@@ -1,0 +1,88 @@
+@import "../../assets/my-styles/variables";
+
+.auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 56px);
+}
+
+.auth__container {
+
+}
+
+.auth__btn {
+  margin-top: 25px;
+}
+
+.greeting__content {
+
+}
+
+.greeting__titile {
+
+}
+
+.greeting__link {
+  margin-top: 20px;
+  width: 100%;
+}
+
+
+// --- For cards ---
+
+
+.card {
+  width: 340px;
+  height: 380px;
+  text-align: center;
+  transition: 1.0s ease;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.card__header {
+  padding: 10px 0;
+}
+
+.card__title {
+
+}
+
+.card__body {
+
+}
+
+.card__inputs-wrap {
+
+  &-sign-in {
+    margin-bottom: 70px;
+  }
+}
+
+.card__input {
+  width: 100%;
+  margin-bottom: 5px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &-email {
+    margin-bottom: 6px;
+  }
+}
+
+.card__icon {
+  cursor: pointer;
+}
+
+.card__passwords-match-error {
+  color: red;
+  position: absolute;
+  bottom: 83px;
+}

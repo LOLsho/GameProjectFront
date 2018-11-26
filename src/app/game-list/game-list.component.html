@@ -1,0 +1,12 @@
+<section class="game-list">
+  <div class="main-container game-list__container">
+    <div class="game-list__content">
+      <ul class="game-list__list">
+        <li class="game-list__item" *ngFor="let game of GAMES">
+          Игра {{game.gameTitle}}
+          <button class="game-list__btn" routerLink="/{{game.gameTitle}}">Играть</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

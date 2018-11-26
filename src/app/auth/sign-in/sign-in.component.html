@@ -1,0 +1,46 @@
+<form [formGroup]="form"
+      (submit)="onSubmit()"
+      class="card mat-card mat-elevation-z3">
+  <div class="card__header mat-app-background mat-elevation-z1">
+    <h2 class="card__title">
+      Sign in
+    </h2>
+  </div>
+  <div class="card__body">
+
+    <div class="card__inputs-wrap card__inputs-wrap-sign-in">
+      <mat-form-field class="card__input card__input-email">
+        <input matInput
+               placeholder="Enter your email"
+               autocomplete="off"
+               formControlName="email"
+        >
+        <mat-error *ngIf="email.invalid">
+          {{getEmailErrorMessage()}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="card__input">
+        <input matInput
+               formControlName="password"
+               placeholder="Enter your password"
+               autocomplete="new-password"
+               [type]="hide ? 'password' : 'text'"
+        >
+        <mat-icon class="card__icon" matSuffix (click)="hide = !hide">
+          {{hide ? 'visibility' : 'visibility_off'}}
+        </mat-icon>
+        <mat-error *ngIf="password.invalid">
+          {{getPasswordErrorMessage()}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <button mat-raised-button
+            class="auth__btn"
+            color="primary"
+            type="submit">
+      Sign in
+    </button>
+  </div>
+</form>

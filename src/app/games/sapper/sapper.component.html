@@ -1,0 +1,15 @@
+<div class="sapper">
+  <div class="sapper__container">
+    <div class="sapper__field">
+      <div class="sapper__row" *ngFor="let row of field; let rowIndex = index">
+        <div class="sapper__sell"
+             *ngFor="let cell of row; let cellIndex = index"
+             [style.background-color]="cell.hasMine ? 'red' : 'grey'"
+             (click)="cellClick()"
+        >
+          {{ rowIndex * row.length + cellIndex }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

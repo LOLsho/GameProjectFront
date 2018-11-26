@@ -1,0 +1,70 @@
+<form [formGroup]="form"
+      (submit)="onSubmit()"
+      class="card mat-card mat-elevation-z3">
+  <div class="card__header mat-app-background mat-elevation-z1">
+    <h2 class="card__title">
+      Sign up
+    </h2>
+  </div>
+  <div class="card__body">
+
+    <div class="card__inputs-wrap">
+      <mat-form-field class="card__input">
+        <input matInput
+               placeholder="Enter your email"
+               formControlName="email"
+        >
+        <mat-error *ngIf="form.get('email').invalid">
+          {{getEmailErrorMessage()}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="card__input">
+        <input autocomplete="new-password"
+               matInput
+               formControlName="password"
+               placeholder="Enter your password"
+               [type]="hide ? 'password' : 'text'"
+        >
+        <mat-icon class="card__icon"
+                  matSuffix
+                  (click)="hide = !hide">
+          {{hide ? 'visibility' : 'visibility_off'}}
+        </mat-icon>
+        <mat-error *ngIf="form.get('password').invalid">
+          {{getPasswordErrorMessage()}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="card__input">
+        <input autocomplete="new-password"
+               matInput
+               formControlName="passwordRepeat"
+               placeholder="Enter password again"
+               [type]="hide ? 'password' : 'text'"
+        >
+        <mat-icon class="card__icon"
+                  matSuffix
+                  (click)="hide = !hide">
+          {{hide ? 'visibility' : 'visibility_off'}}
+        </mat-icon>
+        <mat-error *ngIf="form.get('passwordRepeat').invalid">
+          {{getPasswordRepeatErrorMessage()}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="card__passwords-match-error"
+         *ngIf="form.get('passwordRepeat').touched && !isPasswordsMatch">
+      Passwords do not match!
+    </div>
+
+
+    <button mat-raised-button
+            color="primary"
+            class="auth__btn"
+            type="submit">
+      Sign up
+    </button>
+  </div>
+</form>

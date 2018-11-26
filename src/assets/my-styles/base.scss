@@ -1,0 +1,42 @@
+@import "variables";
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $ff-main;
+  //background: url("assets/img/bg/stressed_linen_@2X.png");
+  //background: url("assets/img/bg/fonwall.ru_237821.jpg") no-repeat center center / cover;
+  //background-color: #7b1fa2;
+  color: white;
+}
+
+html, body {
+  height: 100%;
+}
+
+div, ul, li, p, a, img, button, html {
+  box-sizing: border-box;
+  display: block;
+}
+
+h1 {
+
+}
+
+h2 {
+
+}
+
+.main {
+  padding-top: $header-height;
+  height: 100%;
+}
+
+.main-container {
+  padding: 0 10px;
+  width: 1220px;
+  margin: 0 auto;
+}

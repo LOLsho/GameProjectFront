@@ -1,0 +1,32 @@
+<section class="game">
+  <div class="main-container game__container">
+    <div class="game__content">
+      <div class="tic-tac-toe">
+        <ul class="tic-tac-toe__list">
+          <div class="tic-tac-toe__end" *ngIf="isThereWinner || draw">
+            {{ congratPhrase }}
+          </div>
+          <li class="tic-tac-toe__item"
+              *ngFor="let cell of gameField; index as i"
+              (click)="onCellClick(cell)">
+            <div class="tic-tac-toe__cell">
+
+
+              <div class="cross" *ngIf="cell.value === 'x'">
+                <div class="cross__elem cross__elem-1"></div>
+                <div class="cross__elem cross__elem-2"></div>
+              </div>
+
+
+              <div class="nullik" *ngIf="cell.value === 'o'">
+                <div class="nullik__elem"></div>
+              </div>
+
+
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,85 @@
+.tic-tac-toe {
+
+}
+
+.tic-tac-toe__list {
+  width: 300px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 200px;
+  margin-left: 200px;
+  position: relative;
+}
+
+.tic-tac-toe__item {
+  //position: relative;
+}
+
+.tic-tac-toe__cell {
+  width: 100px;
+  height: 100px;
+  background-color: pink;
+  border: 1px solid black;
+  transition: background-color 0.25s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+
+
+  &:hover {
+    background-color: gold;
+  }
+}
+
+.cross {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.cross__elem {
+  width: 8px;
+  height: 100%;
+  background: black;
+  position: absolute;
+  left: 44px;
+  border-radius: 50%;
+
+  &-1 {
+    transform: rotate(-45deg);
+  }
+
+  &-2 {
+    transform: rotate(45deg);
+  }
+}
+
+.nullik {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nullik__elem {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 4px solid black;
+}
+
+.tic-tac-toe__end {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(black,.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  font-size: 24px;
+}

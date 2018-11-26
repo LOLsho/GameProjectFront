@@ -1,0 +1,43 @@
+<nav class="header mat-elevation-z6" id="header">
+  <div class="main-container">
+    <ul class="header__list">
+
+      <li class="header__item">
+        <a routerLink="/"
+           mat-button
+           class="header__link">
+          <i class="material-icons">videogame_asset</i>
+           LGames
+        </a>
+      </li>
+      <li class="header__item">
+        <!--<mat-icon>thumbs-up</mat-icon>-->
+        <a routerLink="/games"
+           mat-button
+           routerLinkActive="header__active"
+           class="header__link"
+        >
+          List of games
+        </a>
+      </li>
+    </ul>
+
+    <div class="header__auth" *ngIf="!isLoggedIn">
+      <a routerLink="/authentication/sign-in"
+         mat-button
+         routerLinkActive="header__active"
+         class="header__link">
+        Вход
+      </a>
+      <a routerLink="/authentication/sign-up"
+         mat-button
+         routerLinkActive="header__active"
+         class="header__link">
+        Регистрация
+      </a>
+    </div>
+    <div class="header__auth" *ngIf="isLoggedIn">
+      <button mat-button (click)="singOut()">Sign out</button>
+    </div>
+  </div>
+</nav>

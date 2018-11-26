@@ -1,0 +1,25 @@
+// fonts
+$ff-main: 'sant-serif';
+$ff-main-bold: '';
+$ff-main-light: '';
+
+
+// heights and widths
+$header-height: 56px;
+
+
+
+// Angular-Material custom
+$theme: deeppurple-amber;
+//$theme: indigo-pink;
+//$theme: pink-bluegrey;
+//$theme: purple-green;
+
+
+
+//if($theme == deeppurple-amber) { $mat-header-bgc: #673ab7; }
+$mat-accent-color: if( $theme == deeppurple-amber, #673ab7, transporent);
+//$mat-accent-color: if( $theme == indigo-pink, #3f51b5, transporent);
+//$mat-accent-color: if( $theme == pink-bluegrey, #c2185b, transporent);
+//$mat-accent-color: if( $theme == purple-green, #7b1fa2, transporent);
+
