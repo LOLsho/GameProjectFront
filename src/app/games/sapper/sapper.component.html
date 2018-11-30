@@ -1,13 +1,41 @@
 <div class="sapper">
   <div class="sapper__container">
-    <div class="sapper__field">
+
+    <div class="sapper__top-menu">
+      <div class="sapper__counter sapper__mines-left">{{ unclearedMines | number:'3.0' }}</div>
+      <button class="sapper__button" (click)="restartGame()">Новая игра</button>
+      <div class="sapper__counter sapper__timer">{{ (timePassed < 1000 ? timePassed : 999) | number:'3.0' }}</div>
+    </div>
+
+    <div class="sapper__field" (contextmenu)="$event.preventDefault()">
       <div class="sapper__row" *ngFor="let row of field; let rowIndex = index">
         <div class="sapper__sell"
              *ngFor="let cell of row; let cellIndex = index"
              [style.background-color]="cell.hasMine ? 'red' : 'grey'"
-             (click)="cellClick()"
+             (click)="cellClick(cell)"
+             (contextmenu)="rightClick(cell)"
         >
-          {{ rowIndex * row.length + cellIndex }}
+
+          <div class="sapper__mistake-flag" *ngIf="cell.checked && !cell.hasMine && gameOver"></div>
+
+          <div class="sapper__opened-cell" *ngIf="cell.isOpen"> <!-- *ngIf="cell.isOpen" -->
+            <div class="sapper__mine" [style.background-color]="losingSellId === cell.id ? '#FF0200' : ''" *ngIf="cell.hasMine">
+              <img src="../../../assets/games/sapper/images/mine.png" class="sapper__mine-img">
+            </div>
+
+            <div *ngIf="cell.number > 0"
+                 class="sapper__number"
+                 [ngStyle]="getNumberStyle(cell)"
+            >
+              {{ cell.number }}
+            </div>
+          </div>
+
+          <div class="sapper__closed-cell" *ngIf="!cell.isOpen">
+            <i class="fas fa-flag" *ngIf="cell.checked"></i>
+          </div>
+
+
         </div>
       </div>
     </div>

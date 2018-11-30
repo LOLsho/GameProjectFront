@@ -1,3 +1,35 @@
+@mixin font($fontName, $url, $formats) {
+  @font-face {
+
+    font-family: $fontName;
+
+    @each $format in $formats {
+      @if $format == 'eot' {
+        src: url($url + '.eot');                                    /* IE9 Compat Modes */
+        src: url($url + '.eot?#iefix') format('embedded-opentype'); /* IE6-IE8 */
+      }
+      @if $format == 'woff2' {
+        src: url($url + '.woff2') format('woff2'),                  /*Super Modern Browsers */
+      }
+      @if $format == 'woff' {
+        src: url($url + '.woff') format('woff'),                    /* Pretty Modern Browsers */
+      }
+      @if $format == 'ttf' {
+        src: url($url + '.ttf')  format('truetype');                /* Safari, Android, iOS */
+      }
+      @if $format == 'otf' {
+        src: url($url + '.otf')  format("opentype");
+      }
+      @if $format == 'svg' {
+        src: url($url + '.svg#svgFontName') format('svg');          /* Legacy iOS */
+      }
+    }
+
+    @content;
+  }
+}
+
+
 @mixin centerer-xy() {
   position: absolute;
   left: 50%;
