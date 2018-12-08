@@ -19,7 +19,7 @@ $border-color: #808080;
 .sapper__top-menu {
   margin: 0 auto 15px auto;
   display: flex;
-  width: 400px;
+  max-width: 400px;
   justify-content: space-between;
 }
 
@@ -146,5 +146,26 @@ $border-color: #808080;
     height: 2px;
     position: absolute;
     background-color: red;
+  }
+}
+
+.sapper__text {
+  text-align: center;
+  font-weight: bold;
+}
+
+.sapper__list {
+  margin-top: 12px;
+}
+
+.sapper__item {
+  margin-bottom: 8px;
+
+  button {
+    width: 100%;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
   }
 }

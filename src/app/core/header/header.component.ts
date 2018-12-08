@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from "../../auth/auth.service";
-import {Router} from "@angular/router";
+import { AuthService } from '../../auth/auth.service';
+import { LocaleService, TranslationService, Language } from 'angular-l10n';
+
 
 @Component({
   selector: 'app-header',
@@ -9,8 +10,12 @@ import {Router} from "@angular/router";
 })
 export class HeaderComponent implements OnInit {
 
+  @Language() lang: string;
+
   constructor(
     private authService: AuthService,
+    public locale: LocaleService,
+    public translation: TranslationService,
   ) { }
 
   isLoggedIn;
@@ -21,5 +26,13 @@ export class HeaderComponent implements OnInit {
 
   singOut() {
     this.authService.logout();
+  }
+
+  changeLanguage() {
+    if (this.lang === 'ru') {
+      this.locale.setCurrentLanguage('en');
+    } else {
+      this.locale.setCurrentLanguage('ru');
+    }
   }
 }

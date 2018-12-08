@@ -8,7 +8,7 @@ import {SapperCell} from './sapper.interface';
 })
 export class SapperComponent implements OnInit, OnDestroy {
 
-  timer;
+  timer; 
   timePassed: number = 0;
   losingSellId: number;
   firstClick: boolean = true;
@@ -36,19 +36,46 @@ export class SapperComponent implements OnInit, OnDestroy {
     hasMine: false,
   };
 
-  constructor() {
-    this.chosenField = this.defaultFields.big;
+  constructor(
+    
+  ) {
+    
   }
 
   ngOnInit() {
+    
+  }
+
+  chooseField(field) {
+    this.chosenField = {...field};
     this.createEmptyField();
+  }
+
+  makeFieldMyself() {
+    const rows = Number(prompt('Количество рядов. Мин - 4. Макс - 16'));
+    const columns = Number(prompt('Количество колонок. Мин - 9. Макс - 40'));
+    const amountMines = Number(prompt('Количество мин. Должно быть меньше, чем клеток'));
+
+    if (!rows || !columns || !amountMines) return;
+
+    if (rows < 4 || columns < 9) return;
+    if (rows > 16 || columns > 40) return;
+
+    if (amountMines >= rows * columns || amountMines < 1) return;
+
+    const field = {
+      size: [columns, rows],
+      amountMines: amountMines
+    };
+
+    this.chooseField(field);
   }
 
   restartGame() {
     this.stopTimer();
     this.timePassed = 0;
     this.firstClick = true;
-    this.createEmptyField();
+    this.chosenField = null;
   }
 
   cellClick(cell: SapperCell) {
@@ -68,13 +95,25 @@ export class SapperComponent implements OnInit, OnDestroy {
     if (cell.number === 0) {
       // this.openCellsAround(cell.id);
     }
+
+    if (this.playerWon) {
+      this.stopTimer();
+      this.makeAllMinesChacked();
+      setTimeout(() => { alert("Победа!"); }, 0);
+    }
   }
 
-  finishGame(cell: SapperCell) {
+  makeAllMinesChacked() {
+    this.field.forEach(row => row.forEach(item => {
+      if (item.hasMine) item.checked = true;
+    }));
+  }
+
+  finishGame(losingSell?: SapperCell) {
     this.field.forEach(row => row.forEach(item => {
       if (item.hasMine && !item.checked) item.isOpen = true;
     }));
-    this.losingSellId = cell.id;
+    if (losingSell) this.losingSellId = losingSell.id;
     this.stopTimer();
   }
 
@@ -283,6 +322,17 @@ export class SapperComponent implements OnInit, OnDestroy {
     }));
 
     return this.chosenField.amountMines - clearedMines;
+  }
+
+  get playerWon() {
+    for (let rowIndex = 0; rowIndex < this.rowsLength; rowIndex++) {
+      for (let columnIndex = 0; columnIndex < this.rowsLength; columnIndex++) {
+        const currentCell = this.field[rowIndex][columnIndex];
+        if (!currentCell.hasMine && !currentCell.isOpen) return false;
+      }
+    }
+
+    return true;
   }
 
   getNumberStyle(cell) {

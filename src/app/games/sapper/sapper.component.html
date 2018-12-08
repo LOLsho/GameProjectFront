@@ -1,43 +1,75 @@
 <div class="sapper">
   <div class="sapper__container">
 
-    <div class="sapper__top-menu">
-      <div class="sapper__counter sapper__mines-left">{{ unclearedMines | number:'3.0' }}</div>
-      <button class="sapper__button" (click)="restartGame()">Новая игра</button>
-      <div class="sapper__counter sapper__timer">{{ (timePassed < 1000 ? timePassed : 999) | number:'3.0' }}</div>
-    </div>
+    <div *ngIf="chosenField; else startingMenu">
+      <div class="sapper__top-menu">
+        <div class="sapper__counter sapper__mines-left">{{ unclearedMines | number:'3.0' }}</div>
+        <button class="sapper__button" (click)="restartGame()">Новая игра</button>
+        <div class="sapper__counter sapper__timer">{{ (timePassed < 1000 ? timePassed : 999) | number:'3.0' }}</div>
+      </div>
 
-    <div class="sapper__field" (contextmenu)="$event.preventDefault()">
-      <div class="sapper__row" *ngFor="let row of field; let rowIndex = index">
-        <div class="sapper__sell"
-             *ngFor="let cell of row; let cellIndex = index"
-             [style.background-color]="cell.hasMine ? 'red' : 'grey'"
-             (click)="cellClick(cell)"
-             (contextmenu)="rightClick(cell)"
-        >
+      <div class="sapper__field" (contextmenu)="$event.preventDefault()">
 
-          <div class="sapper__mistake-flag" *ngIf="cell.checked && !cell.hasMine && gameOver"></div>
+        <div class="sapper__row" *ngFor="let row of field; let rowIndex = index">
+          <div class="sapper__sell"
+               *ngFor="let cell of row; let cellIndex = index"
+               [style.background-color]="cell.hasMine ? 'red' : 'grey'"
+               (click)="cellClick(cell)"
+               (contextmenu)="rightClick(cell)"
+          >
 
-          <div class="sapper__opened-cell" *ngIf="cell.isOpen"> <!-- *ngIf="cell.isOpen" -->
-            <div class="sapper__mine" [style.background-color]="losingSellId === cell.id ? '#FF0200' : ''" *ngIf="cell.hasMine">
-              <img src="../../../assets/games/sapper/images/mine.png" class="sapper__mine-img">
+            <div class="sapper__mistake-flag" *ngIf="cell.checked && !cell.hasMine && gameOver"></div>
+
+            <div class="sapper__opened-cell" *ngIf="cell.isOpen"> <!-- *ngIf="cell.isOpen" -->
+              <div class="sapper__mine" [style.background-color]="losingSellId === cell.id ? '#FF0200' : ''" *ngIf="cell.hasMine">
+                <img src="../../../assets/games/sapper/images/mine.png" class="sapper__mine-img">
+              </div>
+
+              <div *ngIf="cell.number > 0"
+                   class="sapper__number"
+                   [ngStyle]="getNumberStyle(cell)"
+              >
+                {{ cell.number }}
+              </div>
             </div>
 
-            <div *ngIf="cell.number > 0"
-                 class="sapper__number"
-                 [ngStyle]="getNumberStyle(cell)"
-            >
-              {{ cell.number }}
+            <div class="sapper__closed-cell" *ngIf="!cell.isOpen">
+              <i class="fas fa-flag" *ngIf="cell.checked"></i>
             </div>
+
+
           </div>
-
-          <div class="sapper__closed-cell" *ngIf="!cell.isOpen">
-            <i class="fas fa-flag" *ngIf="cell.checked"></i>
-          </div>
-
-
         </div>
       </div>
     </div>
+
+    <ng-template #startingMenu>
+      <div class="sapper__text">
+        Выберите сложность:
+      </div>
+      <ul class="sapper__list">
+        <li class="sapper__item" (click)="chooseField(defaultFields.small)">
+          <button mat-raised-button color="primary">
+            Просто (9х9, 10 мин)
+          </button>
+        </li>
+        <li class="sapper__item" (click)="chooseField(defaultFields.medium)">
+          <button mat-raised-button color="primary">
+            Средне (16х16, 40 мин)
+          </button>
+        </li>
+        <li class="sapper__item" (click)="chooseField(defaultFields.big)">
+          <button mat-raised-button color="primary">
+            Сложно (30х16, 99 мин)
+          </button>
+        </li>
+        <li class="sapper__item" (click)="makeFieldMyself()">
+          <button mat-stroked-button color="primary">
+            Сделать свое поле
+          </button>
+        </li>
+      </ul>
+    </ng-template>
+
   </div>
 </div>

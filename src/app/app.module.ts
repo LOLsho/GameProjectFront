@@ -18,6 +18,10 @@ import { AuthGuard } from "./auth/auth.guard";
 import {TokenInterceptorService} from "./auth/token-interceptor.service";
 import { SpaceshipComponent } from './games/spaceship/spaceship.component';
 import {SapperComponent} from './games/sapper/sapper.component';
+import { RadioComponent } from './elements/radio/radio.component';
+import {TranslationModule, L10nLoader} from 'angular-l10n';
+import {l10nConfig} from '../configs/l10n/l10n.config'
+
 
 
 @NgModule({
@@ -31,7 +35,8 @@ import {SapperComponent} from './games/sapper/sapper.component';
     SignInComponent,
     SignUpComponent,
     SpaceshipComponent,
-    SapperComponent
+    SapperComponent,
+    RadioComponent,
   ],
   imports: [
     HttpClientModule,
@@ -40,6 +45,7 @@ import {SapperComponent} from './games/sapper/sapper.component';
     BrowserModule,
     BrowserAnimationsModule,
     MaterialModule,
+    TranslationModule.forRoot(l10nConfig),
     RouterModule.forRoot([
       {
         path: '',
@@ -76,4 +82,8 @@ import {SapperComponent} from './games/sapper/sapper.component';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private l10nLoader: L10nLoader) {
+    this.l10nLoader.load();
+  }
+}

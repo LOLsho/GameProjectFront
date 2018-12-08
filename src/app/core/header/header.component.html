@@ -16,8 +16,9 @@
            mat-button
            routerLinkActive="header__active"
            class="header__link"
+           (click)="changeLanguage()"
         >
-          List of games
+          {{ 'List of games' | translate:lang }}
         </a>
       </li>
     </ul>
