@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +7,6 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 })
 export class AppComponent {
 
-  form: FormGroup;
-
-  constructor(
-    private fb: FormBuilder,
-  ) {
-    this.form = this.fb.group({
-      radio: ['bananas']
-    });
+  constructor() {
   }
 }

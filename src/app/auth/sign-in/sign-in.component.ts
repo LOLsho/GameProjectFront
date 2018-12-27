@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../auth.service";
 import {Router} from "@angular/router";
+import {Language} from "angular-l10n";
 
 @Component({
   selector: 'app-sign-in',
@@ -9,6 +10,8 @@ import {Router} from "@angular/router";
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent implements OnInit {
+
+  @Language() lang: string;
 
   constructor(
     private authService: AuthService,

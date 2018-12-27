@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../auth/auth.service';
-import { LocaleService, TranslationService, Language } from 'angular-l10n';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../../auth/auth.service';
+import {LocaleService, TranslationService, Language} from 'angular-l10n';
 
 
 @Component({
@@ -16,7 +16,8 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     public locale: LocaleService,
     public translation: TranslationService,
-  ) { }
+  ) {
+  }
 
   isLoggedIn;
 
