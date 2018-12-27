@@ -1,6 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {GreetingComponent} from './greeting/greeting.component';
 import {RouterModule} from '@angular/router';
@@ -20,8 +19,8 @@ import {TokenInterceptorService} from "./auth/token-interceptor.service";
 import {SapperComponent} from './games/sapper/sapper.component';
 import {RadioComponent} from './elements/radio/radio.component';
 import {TranslationModule, L10nLoader} from 'angular-l10n';
-import {l10nConfig} from '../configs/l10n/l10n.config'
-import {ROUTES} from "./app.module-routing";
+import {initL10n, l10nConfig} from '../configs/l10n/l10n.config'
+import {ROUTES} from "./app-routing.module";
 
 
 @NgModule({
@@ -55,6 +54,12 @@ import {ROUTES} from "./app.module-routing";
       useClass: TokenInterceptorService,
       multi: true,
     },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: initL10n,
+    //   deps: [L10nLoader],
+    //   multi: true
+    // },
   ],
   bootstrap: [AppComponent],
 })
