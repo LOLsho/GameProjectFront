@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
-import { AuthService } from "../auth.service";
-import { Router } from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AuthService} from '../auth.service';
+import {Router} from '@angular/router';
+import {Language} from 'angular-l10n';
 
 @Component({
   selector: 'app-sign-up',
@@ -9,6 +10,8 @@ import { Router } from "@angular/router";
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent implements OnInit {
+
+  @Language() lang: string;
 
   form: FormGroup;
   hide = true;
@@ -19,7 +22,8 @@ export class SignUpComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -38,18 +42,18 @@ export class SignUpComponent implements OnInit {
 
   getEmailErrorMessage() {
     return this.email.hasError('required') ? 'You must enter a value' :
-           this.email.hasError('email') ? 'Not a valid email' :
-           this.email.hasError('minlength') ? 'Min email length - 6' : '';
+      this.email.hasError('email') ? 'Not a valid email' :
+        this.email.hasError('minlength') ? 'Min email length - 6' : '';
   }
 
   getPasswordErrorMessage() {
     return this.password.hasError('required') ? 'You must enter a value' :
-           this.password.hasError('minlength') ? 'Min password length - 6' : '';
+      this.password.hasError('minlength') ? 'Min password length - 6' : '';
   }
 
   getPasswordRepeatErrorMessage() {
     return this.passwordRepeat.hasError('required') ? 'You must enter a value' :
-           this.passwordRepeat.hasError('minlength') ? 'Min password length - 6' : '';
+      this.passwordRepeat.hasError('minlength') ? 'Min password length - 6' : '';
   }
 
   onSubmit() {
@@ -59,7 +63,7 @@ export class SignUpComponent implements OnInit {
 
     if (this.form.invalid && !this.isPasswordsMatch) return;
 
-    let userDataToSend = {
+    const userDataToSend = {
       email: this.email.value,
       password: this.password.value
     };

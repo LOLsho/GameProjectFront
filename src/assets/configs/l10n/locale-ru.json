@@ -1,0 +1,16 @@
+{
+  "Sign-in": "Вход",
+  "Sign-up": "Регистрация",
+  "Min-length": "Минимальная длина",
+
+  "HEADER__SIGN-IN": "Вход",
+  "HEADER__SIGN-UP": "Регистрация",
+	"HEADER__LIST-GAMES": "Список игр",
+
+  "SIGN-IN__BUTTON": "Войти",
+  "SIGN-IN__EMAIL-PLACEHOLDER": "Введите e-mail",
+  "SIGN-IN__PASSWORD-PLACEHOLDER": "Введите пароль",
+  "SIGN-IN__EMAIL-REQUIRED": "Обязательное поле",
+  "SIGN-IN__EMAIL-NOT-VALID": "Неверный e-mail",
+  "SIGN-IN__PASSWORD-REQUIRED": "Обязательное поле"
+}

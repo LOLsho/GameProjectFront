@@ -12,15 +12,15 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthComponent} from './auth/auth.component';
 import {SignInComponent} from './auth/sign-in/sign-in.component';
 import {SignUpComponent} from './auth/sign-up/sign-up.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {AuthGuard} from "./auth/auth.guard";
-import {TokenInterceptorService} from "./auth/token-interceptor.service";
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {AuthGuard} from './auth/auth.guard';
+import {TokenInterceptorService} from './auth/token-interceptor.service';
 // import { SpaceshipComponent } from './games/spaceship/spaceship.component';
 import {SapperComponent} from './games/sapper/sapper.component';
 import {RadioComponent} from './elements/radio/radio.component';
 import {TranslationModule, L10nLoader} from 'angular-l10n';
-import {initL10n, l10nConfig} from '../configs/l10n/l10n.config'
-import {ROUTES} from "./app-routing.module";
+import {initL10n, l10nConfig} from '../assets/configs/l10n/l10n.config';
+import {ROUTES} from './app-routing.module';
 
 
 @NgModule({
@@ -53,18 +53,14 @@ import {ROUTES} from "./app-routing.module";
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
       multi: true,
+    }, // TODO Separation to modules, lazy loading, and e.c.
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initL10n,
+      deps: [L10nLoader],
+      multi: true
     },
-    // {
-    //   provide: APP_INITIALIZER,
-    //   useFactory: initL10n,
-    //   deps: [L10nLoader],
-    //   multi: true
-    // },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-  constructor(private l10nLoader: L10nLoader) {
-    this.l10nLoader.load();
-  }
-}
+export class AppModule {}

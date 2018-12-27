@@ -3,7 +3,6 @@
       class="card mat-card mat-elevation-z3">
   <div class="card__header mat-app-background mat-elevation-z1">
     <h2 class="card__title">
-      {{ lang }}
       {{ "Sign-in" | translate:lang }}
     </h2>
   </div>
@@ -12,7 +11,7 @@
     <div class="card__inputs-wrap card__inputs-wrap-sign-in">
       <mat-form-field class="card__input card__input-email">
         <input matInput
-               placeholder="Enter your email"
+               placeholder="{{ 'SIGN-IN__EMAIL-PLACEHOLDER' | translate:lang }}"
                autocomplete="off"
                formControlName="email"
         >
@@ -24,7 +23,7 @@
       <mat-form-field class="card__input">
         <input matInput
                formControlName="password"
-               placeholder="Enter your password"
+               placeholder="{{ 'SIGN-IN__PASSWORD-PLACEHOLDER' | translate:lang }}"
                autocomplete="new-password"
                [type]="hide ? 'password' : 'text'"
         >
@@ -41,7 +40,7 @@
             class="auth__btn"
             color="primary"
             type="submit">
-      Sign in
+      {{ 'SIGN-IN__BUTTON' | translate:lang }}
     </button>
   </div>
 </form>

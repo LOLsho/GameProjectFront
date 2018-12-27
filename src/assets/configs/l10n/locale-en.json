@@ -1,0 +1,16 @@
+{
+  "Sign-in": "Sign in",
+  "Sign-up": "Sign up",
+  "Min-length": "Min length",
+
+  "HEADER__SIGN-IN": "Sign in",
+  "HEADER__SIGN-UP": "Sign up",
+  "HEADER__LIST-GAMES": "List of games",
+
+  "SIGN-IN__BUTTON": "Sign in",
+  "SIGN-IN__EMAIL-PLACEHOLDER": "Enter your email",
+  "SIGN-IN__PASSWORD-PLACEHOLDER": "Enter your password",
+  "SIGN-IN__EMAIL-REQUIRED": "You must enter a value",
+  "SIGN-IN__EMAIL-NOT-VALID": "Not a valid email",
+  "SIGN-IN__PASSWORD-REQUIRED": "You must enter a value"
+}
