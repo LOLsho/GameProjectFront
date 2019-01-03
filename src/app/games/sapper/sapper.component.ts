@@ -1,5 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {SapperCell} from './sapper.interface';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { SapperCell } from './sapper.interface';
+import { Language } from 'angular-l10n';
 
 @Component({
   selector: 'app-sapper',
@@ -8,23 +9,25 @@ import {SapperCell} from './sapper.interface';
 })
 export class SapperComponent implements OnInit, OnDestroy {
 
-  timer; 
-  timePassed: number = 0;
+  @Language() lang: string;
+
+  timer;
+  timePassed = 0;
   losingSellId: number;
-  firstClick: boolean = true;
+  firstClick = true;
   field: SapperCell[][] = [];
   defaultFields = {
     small: {
       size: [9, 9],
-      amountMines: 10
+      amountMines: 10,
     },
     medium: {
       size: [16, 16],
-      amountMines: 40
+      amountMines: 40,
     },
     big: {
       size: [30, 16],
-      amountMines: 99
+      amountMines: 99,
     },
   };
   chosenField;
@@ -36,18 +39,16 @@ export class SapperComponent implements OnInit, OnDestroy {
     hasMine: false,
   };
 
-  constructor(
-    
-  ) {
-    
+  constructor() {
+
   }
 
   ngOnInit() {
-    
+
   }
 
   chooseField(field) {
-    this.chosenField = {...field};
+    this.chosenField = { ...field };
     this.createEmptyField();
   }
 
@@ -65,7 +66,7 @@ export class SapperComponent implements OnInit, OnDestroy {
 
     const field = {
       size: [columns, rows],
-      amountMines: amountMines
+      amountMines: amountMines,
     };
 
     this.chooseField(field);
@@ -97,9 +98,12 @@ export class SapperComponent implements OnInit, OnDestroy {
     }
 
     if (this.playerWon) {
+      console.log('in if (this.playerWon)');
       this.stopTimer();
       this.makeAllMinesChacked();
-      setTimeout(() => { alert("Победа!"); }, 0);
+      setTimeout(() => {
+        alert('Победа!');
+      }, 0);
     }
   }
 
@@ -118,7 +122,7 @@ export class SapperComponent implements OnInit, OnDestroy {
   }
 
   rightClick(cell: SapperCell) {
-    if (this.gameOver || this.firstClick) return;
+    if (this.gameOver || this.firstClick || cell.isOpen) return;
     cell.checked = !cell.checked;
   }
 
@@ -185,7 +189,7 @@ export class SapperComponent implements OnInit, OnDestroy {
     // Заполняем массив начальными данными
     for (let rowIndex = 0; rowIndex < this.chosenField.size[1]; rowIndex++) {
       for (let cellIndex = 0; cellIndex < this.chosenField.size[0]; cellIndex++) {
-        this.field[rowIndex][cellIndex] = {...this.initialCell, id: rowIndex * this.columnsLength + cellIndex};
+        this.field[rowIndex][cellIndex] = { ...this.initialCell, id: rowIndex * this.columnsLength + cellIndex };
       }
     }
   }
@@ -205,16 +209,16 @@ export class SapperComponent implements OnInit, OnDestroy {
     // Заполняем поле минами
     mines.forEach((mineNumber) => {
       const [rowIndex, cellIndex] = this.getIndexesFromId(mineNumber);
-      this.field[rowIndex][cellIndex] = {...this.initialCell, hasMine: true, id: mineNumber};
+      this.field[rowIndex][cellIndex] = { ...this.initialCell, hasMine: true, id: mineNumber };
     });
 
     // Определяем номер для каждой клетки
     this.field = this.field.map((row, rowIndex) => {
       return row.map((cell: SapperCell, columnIndex) => {
-        if (cell.hasMine) return {...cell, number: null};
+        if (cell.hasMine) return { ...cell, number: null };
 
         const minesAround = this.checkAvailableCells(rowIndex, columnIndex, 'checkMines');
-        return {...cell, number: minesAround};
+        return { ...cell, number: minesAround };
       });
     });
   }
@@ -324,13 +328,28 @@ export class SapperComponent implements OnInit, OnDestroy {
     return this.chosenField.amountMines - clearedMines;
   }
 
+  testVar;
+  counter = 0;
+
   get playerWon() {
     for (let rowIndex = 0; rowIndex < this.rowsLength; rowIndex++) {
       for (let columnIndex = 0; columnIndex < this.rowsLength; columnIndex++) {
+        this.counter++;
         const currentCell = this.field[rowIndex][columnIndex];
-        if (!currentCell.hasMine && !currentCell.isOpen) return false;
+        this.testVar = currentCell;
+        if (!currentCell.hasMine && !currentCell.isOpen) {
+          this.counter = 0;
+          return false;
+        } else {
+
+        }
       }
     }
+
+    console.log('this.field - ', this.field);
+    console.log('this.counter - ', this.counter);
+    console.log('currentCell - ', this.testVar);
+    console.log('!currentCell.hasMine && !currentCell.isOpen - ', !this.testVar.hasMine && !this.testVar.isOpen);
 
     return true;
   }

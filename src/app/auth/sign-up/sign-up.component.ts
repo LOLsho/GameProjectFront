@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../auth.service';
+import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
-import {Language} from 'angular-l10n';
+import {Language, TranslationService} from 'angular-l10n';
 
 @Component({
   selector: 'app-sign-up',
@@ -13,6 +13,9 @@ export class SignUpComponent implements OnInit {
 
   @Language() lang: string;
 
+  EMAIL_MIN_LENGTH = 6;
+  PASSWORD_MIN_LENGTH = 6;
+
   form: FormGroup;
   hide = true;
   email: AbstractControl;
@@ -21,7 +24,8 @@ export class SignUpComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private trn: TranslationService,
   ) {
   }
 
@@ -41,26 +45,22 @@ export class SignUpComponent implements OnInit {
   }
 
   getEmailErrorMessage() {
-    return this.email.hasError('required') ? 'You must enter a value' :
-      this.email.hasError('email') ? 'Not a valid email' :
-        this.email.hasError('minlength') ? 'Min email length - 6' : '';
+    return this.email.hasError('required') ? this.trn.translate('SIGN-IN__EMAIL-REQUIRED') :
+      this.email.hasError('email') ? this.trn.translate('SIGN-IN__EMAIL-NOT-VALID') :
+        this.email.hasError('minlength') ? this.trn.translate('Min-length') + ' - ' + this.EMAIL_MIN_LENGTH : '';
   }
 
   getPasswordErrorMessage() {
-    return this.password.hasError('required') ? 'You must enter a value' :
-      this.password.hasError('minlength') ? 'Min password length - 6' : '';
+    return this.password.hasError('required') ? this.trn.translate('SIGN-IN__PASSWORD-REQUIRED') :
+      this.password.hasError('minlength') ? this.trn.translate('Min-length') + ' - ' + this.PASSWORD_MIN_LENGTH : '';
   }
 
   getPasswordRepeatErrorMessage() {
-    return this.passwordRepeat.hasError('required') ? 'You must enter a value' :
-      this.passwordRepeat.hasError('minlength') ? 'Min password length - 6' : '';
+    return this.passwordRepeat.hasError('required') ? this.trn.translate('SIGN-UP__PASSWORD-AGAIN-REQUIRED') :
+      this.passwordRepeat.hasError('minlength') ? this.trn.translate('Min-length') + ' - ' + this.PASSWORD_MIN_LENGTH : '';
   }
 
   onSubmit() {
-    // console.log('from localstorage - ', localStorage.getItem('token'));
-    //
-    // return;
-
     if (this.form.invalid && !this.isPasswordsMatch) return;
 
     const userDataToSend = {

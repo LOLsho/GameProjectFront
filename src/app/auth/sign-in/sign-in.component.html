@@ -37,6 +37,7 @@
     </div>
 
     <button mat-raised-button
+            [disabled]="form.invalid"
             class="auth__btn"
             color="primary"
             type="submit">

@@ -3,8 +3,8 @@
     <div class="game-list__content">
       <ul class="game-list__list">
         <li class="game-list__item" *ngFor="let game of GAMES">
-          Игра {{game.gameTitle}}
-          <button class="game-list__btn" routerLink="/{{game.gameTitle}}">Играть</button>
+          {{ game.gameTitle }}
+          <button class="game-list__btn" routerLink="/{{ game.gameTitle }}">{{ 'Play' | translate:lang }}</button>
         </li>
       </ul>
     </div>

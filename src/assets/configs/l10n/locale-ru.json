@@ -1,7 +1,14 @@
 {
+  "": "",
   "Sign-in": "Вход",
   "Sign-up": "Регистрация",
+  "Sign-out": "Выйти",
   "Min-length": "Минимальная длина",
+  "Language": "Язык",
+  "Russian": "Русский",
+  "English": "English",
+  "Play": "Играть",
+  "New-game": "Новая игра",
 
   "HEADER__SIGN-IN": "Вход",
   "HEADER__SIGN-UP": "Регистрация",
@@ -12,5 +19,16 @@
   "SIGN-IN__PASSWORD-PLACEHOLDER": "Введите пароль",
   "SIGN-IN__EMAIL-REQUIRED": "Обязательное поле",
   "SIGN-IN__EMAIL-NOT-VALID": "Неверный e-mail",
-  "SIGN-IN__PASSWORD-REQUIRED": "Обязательное поле"
+  "SIGN-IN__PASSWORD-REQUIRED": "Обязательное поле",
+
+  "SIGN-UP_BUTTON": "Зарегистрироваться",
+  "SIGN-UP_PASSWORD-NOT-MATCH": "Пароли не совпадают!",
+  "SIGN-UP__PASSWORD-AGAIN": "Пароль еще раз",
+  "SIGN-UP__PASSWORD-AGAIN-REQUIRED": "Обязательное поле",
+
+  "SAPPER_SELECT-DIFFICULTY": "Выберите сложность:",
+  "SAPPER_DIFFICULTY-EASY": "Просто (9х9, 10 мин)",
+  "SAPPER_DIFFICULTY-MIDDLE": "Средне (16х16, 40 мин)",
+  "SAPPER_DIFFICULTY-HARD": "Сложно (30х16, 99 мин)",
+  "SAPPER_SELECT-CUSTOM": "Сделать свое поле"
 }

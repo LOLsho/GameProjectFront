@@ -4,7 +4,7 @@
     <div *ngIf="chosenField; else startingMenu">
       <div class="sapper__top-menu">
         <div class="sapper__counter sapper__mines-left">{{ unclearedMines | number:'3.0' }}</div>
-        <button class="sapper__button" (click)="restartGame()">Новая игра</button>
+        <button class="sapper__button" (click)="restartGame()">{{ 'New-game' | translate:lang }}</button>
         <div class="sapper__counter sapper__timer">{{ (timePassed < 1000 ? timePassed : 999) | number:'3.0' }}</div>
       </div>
 
@@ -20,9 +20,9 @@
 
             <div class="sapper__mistake-flag" *ngIf="cell.checked && !cell.hasMine && gameOver"></div>
 
-            <div class="sapper__opened-cell" *ngIf="cell.isOpen"> <!-- *ngIf="cell.isOpen" -->
+            <div class="sapper__opened-cell" *ngIf="cell.isOpen">
               <div class="sapper__mine" [style.background-color]="losingSellId === cell.id ? '#FF0200' : ''" *ngIf="cell.hasMine">
-                <img src="../../../assets/games/sapper/images/mine.png" class="sapper__mine-img">
+                <img src="../../../assets/games/sapper/images/mine.png" alt="mine" class="sapper__mine-img">
               </div>
 
               <div *ngIf="cell.number > 0"
@@ -45,27 +45,27 @@
 
     <ng-template #startingMenu>
       <div class="sapper__text">
-        Выберите сложность:
+        {{ 'SAPPER_SELECT-DIFFICULTY' | translate:lang }}
       </div>
       <ul class="sapper__list">
         <li class="sapper__item" (click)="chooseField(defaultFields.small)">
           <button mat-raised-button color="primary">
-            Просто (9х9, 10 мин)
+            {{ 'SAPPER_DIFFICULTY-EASY' | translate:lang }}
           </button>
         </li>
         <li class="sapper__item" (click)="chooseField(defaultFields.medium)">
           <button mat-raised-button color="primary">
-            Средне (16х16, 40 мин)
+            {{ 'SAPPER_DIFFICULTY-MIDDLE' | translate:lang }}
           </button>
         </li>
         <li class="sapper__item" (click)="chooseField(defaultFields.big)">
           <button mat-raised-button color="primary">
-            Сложно (30х16, 99 мин)
+            {{ 'SAPPER_DIFFICULTY-HARD' | translate:lang }}
           </button>
         </li>
         <li class="sapper__item" (click)="makeFieldMyself()">
           <button mat-stroked-button color="primary">
-            Сделать свое поле
+            {{ 'SAPPER_SELECT-CUSTOM' | translate:lang }}
           </button>
         </li>
       </ul>

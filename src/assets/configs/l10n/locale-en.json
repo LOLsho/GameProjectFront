@@ -1,7 +1,14 @@
 {
+  "": "",
   "Sign-in": "Sign in",
   "Sign-up": "Sign up",
+  "Sign-out": "Sign out",
   "Min-length": "Min length",
+  "Language": "Language",
+  "Russian": "Русский",
+  "English": "English",
+  "Play": "Play",
+  "New-game": "New game",
 
   "HEADER__SIGN-IN": "Sign in",
   "HEADER__SIGN-UP": "Sign up",
@@ -12,5 +19,16 @@
   "SIGN-IN__PASSWORD-PLACEHOLDER": "Enter your password",
   "SIGN-IN__EMAIL-REQUIRED": "You must enter a value",
   "SIGN-IN__EMAIL-NOT-VALID": "Not a valid email",
-  "SIGN-IN__PASSWORD-REQUIRED": "You must enter a value"
+  "SIGN-IN__PASSWORD-REQUIRED": "You must enter a value",
+
+  "SIGN-UP_BUTTON": "Sign up",
+  "SIGN-UP_PASSWORD-NOT-MATCH": "Passwords do not match!",
+  "SIGN-UP__PASSWORD-AGAIN": "Enter password again",
+  "SIGN-UP__PASSWORD-AGAIN-REQUIRED": "You must enter a value",
+
+  "SAPPER_SELECT-DIFFICULTY": "Select difficulty:",
+  "SAPPER_DIFFICULTY-EASY": "Easy (9х9, 10 mines)",
+  "SAPPER_DIFFICULTY-MIDDLE": "Middle (16х16, 40 mines)",
+  "SAPPER_DIFFICULTY-HARD": "Hard (30х16, 99 mines)",
+  "SAPPER_SELECT-CUSTOM": "Make custom field"
 }

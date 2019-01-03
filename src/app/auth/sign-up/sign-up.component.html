@@ -11,11 +11,11 @@
     <div class="card__inputs-wrap">
       <mat-form-field class="card__input">
         <input matInput
-               placeholder="Enter your email"
+               placeholder="{{ 'SIGN-IN__EMAIL-PLACEHOLDER' | translate:lang }}"
                formControlName="email"
         >
         <mat-error *ngIf="form.get('email').invalid">
-          {{getEmailErrorMessage()}}
+          {{ getEmailErrorMessage() }}
         </mat-error>
       </mat-form-field>
 
@@ -23,7 +23,7 @@
         <input autocomplete="new-password"
                matInput
                formControlName="password"
-               placeholder="Enter your password"
+               placeholder="{{ 'SIGN-IN__PASSWORD-PLACEHOLDER' | translate:lang }}"
                [type]="hide ? 'password' : 'text'"
         >
         <mat-icon class="card__icon"
@@ -32,7 +32,7 @@
           {{hide ? 'visibility' : 'visibility_off'}}
         </mat-icon>
         <mat-error *ngIf="form.get('password').invalid">
-          {{getPasswordErrorMessage()}}
+          {{ getPasswordErrorMessage() }}
         </mat-error>
       </mat-form-field>
 
@@ -40,7 +40,7 @@
         <input autocomplete="new-password"
                matInput
                formControlName="passwordRepeat"
-               placeholder="Enter password again"
+               placeholder="{{ 'SIGN-UP__PASSWORD-AGAIN' | translate:lang }}"
                [type]="hide ? 'password' : 'text'"
         >
         <mat-icon class="card__icon"
@@ -48,23 +48,24 @@
                   (click)="hide = !hide">
           {{hide ? 'visibility' : 'visibility_off'}}
         </mat-icon>
-        <mat-error *ngIf="form.get('passwordRepeat').invalid">
-          {{getPasswordRepeatErrorMessage()}}
+        <mat-error *ngIf="true">
+          {{ getPasswordRepeatErrorMessage() }}
         </mat-error>
       </mat-form-field>
     </div>
 
     <div class="card__passwords-match-error"
-         *ngIf="form.get('passwordRepeat').touched && !isPasswordsMatch">
-      Passwords do not match!
+         *ngIf="form.get('passwordRepeat').valid && form.get('password').valid && !isPasswordsMatch">
+      {{ 'SIGN-UP_PASSWORD-NOT-MATCH' | translate:lang }}
     </div>
 
 
     <button mat-raised-button
+            [disabled]="form.invalid || !isPasswordsMatch"
             color="primary"
             class="auth__btn"
             type="submit">
-      Sign up
+      {{ 'SIGN-UP_BUTTON' | translate:lang }}
     </button>
   </div>
 </form>

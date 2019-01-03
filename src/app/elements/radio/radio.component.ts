@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, forwardRef} from '@angular/core';
+import {Component, Input, OnInit, forwardRef} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 
@@ -6,7 +6,7 @@ const RADIO_CONTROL_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
   useExisting: forwardRef(() => RadioComponent),
   multi: true,
-}; 
+};
 
 
 @Component({
