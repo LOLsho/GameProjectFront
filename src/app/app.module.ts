@@ -3,9 +3,6 @@ import { AppComponent } from './app.component';
 import { l10nConfig, L10nProvider } from '../assets/configs/l10n/l10n.config';
 import { HeaderComponent } from './core/header/header.component';
 import { GreetingComponent } from './greeting/greeting.component';
-import { GameListComponent } from './game-list/game-list.component';
-import { TicTacToeComponent } from './games/tic-tac-toe/tic-tac-toe.component';
-import { SapperComponent } from './games/sapper/sapper.component';
 import { RadioComponent } from './elements/radio/radio.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { PreloadAllModules, RouterModule } from '@angular/router';
@@ -23,12 +20,8 @@ import { TranslationModule } from 'angular-l10n';
   declarations: [
     HeaderComponent,
     GreetingComponent,
-    GameListComponent,
-    TicTacToeComponent,
-    SapperComponent,
     RadioComponent,
     AppComponent,
-    // SpaceshipComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../auth.service';
-import {Router} from '@angular/router';
-import {Language, TranslationService} from 'angular-l10n';
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
+import { Language, TranslationService } from 'angular-l10n';
 
 @Component({
   selector: 'app-sign-in',
@@ -31,7 +31,7 @@ export class SignInComponent implements OnInit {
   ngOnInit() {
     this.form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email, Validators.minLength(this.EMAIL_MIN_LENGTH)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(this.PASSWORD_MIN_LENGTH)])
+      password: new FormControl('', [Validators.required, Validators.minLength(this.PASSWORD_MIN_LENGTH)]),
     });
 
     this.email = this.form.get('email');
@@ -54,7 +54,7 @@ export class SignInComponent implements OnInit {
 
     const userDataToSend = {
       email: this.email.value,
-      password: this.password.value
+      password: this.password.value,
     };
 
     await this.authService.loginViaEmailAndPassword(userDataToSend);

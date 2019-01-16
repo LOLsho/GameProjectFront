@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GAMES } from './game-list';
+import { Games, GAMES } from './game-list';
 import { AuthService } from '../auth/auth.service';
 import { Language } from 'angular-l10n';
 
@@ -12,7 +12,7 @@ export class GameListComponent implements OnInit {
 
   @Language() lang: string;
 
-  GAMES = GAMES;
+  games: Games = GAMES;
 
   constructor(
     private auth: AuthService,

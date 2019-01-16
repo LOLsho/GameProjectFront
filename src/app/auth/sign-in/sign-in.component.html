@@ -5,36 +5,36 @@
       {{ "Sign-in" | translate:lang }}
     </h2>
   </div>
-  <div class="card__body">
 
-    <div class="card__inputs-wrap card__inputs-wrap-sign-in">
-      <mat-form-field class="card__input card__input-email">
-        <input matInput
-               placeholder="{{ 'SIGN-IN__EMAIL-PLACEHOLDER' | translate:lang }}"
-               autocomplete="off"
-               formControlName="email"
-        >
-        <mat-error *ngIf="email.invalid">
-          {{getEmailErrorMessage()}}
-        </mat-error>
-      </mat-form-field>
+  <div class="card__inputs-wrap card__inputs-wrap-sign-in">
+    <mat-form-field class="card__input card__input-email">
+      <input matInput
+             placeholder="{{ 'SIGN-IN__EMAIL-PLACEHOLDER' | translate:lang }}"
+             autocomplete="off"
+             formControlName="email"
+      >
+      <mat-error *ngIf="email.invalid">
+        {{getEmailErrorMessage()}}
+      </mat-error>
+    </mat-form-field>
 
-      <mat-form-field class="card__input">
-        <input matInput
-               formControlName="password"
-               placeholder="{{ 'SIGN-IN__PASSWORD-PLACEHOLDER' | translate:lang }}"
-               autocomplete="new-password"
-               [type]="hide ? 'password' : 'text'"
-        >
-        <mat-icon class="card__icon" matSuffix (click)="hide = !hide">
-          {{hide ? 'visibility' : 'visibility_off'}}
-        </mat-icon>
-        <mat-error *ngIf="password.invalid">
-          {{getPasswordErrorMessage()}}
-        </mat-error>
-      </mat-form-field>
-    </div>
+    <mat-form-field class="card__input">
+      <input matInput
+             formControlName="password"
+             placeholder="{{ 'SIGN-IN__PASSWORD-PLACEHOLDER' | translate:lang }}"
+             autocomplete="new-password"
+             [type]="hide ? 'password' : 'text'"
+      >
+      <mat-icon class="card__icon" matSuffix (click)="hide = !hide">
+        {{hide ? 'visibility' : 'visibility_off'}}
+      </mat-icon>
+      <mat-error *ngIf="password.invalid">
+        {{getPasswordErrorMessage()}}
+      </mat-error>
+    </mat-form-field>
+  </div>
 
+  <div class="auth__bottom">
     <button mat-raised-button
             [disabled]="form.invalid"
             class="auth__btn"
@@ -44,16 +44,10 @@
     >
       {{ 'SIGN-IN__BUTTON' | translate:lang }}
     </button>
-  </div>
-  <div *ngIf="authService.user$ | async as user; else login">
-    {{ user | json }}
-    <hr>
-    <button (click)="authService.signOut()">Sign Out</button>
+
+    <div class="auth__socials">
+      <app-socials></app-socials>
+    </div>
   </div>
 
-  <!--<ng-template #login>-->
-    <!--<button (click)="authService.loginViaFacebook()">-->
-      <!--Login with-->
-    <!--</button>-->
-  <!--</ng-template>-->
 </form>

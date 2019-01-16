@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SapperCell } from './sapper.interface';
+import { SapperCell, SapperField, SapperFields } from './sapper.interface';
 import { Language } from 'angular-l10n';
+import { MatDialog } from '@angular/material';
+import { CustomFieldComponent } from './custom-field/custom-field.component';
 
 @Component({
   selector: 'app-sapper',
@@ -16,7 +18,7 @@ export class SapperComponent implements OnInit, OnDestroy {
   losingSellId: number;
   firstClick = true;
   field: SapperCell[][] = [];
-  defaultFields = {
+  defaultFields: SapperFields = {
     small: {
       size: [9, 9],
       amountMines: 10,
@@ -30,7 +32,7 @@ export class SapperComponent implements OnInit, OnDestroy {
       amountMines: 99,
     },
   };
-  chosenField;
+  chosenField: SapperField;
   initialCell: SapperCell = {
     id: null,
     isOpen: false,
@@ -39,7 +41,9 @@ export class SapperComponent implements OnInit, OnDestroy {
     hasMine: false,
   };
 
-  constructor() {
+  constructor(
+    private modal: MatDialog,
+  ) {
 
   }
 
@@ -53,23 +57,26 @@ export class SapperComponent implements OnInit, OnDestroy {
   }
 
   makeFieldMyself() {
-    const rows = Number(prompt('Количество рядов. Мин - 4. Макс - 16'));
-    const columns = Number(prompt('Количество колонок. Мин - 9. Макс - 40'));
-    const amountMines = Number(prompt('Количество мин. Должно быть меньше, чем клеток'));
+    const dialogRef = this.modal.open(CustomFieldComponent);
+    console.log('dialogRef -', dialogRef.componentInstance);
 
-    if (!rows || !columns || !amountMines) return;
-
-    if (rows < 4 || columns < 9) return;
-    if (rows > 16 || columns > 40) return;
-
-    if (amountMines >= rows * columns || amountMines < 1) return;
-
-    const field = {
-      size: [columns, rows],
-      amountMines: amountMines,
-    };
-
-    this.chooseField(field);
+    // const rows = Number(prompt('Количество рядов. Мин - 4. Макс - 16'));
+    // const columns = Number(prompt('Количество колонок. Мин - 9. Макс - 40'));
+    // const amountMines = Number(prompt('Количество мин. Должно быть меньше, чем клеток'));
+    //
+    // if (!rows || !columns || !amountMines) return;
+    //
+    // if (rows < 4 || columns < 9) return;
+    // if (rows > 16 || columns > 40) return;
+    //
+    // if (amountMines >= rows * columns || amountMines < 1) return;
+    //
+    // const field = {
+    //   size: [columns, rows],
+    //   amountMines: amountMines,
+    // };
+    //
+    // this.chooseField(field);
   }
 
   restartGame() {

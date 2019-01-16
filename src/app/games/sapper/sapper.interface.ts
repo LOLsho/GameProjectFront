@@ -5,3 +5,12 @@ export interface SapperCell {
   number: number;
   hasMine: boolean;
 }
+
+export interface SapperFields {
+  [fieldSize: string]: SapperField;
+}
+
+export interface SapperField {
+  size: [number, number];
+  amountMines: number;
+}

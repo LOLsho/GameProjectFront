@@ -4,19 +4,18 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TranslationModule } from 'angular-l10n';
 import { MaterialModule } from './material.module';
 
+
+const sharedModules = [
+  HttpClientModule,
+  ReactiveFormsModule,
+  TranslationModule,
+  MaterialModule,
+];
+
+
 @NgModule({
   declarations: [],
-  imports: [
-    HttpClientModule,
-    ReactiveFormsModule,
-    TranslationModule,
-    MaterialModule,
-  ],
-  exports: [
-    HttpClientModule,
-    ReactiveFormsModule,
-    TranslationModule,
-    MaterialModule,
-  ],
+  imports: sharedModules,
+  exports: sharedModules,
 })
 export class SharedModule { }

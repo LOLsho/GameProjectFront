@@ -15,6 +15,10 @@
   margin-top: 25px;
 }
 
+.auth__socials {
+  margin-top: 10px;
+}
+
 .greeting__content {
 
 }
@@ -34,7 +38,7 @@
 
 .card {
   width: 340px;
-  height: 380px;
+  height: 425px;
   text-align: center;
   transition: 1.0s ease;
   padding: 20px;
@@ -60,7 +64,7 @@
 .card__inputs-wrap {
 
   &-sign-in {
-    margin-bottom: 70px;
+    //margin-bottom: 70px;
   }
 }
 
