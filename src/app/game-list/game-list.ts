@@ -8,10 +8,9 @@ export const GAMES: Games = [
 ];
 
 
-
-export type Games = Game[];
-
 export interface Game {
   title: string;
   component: any;
 }
+
+export type Games = Game[];

@@ -39,12 +39,22 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private afStore: AngularFirestore,
     private router: Router,
-  ) {}
+  ) {
+    this.user$.subscribe();
+    // this.afAuth.authState.subscribe(state => console.log('state - ', state));
+  }
 
-  async loginViaGoogle() {
+  loginViaGoogle() {
     const provider = new auth.GoogleAuthProvider();
-    const credential = await this.afAuth.auth.signInWithPopup(provider);
-    return this.updateUserData(credential.user);
+    this.afAuth.auth.signInWithPopup(provider).then(
+      credential => {
+        return this.updateUserData(credential.user);
+      },
+      error => {
+
+      }
+    );
+
   }
 
   async loginViaFacebook() {
@@ -61,7 +71,12 @@ export class AuthService {
   updateUserData({ uid, email, displayName, photoURL }: User) {
     const userRef: AngularFirestoreDocument<User> = this.afStore.doc(`users/${uid}`);
 
+    console.log('userRef - ', userRef);
+
+
     const data = { uid, email, displayName, photoURL };
+
+    console.log('data - ', data);
 
     return userRef.set(data, { merge: true });
   }

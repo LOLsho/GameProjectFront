@@ -14,4 +14,9 @@ export class SocialsComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  async authGoogle() {
+    await this.auth.loginViaGoogle();
+
+  }
 }
