@@ -1,19 +1,22 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslationModule } from 'angular-l10n';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [],
   imports: [
     HttpClientModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
+    TranslationModule,
+    MaterialModule,
   ],
   exports: [
     HttpClientModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
+    TranslationModule,
+    MaterialModule,
   ],
 })
 export class SharedModule { }

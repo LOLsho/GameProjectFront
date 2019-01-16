@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../auth.service';
 import {Router} from '@angular/router';
 import {Language, TranslationService} from 'angular-l10n';
 
@@ -60,7 +60,7 @@ export class SignUpComponent implements OnInit {
       this.passwordRepeat.hasError('minlength') ? this.trn.translate('Min-length') + ' - ' + this.PASSWORD_MIN_LENGTH : '';
   }
 
-  onSubmit() {
+  async submit() {
     if (this.form.invalid && !this.isPasswordsMatch) return;
 
     const userDataToSend = {
@@ -68,13 +68,7 @@ export class SignUpComponent implements OnInit {
       password: this.password.value
     };
 
-    this.authService.signUp(userDataToSend).subscribe(
-      response => {
-        this.router.navigate(['/games']);
-        console.log('response - ', response);
-      },
-      error => console.log(error.error.message)
-    );
+    await this.authService.registerViaEmailAndPassword(userDataToSend);
+    this.router.navigate(['/games']);
   }
-
 }

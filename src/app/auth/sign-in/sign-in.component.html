@@ -1,5 +1,4 @@
 <form [formGroup]="form"
-      (submit)="onSubmit()"
       class="card mat-card mat-elevation-z3">
   <div class="card__header mat-app-background mat-elevation-z1">
     <h2 class="card__title">
@@ -40,8 +39,21 @@
             [disabled]="form.invalid"
             class="auth__btn"
             color="primary"
-            type="submit">
+            type="submit"
+            (click)="submit()"
+    >
       {{ 'SIGN-IN__BUTTON' | translate:lang }}
     </button>
   </div>
+  <div *ngIf="authService.user$ | async as user; else login">
+    {{ user | json }}
+    <hr>
+    <button (click)="authService.signOut()">Sign Out</button>
+  </div>
+
+  <!--<ng-template #login>-->
+    <!--<button (click)="authService.loginViaFacebook()">-->
+      <!--Login with-->
+    <!--</button>-->
+  <!--</ng-template>-->
 </form>

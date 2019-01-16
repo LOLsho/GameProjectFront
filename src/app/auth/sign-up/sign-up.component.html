@@ -1,6 +1,5 @@
-<form [formGroup]="form"
-      (submit)="onSubmit()"
-      class="card mat-card mat-elevation-z3">
+<form [formGroup]="form" class="card mat-card mat-elevation-z3">
+
   <div class="card__header mat-app-background mat-elevation-z1">
     <h2 class="card__title">
       {{ "Sign-up" | translate:lang }}
@@ -64,7 +63,9 @@
             [disabled]="form.invalid || !isPasswordsMatch"
             color="primary"
             class="auth__btn"
-            type="submit">
+            type="submit"
+            (click)="submit()"
+    >
       {{ 'SIGN-UP_BUTTON' | translate:lang }}
     </button>
   </div>
