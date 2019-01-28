@@ -30,5 +30,6 @@
   "SAPPER_DIFFICULTY-EASY": "Easy (9х9, 10 mines)",
   "SAPPER_DIFFICULTY-MIDDLE": "Middle (16х16, 40 mines)",
   "SAPPER_DIFFICULTY-HARD": "Hard (30х16, 99 mines)",
-  "SAPPER_SELECT-CUSTOM": "Make custom field"
+  "SAPPER_SELECT-CUSTOM": "Make custom field",
+  "SAPPER_WIN-MESSAGE": "The field is completely cleared, congratulations!"
 }

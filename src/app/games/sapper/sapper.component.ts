@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SapperCell, SapperField, SapperFields } from './sapper.interface';
-import { Language } from 'angular-l10n';
+import { Language, TranslationService } from 'angular-l10n';
 import { MatDialog } from '@angular/material';
 import { CustomFieldComponent } from './custom-field/custom-field.component';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-sapper',
@@ -43,6 +44,8 @@ export class SapperComponent implements OnInit, OnDestroy {
 
   constructor(
     private modal: MatDialog,
+    private notifierService: NotifierService,
+    private translation: TranslationService,
   ) {
 
   }
@@ -108,9 +111,7 @@ export class SapperComponent implements OnInit, OnDestroy {
       console.log('in if (this.playerWon)');
       this.stopTimer();
       this.makeAllMinesChecked();
-      setTimeout(() => {
-        alert('Победа!');
-      }, 0);
+      this.notifierService.notify('success', this.translation.translate(`SAPPER_WIN-MESSAGE`));
     }
   }
 
