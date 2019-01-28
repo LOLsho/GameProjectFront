@@ -5,20 +5,14 @@ import { AppState } from './store/reducers';
 import { Observable } from 'rxjs';
 import { User } from './auth/auth.interface';
 import { getUser } from './store/selectors/auth.selectors';
-import { delay, tap } from 'rxjs/operators';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { delay } from 'rxjs/operators';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-root',
   styleUrls: ['./app.component.scss'],
   animations: [
     trigger('appPreloader', [
-      // state('displayed', style({
-      //   opacity: 1
-      // })),
-      // state('hidden', style({
-      //   opacity: 0
-      // })),
       transition(':leave', [
         animate('0.25s', style({ opacity: 0 }))
       ]),

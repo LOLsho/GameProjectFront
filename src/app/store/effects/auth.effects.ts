@@ -24,6 +24,7 @@ import { AuthWithEmailAndPasswordData, defaultUser, User } from '../../auth/auth
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { auth } from 'firebase';
 import { RouterGo } from '../actions/router.actions';
+import { NotifierService } from 'angular-notifier';
 
 
 @Injectable()
@@ -32,6 +33,7 @@ export class AuthEffects {
   constructor(
     private actions$: Actions,
     private afAuth: AngularFireAuth,
+    private notifierService: NotifierService,
   ) {}
 
   @Effect()
@@ -47,24 +49,12 @@ export class AuthEffects {
           photoURL: authData.photoURL,
           authenticated: true,
         };
+        this.notifierService.notify('default', `You are signed in with email "${user.email}"`);
         return new Authenticated(user);
       } else {
         return new NotAuthenticated();
       }
     }),
-  );
-
-  @Effect()
-  emailAndPasswordLogin$: Observable<Action | Action[]> = this.actions$.pipe(
-    ofType(EMAIL_AND_PASSWORD_LOGIN),
-    map((action: EmailAndPasswordLogin) => action.payload),
-    switchMap((payload: AuthWithEmailAndPasswordData) => {
-      return this.afAuth.auth.signInWithEmailAndPassword(payload.email, payload.password);
-    }),
-    mergeMap((credential) => [
-      new Authenticated({ uid: credential.user.uid, authenticated: true }),
-      new RouterGo({path: ['/games']})
-    ])
   );
 
   @Effect()
@@ -77,7 +67,22 @@ export class AuthEffects {
     mergeMap((credential) => [
       new Authenticated({ uid: credential.user.uid, authenticated: true }),
       new RouterGo({path: ['/games']})
-    ])
+    ]),
+    catchError((error) => of(new AuthFail(error)))
+  );
+
+  @Effect()
+  emailAndPasswordLogin$: Observable<Action | Action[]> = this.actions$.pipe(
+    ofType(EMAIL_AND_PASSWORD_LOGIN),
+    map((action: EmailAndPasswordLogin) => action.payload),
+    switchMap((payload: AuthWithEmailAndPasswordData) => {
+      return this.afAuth.auth.signInWithEmailAndPassword(payload.email, payload.password);
+    }),
+    mergeMap((credential) => [
+      new Authenticated({ uid: credential.user.uid, authenticated: true }),
+      new RouterGo({path: ['/games']})
+    ]),
+    catchError((error) => of(new AuthFail(error)))
   );
 
   @Effect()
@@ -91,7 +96,7 @@ export class AuthEffects {
       new Authenticated({ uid: credential.user.uid, authenticated: true }),
       new RouterGo({path: ['/games']})
     ]),
-    catchError((error) => of(new AuthFail(error))),
+    catchError((error) => of(new AuthFail(error)))
   );
 
   @Effect()
@@ -130,7 +135,11 @@ export class AuthEffects {
   logout$: Observable<Action> = this.actions$.pipe(
     ofType(LOGOUT),
     switchMap(() => of(this.afAuth.auth.signOut())),
-    map((authData) => new LogoutSuccess(defaultUser)),
+    map((authData) => {
+      console.log('authData - ', authData);
+      this.notifierService.notify('default', 'You have signed out');
+      return new LogoutSuccess(defaultUser);
+    }),
     catchError((error) => of(new AuthFail(error))),
   );
 
@@ -146,6 +155,6 @@ export class AuthEffects {
   onAuthError$ = this.actions$.pipe(
     ofType(AUTH_FAIL),
     map((action: AuthFail) => action.payload),
-    tap((error) => console.error(error.message))
+    tap((error) => this.notifierService.notify('error', error.message))
   );
 }

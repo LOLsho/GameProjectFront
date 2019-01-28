@@ -20,6 +20,8 @@ import { appReducers } from './store/reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { appEffects } from './store/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { NotifierModule } from 'angular-notifier';
+import { notifierConfig } from '../assets/configs/notifier/notifier.config';
 
 
 
@@ -44,6 +46,8 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
     EffectsModule.forRoot(appEffects),
     StoreRouterConnectingModule,
     storeDevtoolsModule,
+
+    NotifierModule.withConfig(notifierConfig)
   ],
   providers: [
     L10nProvider,
