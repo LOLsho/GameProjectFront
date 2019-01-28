@@ -14,6 +14,13 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { firebaseConfig } from '../assets/configs/firebase/firebase.config';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslationModule } from 'angular-l10n';
+import { StoreModule } from '@ngrx/store';
+import { storeMetaReducers, RouterSerializerProvider, storeDevtoolsModule } from '../assets/configs/store/store.config';
+import { appReducers } from './store/reducers';
+import { EffectsModule } from '@ngrx/effects';
+import { appEffects } from './store/effects';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+
 
 
 @NgModule({
@@ -32,10 +39,18 @@ import { TranslationModule } from 'angular-l10n';
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
+
+    StoreModule.forRoot(appReducers, { metaReducers: storeMetaReducers }),
+    EffectsModule.forRoot(appEffects),
+    StoreRouterConnectingModule,
+    storeDevtoolsModule,
   ],
   providers: [
     L10nProvider,
+    RouterSerializerProvider,
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {}
+}

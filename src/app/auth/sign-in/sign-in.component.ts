@@ -3,6 +3,10 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { Language, TranslationService } from 'angular-l10n';
+import { Store } from '@ngrx/store';
+import { AuthState } from '../../store/reducers/auth.reducer';
+import { EmailAndPasswordLogin } from '../../store/actions/auth.actions';
+import { AuthWithEmailAndPasswordData } from '../auth.interface';
 
 @Component({
   selector: 'app-sign-in',
@@ -25,8 +29,8 @@ export class SignInComponent implements OnInit {
     public authService: AuthService,
     private router: Router,
     private trn: TranslationService,
-  ) {
-  }
+    private store: Store<AuthState>,
+  ) {}
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -52,12 +56,11 @@ export class SignInComponent implements OnInit {
   async submit() {
     if (this.form.invalid) return;
 
-    const userDataToSend = {
+    const userDataToSend: AuthWithEmailAndPasswordData = {
       email: this.email.value,
       password: this.password.value,
     };
 
-    await this.authService.loginViaEmailAndPassword(userDataToSend);
-    this.router.navigate(['/games']);
+    this.store.dispatch(new EmailAndPasswordLogin(userDataToSend));
   }
 }

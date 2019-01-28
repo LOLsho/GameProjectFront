@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { Store } from '@ngrx/store';
+import { AuthState } from '../../store/reducers/auth.reducer';
+import { FacebookLogin, GithubLogin, GoogleLogin } from '../../store/actions/auth.actions';
 
 @Component({
   selector: 'app-socials',
@@ -9,14 +11,20 @@ import { AuthService } from '../auth.service';
 export class SocialsComponent implements OnInit {
 
   constructor(
-    public auth: AuthService,
-  ) { }
+    private store: Store<AuthState>
+  ) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  authGoogle() {
+    this.store.dispatch(new GoogleLogin());
   }
 
-  async authGoogle() {
-    await this.auth.loginViaGoogle();
+  authFacebook() {
+    this.store.dispatch(new FacebookLogin());
+  }
 
+  authGithub() {
+    this.store.dispatch(new GithubLogin());
   }
 }

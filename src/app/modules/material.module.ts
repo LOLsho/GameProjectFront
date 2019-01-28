@@ -7,6 +7,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatInputModule } from '@angular/material';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 const matElements = [
@@ -20,6 +21,7 @@ const matElements = [
   MatBadgeModule,
   MatMenuModule,
   MatDialogModule,
+  MatProgressSpinnerModule,
 ];
 
 
@@ -27,5 +29,4 @@ const matElements = [
   imports: matElements,
   exports: matElements,
 })
-export class MaterialModule {
-}
+export class MaterialModule {}

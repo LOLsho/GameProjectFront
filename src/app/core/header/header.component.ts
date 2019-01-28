@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../auth/auth.service';
 import { LocaleService, Language } from 'angular-l10n';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AuthState } from '../../store/reducers/auth.reducer';
+import { Logout } from '../../store/actions/auth.actions';
+import { getUser } from '../../store/selectors/auth.selectors';
+import { map } from 'rxjs/operators';
+import { User } from '../../auth/auth.interface';
 
 
 @Component({
@@ -11,18 +17,21 @@ import { LocaleService, Language } from 'angular-l10n';
 export class HeaderComponent implements OnInit {
 
   @Language() lang: string;
+  authenticated$: Observable<boolean>;
 
   constructor(
-    public auth: AuthService,
     public locale: LocaleService,
-  ) {
-  }
+    private store: Store<AuthState>,
+  ) {}
 
   ngOnInit() {
+    this.authenticated$ = this.store.select(getUser).pipe(
+      map((user: User) => user.authenticated)
+    );
   }
 
   singOut() {
-    this.auth.logout();
+    this.store.dispatch(new Logout());
   }
 
   changeLanguage(lang) {

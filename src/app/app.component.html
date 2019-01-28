@@ -1,0 +1,11 @@
+<ng-template #preloader>
+  <div class="preloader" [@appPreloader]="(user$ | async) ? 'hidden' : 'displayed'">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </div>
+</ng-template>
+<div class="app" *ngIf="user$ | async; else preloader">
+  <app-header></app-header>
+  <div class="main">
+    <router-outlet></router-outlet>
+  </div>
+</div>

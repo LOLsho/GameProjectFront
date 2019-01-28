@@ -4,6 +4,8 @@
 
       <li class="header__item">
         <a routerLink="/"
+           routerLinkActive="header__active"
+           [routerLinkActiveOptions]="{exact: true}"
            mat-button
            class="header__link">
           <i class="material-icons">videogame_asset</i>
@@ -25,27 +27,6 @@
 
     <div class="header__right-elems">
 
-      <div class="header__auth" *ngIf="!auth.isLoggedIn">
-        <a routerLink="/authentication/sign-in"
-           mat-button
-           routerLinkActive="header__active"
-           class="header__link">
-          {{ 'HEADER__SIGN-IN' | translate:lang }}
-        </a>
-        <a routerLink="/authentication/sign-up"
-           mat-button
-           routerLinkActive="header__active"
-           class="header__link">
-          {{ 'HEADER__SIGN-UP' | translate:lang }}
-        </a>
-      </div>
-
-      <div class="header__auth" *ngIf="auth.isLoggedIn">
-        <button mat-button (click)="singOut()">
-          {{ 'Sign-out' | translate:lang }}
-        </button>
-      </div>
-
       <div class="header__auth">
         <button mat-stroked-button [matMenuTriggerFor]="menu">
           <i class="material-icons">language</i>
@@ -56,6 +37,30 @@
           <button mat-menu-item (click)="locale.setCurrentLanguage('en')">{{ 'English' | translate }}</button>
         </mat-menu>
       </div>
+
+      <ng-template #notAuthenticated>
+        <div class="header__auth">
+          <a routerLink="/authentication/sign-in"
+             mat-button
+             routerLinkActive="header__active"
+             class="header__link">
+            {{ 'HEADER__SIGN-IN' | translate:lang }}
+          </a>
+          <a routerLink="/authentication/sign-up"
+             mat-button
+             routerLinkActive="header__active"
+             class="header__link">
+            {{ 'HEADER__SIGN-UP' | translate:lang }}
+          </a>
+        </div>
+      </ng-template>
+
+      <div class="header__auth" *ngIf="authenticated$ | async; else notAuthenticated">
+        <button mat-button (click)="singOut()">
+          {{ 'Sign-out' | translate:lang }}
+        </button>
+      </div>
+
     </div>
   </div>
 </nav>

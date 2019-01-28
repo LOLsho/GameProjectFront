@@ -1,13 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../auth.service';
-import {Router} from '@angular/router';
-import {Language, TranslationService} from 'angular-l10n';
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Language, TranslationService } from 'angular-l10n';
+import { Store } from '@ngrx/store';
+import { AuthState } from '../../store/reducers/auth.reducer';
+import { EmailAndPasswordRegister } from '../../store/actions/auth.actions';
+import { AuthWithEmailAndPasswordData } from '../auth.interface';
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
-  styleUrls: ['./sign-up.component.scss']
+  styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent implements OnInit {
 
@@ -23,8 +25,7 @@ export class SignUpComponent implements OnInit {
   passwordRepeat: AbstractControl;
 
   constructor(
-    private authService: AuthService,
-    private router: Router,
+    private store: Store<AuthState>,
     private trn: TranslationService,
   ) {
   }
@@ -33,7 +34,7 @@ export class SignUpComponent implements OnInit {
     this.form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email, Validators.minLength(6)]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      passwordRepeat: new FormControl('', [Validators.required, Validators.minLength(6)])
+      passwordRepeat: new FormControl('', [Validators.required, Validators.minLength(6)]),
     });
     this.email = this.form.get('email');
     this.password = this.form.get('password');
@@ -63,12 +64,11 @@ export class SignUpComponent implements OnInit {
   async submit() {
     if (this.form.invalid && !this.isPasswordsMatch) return;
 
-    const userDataToSend = {
+    const userDataToSend: AuthWithEmailAndPasswordData = {
       email: this.email.value,
-      password: this.password.value
+      password: this.password.value,
     };
 
-    await this.authService.registerViaEmailAndPassword(userDataToSend);
-    this.router.navigate(['/games']);
+    this.store.dispatch(new EmailAndPasswordRegister(userDataToSend));
   }
 }

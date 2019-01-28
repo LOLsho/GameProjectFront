@@ -107,14 +107,14 @@ export class SapperComponent implements OnInit, OnDestroy {
     if (this.playerWon) {
       console.log('in if (this.playerWon)');
       this.stopTimer();
-      this.makeAllMinesChacked();
+      this.makeAllMinesChecked();
       setTimeout(() => {
         alert('Победа!');
       }, 0);
     }
   }
 
-  makeAllMinesChacked() {
+  makeAllMinesChecked() {
     this.field.forEach(row => row.forEach(item => {
       if (item.hasMine) item.checked = true;
     }));
@@ -129,7 +129,7 @@ export class SapperComponent implements OnInit, OnDestroy {
   }
 
   rightClick(cell: SapperCell) {
-    if (this.gameOver || this.firstClick || cell.isOpen) return;
+    if (this.playerWon || this.gameOver || this.firstClick || cell.isOpen) return;
     cell.checked = !cell.checked;
   }
 

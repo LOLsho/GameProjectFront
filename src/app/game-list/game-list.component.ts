@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Games, GAMES } from './game-list';
-import { AuthService } from '../auth/auth.service';
 import { Language } from 'angular-l10n';
 
 @Component({
@@ -14,15 +13,12 @@ export class GameListComponent implements OnInit {
 
   games: Games = GAMES;
 
-  constructor(
-    private auth: AuthService,
-  ) {
+  constructor() {
+
   }
 
   ngOnInit() {
-    this.auth.isLoggedIn$.subscribe((isLoggedIn: boolean) => {
-      console.log({isLoggedIn});
-    });
+
   }
 
 }

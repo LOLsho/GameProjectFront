@@ -4,8 +4,15 @@ export interface AuthWithEmailAndPasswordData {
 }
 
 export interface User {
-  uid: string;
-  email: string;
+  authenticated: boolean;
+  uid?: string;
+  email?: string;
+  name?: string;
   photoURL?: string;
   displayName?: string;
 }
+
+export const defaultUser: User = {
+  authenticated: false,
+  name: 'GUEST',
+};
