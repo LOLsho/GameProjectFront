@@ -1,3 +1,54 @@
-<p>
-  custom-field works!
-</p>
+<div class="custom-field">
+  <form [formGroup]="form" class="custom-field__form">
+    <mat-form-field class="custom-field__input">
+      <input matInput
+             type="number"
+             placeholder="{{ 'SAPPER_CUSTOM-ROWS' | translate:lang }}"
+             formControlName="rows"
+             autocomplete="off"
+             (input)="onRowsInput($event)"
+      >
+      <mat-hint align="start">
+        {{ 'From' | translate:lang }} 4
+        {{ ('To' | translate:lang).toLowerCase() }} 16
+      </mat-hint>
+    </mat-form-field>
+    <mat-form-field class="custom-field__input">
+      <input matInput
+             type="number"
+             placeholder="{{ 'SAPPER_CUSTOM-COLUMNS' | translate:lang }}"
+             formControlName="columns"
+             autocomplete="off"
+             (input)="onColumnsInput($event)"
+      >
+      <mat-hint align="start">
+        <mat-hint align="start">
+          {{ 'From' | translate:lang }} 9
+          {{ ('To' | translate:lang).toLowerCase() }} 40
+        </mat-hint>
+      </mat-hint>
+    </mat-form-field>
+    <mat-form-field class="custom-field__input">
+      <input matInput
+             placeholder="{{ 'SAPPER_CUSTOM-MINES' | translate:lang }}"
+             formControlName="mines"
+             autocomplete="off"
+      >
+      <mat-hint align="start">
+        {{ 'From' | translate:lang }} 1
+        {{ ('To' | translate:lang).toLowerCase() }}
+        {{ getMaxMines(form.get('rows').value, form.get('columns').value) }}
+      </mat-hint>
+    </mat-form-field>
+
+    <button mat-raised-button
+            [disabled]="form.invalid"
+            color="primary"
+            class="custom-field__btn"
+            type="submit"
+            (click)="submitField()"
+    >
+      {{ 'Create' | translate:lang }}
+    </button>
+  </form>
+</div>

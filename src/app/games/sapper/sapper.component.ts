@@ -4,6 +4,7 @@ import { Language, TranslationService } from 'angular-l10n';
 import { MatDialog } from '@angular/material';
 import { CustomFieldComponent } from './custom-field/custom-field.component';
 import { NotifierService } from 'angular-notifier';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sapper',
@@ -61,25 +62,19 @@ export class SapperComponent implements OnInit, OnDestroy {
 
   makeFieldMyself() {
     const dialogRef = this.modal.open(CustomFieldComponent);
-    console.log('dialogRef -', dialogRef.componentInstance);
 
-    // const rows = Number(prompt('Количество рядов. Мин - 4. Макс - 16'));
-    // const columns = Number(prompt('Количество колонок. Мин - 9. Макс - 40'));
-    // const amountMines = Number(prompt('Количество мин. Должно быть меньше, чем клеток'));
-    //
-    // if (!rows || !columns || !amountMines) return;
-    //
-    // if (rows < 4 || columns < 9) return;
-    // if (rows > 16 || columns > 40) return;
-    //
-    // if (amountMines >= rows * columns || amountMines < 1) return;
-    //
-    // const field = {
-    //   size: [columns, rows],
-    //   amountMines: amountMines,
-    // };
-    //
-    // this.chooseField(field);
+    dialogRef.afterClosed()
+      .pipe(filter(fieldInfo => !!fieldInfo))
+      .subscribe(
+      ({ columns, rows, mines }) => {
+
+        const field = {
+          size: [columns, rows],
+          amountMines: mines,
+        };
+        this.chooseField(field);
+      }
+    );
   }
 
   restartGame() {
@@ -104,11 +99,10 @@ export class SapperComponent implements OnInit, OnDestroy {
     }
 
     if (cell.number === 0) {
-      // this.openCellsAround(cell.id);
+      // this.openCellsAround(cell.id); TODO!
     }
 
     if (this.playerWon) {
-      console.log('in if (this.playerWon)');
       this.stopTimer();
       this.makeAllMinesChecked();
       this.notifierService.notify('success', this.translation.translate(`SAPPER_WIN-MESSAGE`));
@@ -336,28 +330,17 @@ export class SapperComponent implements OnInit, OnDestroy {
     return this.chosenField.amountMines - clearedMines;
   }
 
-  testVar;
-  counter = 0;
-
   get playerWon() {
     for (let rowIndex = 0; rowIndex < this.rowsLength; rowIndex++) {
-      for (let columnIndex = 0; columnIndex < this.rowsLength; columnIndex++) {
-        this.counter++;
+      for (let columnIndex = 0; columnIndex < this.columnsLength; columnIndex++) {
         const currentCell = this.field[rowIndex][columnIndex];
-        this.testVar = currentCell;
         if (!currentCell.hasMine && !currentCell.isOpen) {
-          this.counter = 0;
           return false;
         } else {
 
         }
       }
     }
-
-    console.log('this.field - ', this.field);
-    console.log('this.counter - ', this.counter);
-    console.log('currentCell - ', this.testVar);
-    console.log('!currentCell.hasMine && !currentCell.isOpen - ', !this.testVar.hasMine && !this.testVar.isOpen);
 
     return true;
   }

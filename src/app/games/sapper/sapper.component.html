@@ -14,6 +14,7 @@
           <div class="sapper__sell"
                *ngFor="let cell of row; let cellIndex = index"
                [style.background-color]="cell.hasMine ? 'red' : 'grey'"
+               [style.cursor]="cell.isOpen ? 'default' : 'cursor'"
                (click)="cellClick(cell)"
                (contextmenu)="rightClick(cell)"
           >

@@ -9,6 +9,9 @@
   "English": "English",
   "Play": "Play",
   "New-game": "New game",
+  "Create": "Create",
+  "From": "From",
+  "To": "To",
 
   "HEADER__SIGN-IN": "Sign in",
   "HEADER__SIGN-UP": "Sign up",
@@ -31,5 +34,8 @@
   "SAPPER_DIFFICULTY-MIDDLE": "Middle (16х16, 40 mines)",
   "SAPPER_DIFFICULTY-HARD": "Hard (30х16, 99 mines)",
   "SAPPER_SELECT-CUSTOM": "Make custom field",
-  "SAPPER_WIN-MESSAGE": "The field is completely cleared, congratulations!"
+  "SAPPER_WIN-MESSAGE": "The field is completely cleared, congratulations!",
+  "SAPPER_CUSTOM-ROWS": "Enter amount of rows",
+  "SAPPER_CUSTOM-COLUMNS": "Enter amount of columns",
+  "SAPPER_CUSTOM-MINES": "Enter amount of mines"
 }

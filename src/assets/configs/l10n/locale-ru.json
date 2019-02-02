@@ -9,6 +9,9 @@
   "English": "English",
   "Play": "Играть",
   "New-game": "Новая игра",
+  "Create": "Создать",
+  "From": "От",
+  "To": "До",
 
   "HEADER__SIGN-IN": "Вход",
   "HEADER__SIGN-UP": "Регистрация",
@@ -31,5 +34,8 @@
   "SAPPER_DIFFICULTY-MIDDLE": "Средне (16х16, 40 мин)",
   "SAPPER_DIFFICULTY-HARD": "Сложно (30х16, 99 мин)",
   "SAPPER_SELECT-CUSTOM": "Сделать свое поле",
-  "SAPPER_WIN-MESSAGE": "Поле полностью разминированно, поздравляю!"
+  "SAPPER_WIN-MESSAGE": "Поле полностью разминированно, поздравляю!",
+  "SAPPER_CUSTOM-ROWS": "Введите количество рядов",
+  "SAPPER_CUSTOM-COLUMNS": "Введите количество колонок",
+  "SAPPER_CUSTOM-MINES": "Введите количество мин"
 }

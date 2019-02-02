@@ -27,8 +27,7 @@ export class SignUpComponent implements OnInit {
   constructor(
     private store: Store<AuthState>,
     private trn: TranslationService,
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -61,7 +60,7 @@ export class SignUpComponent implements OnInit {
       this.passwordRepeat.hasError('minlength') ? this.trn.translate('Min-length') + ' - ' + this.PASSWORD_MIN_LENGTH : '';
   }
 
-  async submit() {
+  submit() {
     if (this.form.invalid && !this.isPasswordsMatch) return;
 
     const userDataToSend: AuthWithEmailAndPasswordData = {
