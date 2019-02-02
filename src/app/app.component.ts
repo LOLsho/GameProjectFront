@@ -22,7 +22,9 @@ import { animate, style, transition, trigger } from '@angular/animations';
 })
 export class AppComponent {
 
-  user$: Observable<User>;
+  user$: Observable<User> = this.store.select(getUser).pipe(
+    delay(1500),
+  );
 
   constructor(
     private store: Store<AppState>
@@ -32,8 +34,5 @@ export class AppComponent {
 
   prepareAndLoadApp() {
     this.store.dispatch(new GetUser());
-    this.user$ = this.store.select(getUser).pipe(
-      delay(1500),
-    );
   }
 }

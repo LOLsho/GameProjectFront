@@ -14,12 +14,12 @@ export interface AuthState {
   pending: boolean;
 }
 
-export const initialState: AuthState = {
+export const initialAuthState: AuthState = {
   user: null,
   pending: false,
 };
 
-export function authReducer(state: AuthState = initialState, action: AuthActions): AuthState {
+export function authReducer(state: AuthState = initialAuthState, action: AuthActions): AuthState {
   switch (action.type) {
 
     case GET_USER:

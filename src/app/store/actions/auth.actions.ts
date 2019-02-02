@@ -39,11 +39,11 @@ export class GoogleLogin implements Action {
 }
 
 export class FacebookLogin implements Action {
-  readonly  type = FACEBOOK_LOGIN;
+  readonly type = FACEBOOK_LOGIN;
 }
 
 export class GithubLogin implements Action {
-  readonly  type = GITHUB_LOGIN;
+  readonly type = GITHUB_LOGIN;
 }
 
 export class Authenticated implements Action {

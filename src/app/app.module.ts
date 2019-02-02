@@ -42,7 +42,9 @@ import { notifierConfig } from '../assets/configs/notifier/notifier.config';
     AngularFirestoreModule,
     AngularFireAuthModule,
 
-    StoreModule.forRoot(appReducers, { metaReducers: storeMetaReducers }),
+    StoreModule.forRoot(appReducers,
+      { metaReducers: storeMetaReducers }
+      ),
     EffectsModule.forRoot(appEffects),
     StoreRouterConnectingModule,
     storeDevtoolsModule,
