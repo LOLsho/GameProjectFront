@@ -36,12 +36,12 @@ describe('Auth Selectors', () => {
       });
 
       console.log('result - ', result);
-      expect(result).toEqual({ ...initialAuthState });
+      expect(result).toBe({ ...initialAuthState });
 
       store.dispatch(new Authenticated(testUser));
 
       console.log('result - ', result);
-      expect(result).toEqual({ ...initialAuthState, user: testUser });
+      expect(result).toBe({ ...initialAuthState, user: testUser });
     });
   });
 });

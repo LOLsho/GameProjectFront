@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, mapTo, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Observable, of } from 'rxjs';
+import { fromEvent, interval, merge, Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
 import {
   AUTH_FAIL,
@@ -157,4 +157,11 @@ export class AuthEffects {
     map((action: AuthFail) => action.payload),
     tap((error) => this.notifierService.notify('error', error.message))
   );
+
+  // @Effect({ dispatch: false })
+  // online$ = merge(
+  //   of(navigator.onLine),
+  //   fromEvent(window, 'online').pipe(mapTo(true)),
+  //   fromEvent(window, 'offline').pipe(mapTo(false)),
+  // ).pipe(map(online => console.log(online)));
 }

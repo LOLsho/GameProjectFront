@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from './store/reducers';
 import { Observable } from 'rxjs';
 import { User } from './auth/auth.interface';
-import { getUser } from './store/selectors/auth.selectors';
+import { getAuthPending, getUser } from './store/selectors/auth.selectors';
 import { delay } from 'rxjs/operators';
 import { animate, style, transition, trigger } from '@angular/animations';
 
@@ -25,6 +25,7 @@ export class AppComponent {
   user$: Observable<User> = this.store.select(getUser).pipe(
     delay(1500),
   );
+  // authPending$: Observable<boolean> = this.store.select(getAuthPending);
 
   constructor(
     private store: Store<AppState>

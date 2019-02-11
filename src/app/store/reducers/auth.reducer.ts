@@ -47,3 +47,4 @@ export function authReducer(state: AuthState = initialAuthState, action: AuthAct
 
 
 export const selectUser = (state: AuthState) => state.user;
+export const selectAuthPending = (state: AuthState) => state.pending;

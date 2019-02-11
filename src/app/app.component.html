@@ -6,7 +6,7 @@
 </div>
 
 <ng-template #preloader>
-  <div class="preloader" [@appPreloader]="(user$ | async) ? 'hidden' : 'displayed'">
+  <div class="preloader" [@appPreloader]>
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
   </div>
 </ng-template>

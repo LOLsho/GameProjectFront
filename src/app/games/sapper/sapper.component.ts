@@ -6,6 +6,7 @@ import { CustomFieldComponent } from './custom-field/custom-field.component';
 import { NotifierService } from 'angular-notifier';
 import { filter } from 'rxjs/operators';
 
+
 @Component({
   selector: 'app-sapper',
   templateUrl: './sapper.component.html',
@@ -19,7 +20,7 @@ export class SapperComponent implements OnInit, OnDestroy {
   timePassed = 0;
   losingSellId: number;
   firstClick = true;
-  field: SapperCell[][] = [];
+  field = []; // TODO : SapperCell[][]
   defaultFields: SapperFields = {
     small: {
       size: [9, 9],
@@ -89,7 +90,7 @@ export class SapperComponent implements OnInit, OnDestroy {
     cell.isOpen = true;
 
     if (this.firstClick) {
-      this.fillField(cell);
+      cell = this.fillField(cell);
       this.startTimer();
       this.firstClick = false;
     }
@@ -99,7 +100,7 @@ export class SapperComponent implements OnInit, OnDestroy {
     }
 
     if (cell.number === 0) {
-      // this.openCellsAround(cell.id); TODO!
+      this.openCellsAround(cell.id);
     }
 
     if (this.playerWon) {
@@ -128,53 +129,15 @@ export class SapperComponent implements OnInit, OnDestroy {
     cell.checked = !cell.checked;
   }
 
-  openCellsAround(cellId: number) {
-    const [rowIndex, columnIndex] = this.getIndexesFromId(cellId);
-    const currentCell = this.field[rowIndex][columnIndex];
+  openCellsAround(cellIds: number[] | number) {
+    if (cellIds === undefined) return;
+    if (!Array.isArray(cellIds)) cellIds = [cellIds];
+    if (cellIds.length === 0) return;
 
-    // this.
-  }
-
-  openEmptyCells(cell: SapperCell) {
-    console.log('here!!!');
-    const [rowIndex, columnIndex] = this.getIndexesFromId(cell.id);
-
-    const openRow = (rowI, columnI) => {
-      let rowsCounter = 1;
-
-      while (columnI - rowsCounter >= 0) {
-        this.field[rowI][columnI - rowsCounter].isOpen = true;
-        if (this.field[rowI][columnI - rowsCounter].number !== 0 && this.field[rowI][columnI - rowsCounter - 1].number !== 0) break;
-        rowsCounter++;
-      }
-
-      rowsCounter = 1;
-
-      while (columnI + rowsCounter < this.columnsLength) {
-        this.field[rowI][columnI + rowsCounter].isOpen = true;
-        if (this.field[rowI][columnI + rowsCounter].number !== 0 && this.field[rowI][columnI + rowsCounter + 1].number !== 0) break;
-        rowsCounter++;
-      }
-    };
-
-    let counter = 0;
-    let currentRow;
-    while (rowIndex - counter >= 0) {
-      currentRow = rowIndex - counter;
-      this.field[currentRow][columnIndex].isOpen = true;
-      if (this.field[currentRow][columnIndex].number === 0) openRow(currentRow, columnIndex);
-      if (this.field[currentRow][columnIndex].number !== 0 && this.field[currentRow - 1][columnIndex].number !== 0) break;
-      counter++;
-    }
-
-    counter = 1;
-
-    while (rowIndex + counter < this.rowsLength) {
-      currentRow = rowIndex + counter;
-      this.field[currentRow][columnIndex].isOpen = true;
-      if (this.field[currentRow][columnIndex].number === 0) openRow(currentRow, columnIndex);
-      if (this.field[currentRow][columnIndex].number !== 0 && this.field[currentRow - 1][columnIndex].number !== 0) break;
-      counter++;
+    for (const cellId of cellIds) {
+      const [rowIndex, columnIndex] = this.getIndexesFromId(cellId);
+      const otherIdsToOpen: number | number[] = this.checkAvailableCells(rowIndex, columnIndex, 'openCells');
+      this.openCellsAround(otherIdsToOpen);
     }
   }
 
@@ -190,14 +153,15 @@ export class SapperComponent implements OnInit, OnDestroy {
 
     // Заполняем массив начальными данными
     for (let rowIndex = 0; rowIndex < this.chosenField.size[1]; rowIndex++) {
-      for (let cellIndex = 0; cellIndex < this.chosenField.size[0]; cellIndex++) {
-        this.field[rowIndex][cellIndex] = { ...this.initialCell, id: rowIndex * this.columnsLength + cellIndex };
+      for (let columnIndex = 0; columnIndex < this.chosenField.size[0]; columnIndex++) {
+        this.field[rowIndex][columnIndex] = { ...this.initialCell, id: this.getIdFromIndexes(rowIndex, columnIndex) };
       }
     }
   }
 
   fillField(firstClickedCell) {
     const mines = [];
+    const [firstCellRowIndex, firstCellColumnIndex] = this.getIndexesFromId(firstClickedCell.id);
 
     // Создаем необходимое количество мин с рандомными индексами
     while (mines.length < this.chosenField.amountMines) {
@@ -223,68 +187,125 @@ export class SapperComponent implements OnInit, OnDestroy {
         return { ...cell, number: minesAround };
       });
     });
+
+    return this.field[firstCellRowIndex][firstCellColumnIndex];
   }
 
   checkAvailableCells(rowIndex, columnIndex, action: 'checkMines' | 'openCells') {
-    let minesAround = 0;
+    let result: number | number[];
 
     if (rowIndex === 0 && columnIndex === 0) {
-      minesAround = this.checkAroundCell(rowIndex, columnIndex, ['r', 'br', 'b']);
+      result = this.checkAroundCell(rowIndex, columnIndex, action, ['r', 'br', 'b']);
     } else if (rowIndex === 0 && columnIndex !== 0 && columnIndex !== this.columnsLength - 1) {
-      minesAround = this.checkAroundCell(rowIndex, columnIndex, ['r', 'br', 'b', 'bl', 'l']);
+      result = this.checkAroundCell(rowIndex, columnIndex, action, ['r', 'br', 'b', 'bl', 'l']);
     } else if (rowIndex === 0 && columnIndex === this.columnsLength - 1) {
-      minesAround = this.checkAroundCell(rowIndex, columnIndex, ['b', 'bl', 'l']);
+      result = this.checkAroundCell(rowIndex, columnIndex, action, ['b', 'bl', 'l']);
     } else if (rowIndex !== 0 && rowIndex !== this.rowsLength - 1 && columnIndex === this.columnsLength - 1) {
-      minesAround = this.checkAroundCell(rowIndex, columnIndex, ['b', 'bl', 'l', 'tl', 't']);
+      result = this.checkAroundCell(rowIndex, columnIndex, action, ['b', 'bl', 'l', 'tl', 't']);
     } else if (rowIndex === this.rowsLength - 1 && columnIndex === this.columnsLength - 1) {
-      minesAround = this.checkAroundCell(rowIndex, columnIndex, ['l', 'tl', 't']);
+      result = this.checkAroundCell(rowIndex, columnIndex, action, ['l', 'tl', 't']);
     } else if (rowIndex === this.rowsLength - 1 && columnIndex !== 0 && columnIndex !== this.columnsLength - 1) {
-      minesAround = this.checkAroundCell(rowIndex, columnIndex, ['l', 'tl', 't', 'tr', 'r']);
+      result = this.checkAroundCell(rowIndex, columnIndex, action, ['l', 'tl', 't', 'tr', 'r']);
     } else if (rowIndex === this.rowsLength - 1 && columnIndex === 0) {
-      minesAround = this.checkAroundCell(rowIndex, columnIndex, ['t', 'tr', 'r']);
+      result = this.checkAroundCell(rowIndex, columnIndex, action, ['t', 'tr', 'r']);
     } else if (rowIndex !== 0 && rowIndex !== this.rowsLength - 1 && columnIndex === 0) {
-      minesAround = this.checkAroundCell(rowIndex, columnIndex, ['t', 'tr', 'r', 'br', 'b']);
+      result = this.checkAroundCell(rowIndex, columnIndex, action, ['t', 'tr', 'r', 'br', 'b']);
     } else {
-      minesAround = this.checkAroundCell(rowIndex, columnIndex);
+      result = this.checkAroundCell(rowIndex, columnIndex, action);
     }
 
-    return action === 'checkMines' ? minesAround : null;
+    return result;
   }
 
-  checkAroundCell(rowIndex, columnIndex, sides?) {
-    let minesAround = 0;
+  checkAroundCell(rowIndex, columnIndex, action: 'checkMines' | 'openCells', sides?): number | number[] {
+    let minesAround = 0; // TODO smart refactor with collbacks
+    const otherIdsToOpen: number[] = [];
     const sidesToCheck = sides || ['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l'];
 
+    let searchedCell: SapperCell;
     sidesToCheck.forEach(side => {
       switch (side) {
         case 'tl':
-          if (this.field[rowIndex - 1][columnIndex - 1].hasMine) minesAround++;
+          searchedCell = this.field[rowIndex - 1][columnIndex - 1];
+          if (action === 'checkMines') {
+            // Записываем сколько мин вокруг клетки
+            if (searchedCell.hasMine) minesAround++;
+          } else {
+            // Записываем пустые (!и закрытые!) клетки для последующего открытия
+            if (searchedCell.number === 0 && !searchedCell.isOpen) {
+              otherIdsToOpen.push(searchedCell.id);
+            }
+            // Открываем данную клетку
+            searchedCell.isOpen = true;
+          }
           break;
         case 't':
-          if (this.field[rowIndex - 1][columnIndex].hasMine) minesAround++;
+          searchedCell = this.field[rowIndex - 1][columnIndex];
+          if (action === 'checkMines') {
+            if (searchedCell.hasMine) minesAround++;
+          } else {
+            if (searchedCell.number === 0 && !searchedCell.isOpen) otherIdsToOpen.push(searchedCell.id);
+            searchedCell.isOpen = true;
+          }
           break;
         case 'tr':
-          if (this.field[rowIndex - 1][columnIndex + 1].hasMine) minesAround++;
+          searchedCell = this.field[rowIndex - 1][columnIndex + 1];
+          if (action === 'checkMines') {
+            if (searchedCell.hasMine) minesAround++;
+          } else {
+            if (searchedCell.number === 0 && !searchedCell.isOpen) otherIdsToOpen.push(searchedCell.id);
+            searchedCell.isOpen = true;
+          }
           break;
         case 'r':
-          if (this.field[rowIndex][columnIndex + 1].hasMine) minesAround++;
+          searchedCell = this.field[rowIndex][columnIndex + 1];
+          if (action === 'checkMines') {
+            if (searchedCell.hasMine) minesAround++;
+          } else {
+            if (searchedCell.number === 0 && !searchedCell.isOpen) otherIdsToOpen.push(searchedCell.id);
+            searchedCell.isOpen = true;
+          }
           break;
         case 'br':
-          if (this.field[rowIndex + 1][columnIndex + 1].hasMine) minesAround++;
+          searchedCell = this.field[rowIndex + 1][columnIndex + 1];
+          if (action === 'checkMines') {
+            if (searchedCell.hasMine) minesAround++;
+          } else {
+            if (searchedCell.number === 0 && !searchedCell.isOpen) otherIdsToOpen.push(searchedCell.id);
+            searchedCell.isOpen = true;
+          }
           break;
         case 'b':
-          if (this.field[rowIndex + 1][columnIndex].hasMine) minesAround++;
+          searchedCell = this.field[rowIndex + 1][columnIndex];
+          if (action === 'checkMines') {
+            if (searchedCell.hasMine) minesAround++;
+          } else {
+            if (searchedCell.number === 0 && !searchedCell.isOpen) otherIdsToOpen.push(searchedCell.id);
+            searchedCell.isOpen = true;
+          }
           break;
         case 'bl':
-          if (this.field[rowIndex + 1][columnIndex - 1].hasMine) minesAround++;
+          searchedCell = this.field[rowIndex + 1][columnIndex - 1];
+          if (action === 'checkMines') {
+            if (searchedCell.hasMine) minesAround++;
+          } else {
+            if (searchedCell.number === 0 && !searchedCell.isOpen) otherIdsToOpen.push(searchedCell.id);
+            searchedCell.isOpen = true;
+          }
           break;
         case 'l':
-          if (this.field[rowIndex][columnIndex - 1].hasMine) minesAround++;
+          searchedCell = this.field[rowIndex][columnIndex - 1];
+          if (action === 'checkMines') {
+            if (searchedCell.hasMine) minesAround++;
+          } else {
+            if (searchedCell.number === 0 && !searchedCell.isOpen) otherIdsToOpen.push(searchedCell.id);
+            searchedCell.isOpen = true;
+          }
           break;
       }
     });
 
-    return minesAround;
+    return action === 'checkMines' ? minesAround : otherIdsToOpen;
   }
 
   startTimer() {
@@ -301,6 +322,10 @@ export class SapperComponent implements OnInit, OnDestroy {
     const rowIndex = Math.floor(id / this.columnsLength);
     const columnIndex = id - (rowIndex * this.columnsLength);
     return [rowIndex, columnIndex];
+  }
+
+  getIdFromIndexes(rowIndex, columnIndex): number {
+    return rowIndex * this.columnsLength + columnIndex;
   }
 
   get rowsLength() {

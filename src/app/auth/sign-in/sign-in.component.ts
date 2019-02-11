@@ -26,7 +26,6 @@ export class SignInComponent implements OnInit {
   password: AbstractControl;
 
   constructor(
-    public authService: AuthService,
     private router: Router,
     private trn: TranslationService,
     private store: Store<AuthState>,
