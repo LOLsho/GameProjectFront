@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatInputModule } from '@angular/material';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 const matElements = [
@@ -22,6 +23,7 @@ const matElements = [
   MatMenuModule,
   MatDialogModule,
   MatProgressSpinnerModule,
+  DragDropModule,
 ];
 
 

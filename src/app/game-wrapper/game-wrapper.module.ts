@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { GameWrapperComponent } from './game-wrapper.component';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../modules/shared.module';
-import { Game, GAMES } from '../game-list/game-list';
+import { GAMES } from '../game-list/game-list';
 import { CustomFieldComponent } from '../games/sapper/custom-field/custom-field.component';
 import { TicTacToeComponent } from '../games/tic-tac-toe/tic-tac-toe.component';
 import { SapperComponent } from '../games/sapper/sapper.component';
+import { Game } from './game.interfaces';
 
 
 const ROUTES: Routes = [
