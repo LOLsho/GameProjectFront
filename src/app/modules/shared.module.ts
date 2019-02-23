@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TranslationModule } from 'angular-l10n';
 import { MaterialModule } from './material.module';
+import { LoaderComponent } from '../elements/loader/loader.component';
 
 
 const sharedModules = [
@@ -12,10 +13,14 @@ const sharedModules = [
   MaterialModule,
 ];
 
+const sharedComponents = [
+  LoaderComponent,
+];
+
 
 @NgModule({
-  declarations: [],
+  declarations: sharedComponents,
   imports: sharedModules,
-  exports: sharedModules,
+  exports: [...sharedModules, ...sharedComponents],
 })
 export class SharedModule { }

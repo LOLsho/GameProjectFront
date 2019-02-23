@@ -4,8 +4,8 @@ import { Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { LOAD_GAMES, LoadGamesFail, LoadGamesSuccess } from '../actions/games-list.actions';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { GameListService } from '../../game-list.service';
-import { GameList } from '../../../game-wrapper/game.interfaces';
+import { GameListService } from '../../game-list/game-list.service';
+import { GameList } from '../../game-wrapper/game.interfaces';
 
 
 @Injectable()

@@ -3,9 +3,17 @@ import { TicTacToeComponent } from '../games/tic-tac-toe/tic-tac-toe.component';
 import { Games } from '../game-wrapper/game.interfaces';
 
 export const GAMES: Games = [
-  { title: 'tic-tac-toe', component: TicTacToeComponent },
+  {
+    name: 'tic-tac-toe',
+    imageSrc: '../../assets/games/tic-tac-toe/images/card-bg.jpg',
+    component: TicTacToeComponent
+  },
   // {gameTitle: 'spaceship'},
-  { title: 'sapper', component: SapperComponent },
+  {
+    name: 'sapper',
+    imageSrc: '../../assets/games/sapper/images/card-bg.jpg',
+    component: SapperComponent
+  },
 ];
 
 

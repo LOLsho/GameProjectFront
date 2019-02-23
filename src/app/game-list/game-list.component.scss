@@ -1,20 +1,6 @@
 .game-list {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
 
-.game-list__container {
-  border: 0 solid white;
-  height: 50vh;
-  width: 800px;
-  background: black;
-  box-shadow: 0 0 50px rgba(#9C2EAA, 0.5);
-  border-radius: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 30px 0;
 }
 
 .game-list__content {
@@ -22,15 +8,36 @@
 }
 
 .game-list__list {
-
+  display: flex;
+  justify-content: space-between;
 }
 
 .game-list__item {
+  width: 30%;
   background: white;
   color: black;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.game-list__btn {
-  width: 100px;
-  height: 30px;
+.game-list__title {
+  font-weight: bold;
+  font-size: 25px;
+  text-transform: capitalize;
+  margin-bottom: 13px;
+}
+
+.game-list__bg-img {
+  background: no-repeat center center / cover;
+  height: 230px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.game-list__button {
+  margin-top: 20px;
+  display: block;
+  width: 130px;
 }

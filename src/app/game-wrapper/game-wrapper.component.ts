@@ -38,7 +38,7 @@ export class GameWrapperComponent implements OnInit, AfterContentInit {
     this.games = this.db.collection('games');
 
     this.route.params.subscribe(params => {
-      const componentToResolve = GAMES.find(game => game.title === params.game).component;
+      const componentToResolve = GAMES.find(game => game.name === params.game).component;
 
       const factory = this.resolver.resolveComponentFactory(componentToResolve);
       const gameComponent = this.gameEntry.createComponent(factory);

@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(100% - 56px);
+  padding-top: 110px;
 }
 
 .auth__container {
@@ -19,23 +19,8 @@
   margin-top: 10px;
 }
 
-.greeting__content {
-
-}
-
-.greeting__titile {
-
-}
-
-.greeting__link {
-  margin-top: 20px;
-  width: 100%;
-}
-
 
 // --- For cards ---
-
-
 .card {
   width: 340px;
   height: 425px;

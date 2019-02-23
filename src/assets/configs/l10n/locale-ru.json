@@ -12,6 +12,8 @@
   "Create": "Создать",
   "From": "От",
   "To": "До",
+  "tic-tac-toe": "Крестики-нолики",
+  "sapper": "Сапер",
 
   "HEADER__SIGN-IN": "Вход",
   "HEADER__SIGN-UP": "Регистрация",

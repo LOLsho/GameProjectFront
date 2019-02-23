@@ -12,10 +12,11 @@ body {
   //background: url("assets/img/bg/fonwall.ru_237821.jpg") no-repeat center center / cover;
   //background-color: #7b1fa2;
   color: white;
+  padding-top: $header-height;
 }
 
 html, body {
-  height: 100%;
+
 }
 
 div, ul, li, p, a, img, button, html {
@@ -32,8 +33,7 @@ h2 {
 }
 
 .main {
-  padding-top: $header-height;
-  height: 100%;
+  position: relative;
 }
 
 .main-container {

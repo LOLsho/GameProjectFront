@@ -1,4 +1,4 @@
-import { GameList } from '../../../game-wrapper/game.interfaces';
+import { GameList } from '../../game-wrapper/game.interfaces';
 import { GamesListActions, LOAD_GAMES, LOAD_GAMES_FAIL, LOAD_GAMES_SUCCESS } from '../actions/games-list.actions';
 
 

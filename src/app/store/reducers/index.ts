@@ -13,5 +13,6 @@ export interface AppState {
 export const appReducers: ActionReducerMap<AppState> = {
   auth: authReducer,
   routerReducer: routerReducer,
+
 };
 

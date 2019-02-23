@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { GameList } from '../../../game-wrapper/game.interfaces';
+import { GameList } from '../../game-wrapper/game.interfaces';
 
 
 

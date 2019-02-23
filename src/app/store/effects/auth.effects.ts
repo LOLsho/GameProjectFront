@@ -62,13 +62,14 @@ export class AuthEffects {
     ofType(EMAIL_AND_PASSWORD_REGISTER),
     map((action: EmailAndPasswordRegister) => action.payload),
     switchMap((payload: AuthWithEmailAndPasswordData) => {
-      return this.afAuth.auth.createUserWithEmailAndPassword(payload.email, payload.password);
+      return fromPromise(this.afAuth.auth.createUserWithEmailAndPassword(payload.email, payload.password)).pipe(
+        mergeMap((credential) => [
+          new Authenticated({ uid: credential.user.uid, authenticated: true }),
+          new RouterGo({path: ['/games']})
+        ]),
+        catchError((error) => of(new AuthFail(error)))
+      );
     }),
-    mergeMap((credential) => [
-      new Authenticated({ uid: credential.user.uid, authenticated: true }),
-      new RouterGo({path: ['/games']})
-    ]),
-    catchError((error) => of(new AuthFail(error)))
   );
 
   @Effect()
@@ -76,13 +77,14 @@ export class AuthEffects {
     ofType(EMAIL_AND_PASSWORD_LOGIN),
     map((action: EmailAndPasswordLogin) => action.payload),
     switchMap((payload: AuthWithEmailAndPasswordData) => {
-      return this.afAuth.auth.signInWithEmailAndPassword(payload.email, payload.password);
+      return fromPromise(this.afAuth.auth.signInWithEmailAndPassword(payload.email, payload.password)).pipe(
+        mergeMap((credential) => [
+          new Authenticated({ uid: credential.user.uid, authenticated: true }),
+          new RouterGo({path: ['/games']})
+        ]),
+        catchError((error) => of(new AuthFail(error)))
+      );
     }),
-    mergeMap((credential) => [
-      new Authenticated({ uid: credential.user.uid, authenticated: true }),
-      new RouterGo({path: ['/games']})
-    ]),
-    catchError((error) => of(new AuthFail(error)))
   );
 
   @Effect()
@@ -90,13 +92,14 @@ export class AuthEffects {
     ofType(GOOGLE_LOGIN),
     switchMap(() => {
       const provider = new auth.GoogleAuthProvider();
-      return fromPromise(this.afAuth.auth.signInWithPopup(provider));
+      return fromPromise(this.afAuth.auth.signInWithPopup(provider)).pipe(
+        mergeMap((credential) => [
+          new Authenticated({ uid: credential.user.uid, authenticated: true }),
+          new RouterGo({path: ['/games']})
+        ]),
+        catchError((error) => of(new AuthFail(error)))
+      );
     }),
-    mergeMap((credential) => [
-      new Authenticated({ uid: credential.user.uid, authenticated: true }),
-      new RouterGo({path: ['/games']})
-    ]),
-    catchError((error) => of(new AuthFail(error)))
   );
 
   @Effect()
@@ -104,15 +107,16 @@ export class AuthEffects {
     ofType(FACEBOOK_LOGIN),
     switchMap(() => {
       const provider = new auth.FacebookAuthProvider();
-      return fromPromise(this.afAuth.auth.signInWithPopup(provider));
+      return fromPromise(this.afAuth.auth.signInWithPopup(provider)).pipe(
+        mergeMap((credential) => {
+          return [
+            new Authenticated({ uid: credential.user.uid, authenticated: true }),
+            new RouterGo({path: ['/games']})
+          ];
+        }),
+        catchError((error) => of(new AuthFail(error))),
+      );
     }),
-    mergeMap((credential) => {
-      return [
-        new Authenticated({ uid: credential.user.uid, authenticated: true }),
-        new RouterGo({path: ['/games']})
-      ];
-    }),
-    catchError((error) => of(new AuthFail(error))),
   );
 
   @Effect()
@@ -120,27 +124,28 @@ export class AuthEffects {
     ofType(GITHUB_LOGIN),
     switchMap(() => {
       const provider = new auth.GithubAuthProvider();
-      return fromPromise(this.afAuth.auth.signInWithPopup(provider));
+      return fromPromise(this.afAuth.auth.signInWithPopup(provider)).pipe(
+        mergeMap((credential) => {
+          return [
+            new Authenticated({ uid: credential.user.uid, authenticated: true }),
+            new RouterGo({path: ['/games']})
+          ];
+        }),
+        catchError((error) => of(new AuthFail(error))),
+      );
     }),
-    mergeMap((credential) => {
-      return [
-        new Authenticated({ uid: credential.user.uid, authenticated: true }),
-        new RouterGo({path: ['/games']})
-      ];
-    }),
-    catchError((error) => of(new AuthFail(error))),
   );
 
   @Effect()
   logout$: Observable<Action> = this.actions$.pipe(
     ofType(LOGOUT),
-    switchMap(() => of(this.afAuth.auth.signOut())),
-    map((authData) => {
-      console.log('authData - ', authData);
-      this.notifierService.notify('default', 'You have signed out');
-      return new LogoutSuccess(defaultUser);
-    }),
-    catchError((error) => of(new AuthFail(error))),
+    switchMap(() => of(this.afAuth.auth.signOut()).pipe(
+      map(() => {
+        this.notifierService.notify('default', 'You have signed out');
+        return new LogoutSuccess(defaultUser);
+      }),
+      catchError((error) => of(new AuthFail(error))),
+    )),
   );
 
   @Effect()

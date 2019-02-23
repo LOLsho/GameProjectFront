@@ -67,9 +67,11 @@
     >
       {{ 'SIGN-UP_BUTTON' | translate:lang }}
     </button>
+
     <div class="auth__socials">
       <app-socials></app-socials>
     </div>
-  </div>
 
+    <app-loader *ngIf="$authPending | async"></app-loader>
+  </div>
 </form>

@@ -7,6 +7,8 @@ import { Store } from '@ngrx/store';
 import { AuthState } from '../../store/reducers/auth.reducer';
 import { EmailAndPasswordLogin } from '../../store/actions/auth.actions';
 import { AuthWithEmailAndPasswordData } from '../auth.interface';
+import { getAuthPending } from '../../store/selectors/auth.selectors';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sign-in',
@@ -16,6 +18,8 @@ import { AuthWithEmailAndPasswordData } from '../auth.interface';
 export class SignInComponent implements OnInit {
 
   @Language() lang: string;
+
+  $authPending = this.store.select(getAuthPending);
 
   EMAIL_MIN_LENGTH = 6;
   PASSWORD_MIN_LENGTH = 6;
@@ -52,14 +56,9 @@ export class SignInComponent implements OnInit {
       this.password.hasError('minlength') ? this.trn.translate('Min-length') + ' - ' + this.PASSWORD_MIN_LENGTH : '';
   }
 
-  async submit() {
+  submit() {
     if (this.form.invalid) return;
 
-    const userDataToSend: AuthWithEmailAndPasswordData = {
-      email: this.email.value,
-      password: this.password.value,
-    };
-
-    this.store.dispatch(new EmailAndPasswordLogin(userDataToSend));
+    this.store.dispatch(new EmailAndPasswordLogin(this.form.value));
   }
 }

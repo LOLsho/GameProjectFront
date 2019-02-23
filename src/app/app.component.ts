@@ -4,36 +4,28 @@ import { Store } from '@ngrx/store';
 import { AppState } from './store/reducers';
 import { Observable } from 'rxjs';
 import { User } from './auth/auth.interface';
-import { getAuthPending, getUser } from './store/selectors/auth.selectors';
-import { delay } from 'rxjs/operators';
-import { animate, style, transition, trigger } from '@angular/animations';
+import { getUser } from './store/selectors/auth.selectors';
+import { delay, filter, tap } from 'rxjs/operators';
+import { emersionAnimation } from './animations/emersion.animation';
+
 
 @Component({
   selector: 'app-root',
   styleUrls: ['./app.component.scss'],
-  animations: [
-    trigger('appPreloader', [
-      transition(':leave', [
-        animate('0.25s', style({ opacity: 0 }))
-      ]),
-    ])
-  ],
   templateUrl: './app.component.html',
+  animations: [emersionAnimation],
 })
 export class AppComponent {
 
   user$: Observable<User> = this.store.select(getUser).pipe(
+    filter((user: User) => {
+      if (!user) this.store.dispatch(new GetUser());
+      return !!user;
+    }),
     delay(1500),
   );
-  // authPending$: Observable<boolean> = this.store.select(getAuthPending);
 
   constructor(
-    private store: Store<AppState>
-  ) {
-    this.prepareAndLoadApp();
-  }
-
-  prepareAndLoadApp() {
-    this.store.dispatch(new GetUser());
-  }
+    private store: Store<AppState>,
+  ) {}
 }

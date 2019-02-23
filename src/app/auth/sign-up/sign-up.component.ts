@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { AuthState } from '../../store/reducers/auth.reducer';
 import { EmailAndPasswordRegister } from '../../store/actions/auth.actions';
 import { AuthWithEmailAndPasswordData } from '../auth.interface';
+import { getAuthPending } from '../../store/selectors/auth.selectors';
 
 @Component({
   selector: 'app-sign-up',
@@ -14,6 +15,8 @@ import { AuthWithEmailAndPasswordData } from '../auth.interface';
 export class SignUpComponent implements OnInit {
 
   @Language() lang: string;
+
+  $authPending = this.store.select(getAuthPending);
 
   EMAIL_MIN_LENGTH = 6;
   PASSWORD_MIN_LENGTH = 6;
