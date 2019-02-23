@@ -15,7 +15,7 @@ import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection 
   selector: 'app-game-wrapper',
   styleUrls: ['./game-wrapper.component.scss'],
   template: `
-    <button (click)="addGame()">Add Test Game</button>
+    <!--<button (click)="addGame()">Add Test Game</button>-->
     <div class="game-wrap">
       <div #gameEntry></div>
     </div>

@@ -43,11 +43,11 @@ import { notifierConfig } from '../assets/configs/notifier/notifier.config';
     AngularFireAuthModule,
 
     StoreModule.forRoot(appReducers,
-      { metaReducers: storeMetaReducers } // TODO
+      // { metaReducers: storeMetaReducers } // TODO
     ),
     EffectsModule.forRoot(appEffects),
     StoreRouterConnectingModule,
-    storeDevtoolsModule,
+    // storeDevtoolsModule,
 
     NotifierModule.withConfig(notifierConfig)
   ],
