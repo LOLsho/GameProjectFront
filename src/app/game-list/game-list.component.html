@@ -2,13 +2,11 @@
   <div class="main-container">
     <div class="game-list__content">
       <ul class="game-list__list" *ngIf="games$ | async as games; else loader">
-        <li class="game-list__item card mat-card mat-elevation-z3"
-            *ngFor="let game of games"
-        >
+        <li class="game-list__item card mat-card mat-elevation-z3" *ngFor="let game of games">
           <div class="game-list__title">
             {{ game.name | translate:lang }}
           </div>
-          
+
           <div class="game-list__bg-img" [style.backgroundImage]="'url(' + game.imageSrc + ')'"
                routerLink="/game/{{ game.name }}"
           ></div>
@@ -21,7 +19,14 @@
           >
             {{ 'Play' | translate:lang }}
           </button>
-          <!--<button class="game-list__btn" >{{ 'Play' | translate:lang }}</button>-->
+          <button mat-raised-button
+                  class="game-list__button"
+                  color="primary"
+                  type="button"
+                  (click)="blockGame(game)"
+          >
+            {{ 'Block' | translate:lang }}
+          </button>
         </li>
       </ul>
     </div>

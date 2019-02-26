@@ -1,0 +1,25 @@
+
+
+
+.menu {
+  border: 2px solid black;
+  padding: 15px;
+  border-radius: 4px;
+  min-width: 240px;
+}
+
+.menu__title {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.menu__button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

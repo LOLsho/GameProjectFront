@@ -14,6 +14,7 @@
   "To": "До",
   "tic-tac-toe": "Крестики-нолики",
   "sapper": "Сапер",
+  "Block": "Заблокировать",
 
   "HEADER__SIGN-IN": "Вход",
   "HEADER__SIGN-UP": "Регистрация",
@@ -30,6 +31,14 @@
   "SIGN-UP_PASSWORD-NOT-MATCH": "Пароли не совпадают!",
   "SIGN-UP__PASSWORD-AGAIN": "Пароль еще раз",
   "SIGN-UP__PASSWORD-AGAIN-REQUIRED": "Обязательное поле",
+
+  "CHOOSE-MODE__TITLE": "Выберите режим:",
+  "CHOOSE-MODE__SINGLE": "Одиночный",
+  "CHOOSE-MODE__MULTIPLAYER": "Многопользовательский",
+
+  "SINGLE-MODE-ACTIONS__NEW": "Новая игра",
+  "SINGLE-MODE-ACTIONS__CONTINUE": "Продолжить игру",
+  "SINGLE-MODE-ACTIONS__WATCH": "Смотреть сохраненные игры",
 
   "SAPPER_SELECT-DIFFICULTY": "Выберите сложность:",
   "SAPPER_DIFFICULTY-EASY": "Просто (9х9, 10 мин)",

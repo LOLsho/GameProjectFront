@@ -1,0 +1,15 @@
+<div class="menu">
+  <div class="menu__title" *ngIf="title">
+    {{ title | translate:lang }}
+  </div>
+  <button *ngFor="let option of options"
+          mat-raised-button
+          [disabled]="option.disabled"
+          class="menu__button"
+          color="primary"
+          type="button"
+          (click)="chooseOption(option)"
+  >
+    {{ option.capture | translate:lang }}
+  </button>
+</div>

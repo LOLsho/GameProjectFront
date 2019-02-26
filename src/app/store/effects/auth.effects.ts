@@ -25,6 +25,7 @@ import { fromPromise } from 'rxjs/internal-compatibility';
 import { auth } from 'firebase';
 import { RouterGo } from '../actions/router.actions';
 import { NotifierService } from 'angular-notifier';
+import { ClearGameList } from '../actions/games-list.actions';
 
 
 @Injectable()
@@ -151,16 +152,19 @@ export class AuthEffects {
   @Effect()
   onLogout$: Observable<Action> = this.actions$.pipe(
     ofType(LOGOUT_SUCCESS),
-    map(() => new RouterGo({
-      path: ['authentication/sign-in']
-    }))
+    mergeMap(() => [
+      new RouterGo({ path: ['authentication/sign-in'] }),
+      new ClearGameList()
+    ]),
   );
 
   @Effect({ dispatch: false })
   onAuthError$ = this.actions$.pipe(
     ofType(AUTH_FAIL),
     map((action: AuthFail) => action.payload),
-    tap((error) => this.notifierService.notify('error', error.message))
+    tap((error: any) => {
+      if (error.massage) this.notifierService.notify('error', error.message);
+    })
   );
 
   // @Effect({ dispatch: false })

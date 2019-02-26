@@ -14,6 +14,7 @@
   "To": "To",
   "tic-tac-toe": "Tic-tac-toe",
   "sapper": "Sapper",
+  "Block": "Block",
 
   "HEADER__SIGN-IN": "Sign in",
   "HEADER__SIGN-UP": "Sign up",
@@ -30,6 +31,14 @@
   "SIGN-UP_PASSWORD-NOT-MATCH": "Passwords do not match!",
   "SIGN-UP__PASSWORD-AGAIN": "Enter password again",
   "SIGN-UP__PASSWORD-AGAIN-REQUIRED": "You must enter a value",
+
+  "CHOOSE-MODE__TITLE": "Choose mode:",
+  "CHOOSE-MODE__SINGLE": "Single",
+  "CHOOSE-MODE__MULTIPLAYER": "Multiplayer",
+
+  "SINGLE-MODE-ACTIONS__NEW": "New game",
+  "SINGLE-MODE-ACTIONS__CONTINUE": "Continue",
+  "SINGLE-MODE-ACTIONS__WATCH": "Watch saved games",
 
   "SAPPER_SELECT-DIFFICULTY": "Select difficulty:",
   "SAPPER_DIFFICULTY-EASY": "Easy (9х9, 10 mines)",

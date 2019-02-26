@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SapperCell, SapperField, SapperFields } from './sapper.interface';
 import { Language, TranslationService } from 'angular-l10n';
 import { MatDialog } from '@angular/material';
 import { CustomFieldComponent } from './custom-field/custom-field.component';
 import { NotifierService } from 'angular-notifier';
 import { filter } from 'rxjs/operators';
+import { GameMode, GameSettings, SingleModeAction } from '../../game-wrapper/game.interfaces';
 
 
 @Component({
@@ -16,11 +17,16 @@ export class SapperComponent implements OnInit, OnDestroy {
 
   @Language() lang: string;
 
-  timer;
+  @Input() gameSettings: GameSettings;
+
+  @Output() newGameCreated = new EventEmitter<any>();
+
+  timer: number;
   timePassed = 0;
   losingSellId: number;
   firstClick = true;
   field = []; // TODO : SapperCell[][]
+
   defaultFields: SapperFields = {
     small: {
       size: [9, 9],
@@ -48,16 +54,23 @@ export class SapperComponent implements OnInit, OnDestroy {
     private modal: MatDialog,
     private notifierService: NotifierService,
     private translation: TranslationService,
-  ) {
-
-  }
+  ) {}
 
   ngOnInit() {
-
+    console.log('this.gameSettings - ', this.gameSettings);
   }
 
-  chooseField(field) {
+  initGame(gameConfig: any) {
+    if (gameConfig.newGame) {
+      this.createEmptyField();
+    }
+  }
+
+  chooseField(field: SapperField) {
     this.chosenField = { ...field };
+
+    // const
+
     this.createEmptyField();
   }
 
@@ -68,8 +81,7 @@ export class SapperComponent implements OnInit, OnDestroy {
       .pipe(filter(fieldInfo => !!fieldInfo))
       .subscribe(
       ({ columns, rows, mines }) => {
-
-        const field = {
+        const field: SapperField = {
           size: [columns, rows],
           amountMines: mines,
         };
@@ -83,6 +95,8 @@ export class SapperComponent implements OnInit, OnDestroy {
     this.timePassed = 0;
     this.firstClick = true;
     this.chosenField = null;
+    // this.gameMode = null;
+    // this.singleGameAction = null;
   }
 
   cellClick(cell: SapperCell) {
@@ -142,6 +156,7 @@ export class SapperComponent implements OnInit, OnDestroy {
   }
 
   createEmptyField() {
+    if (!this.chosenField) return;
     // Очищаем массив на всякий случай
     this.field = [];
 

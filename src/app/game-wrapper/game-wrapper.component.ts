@@ -1,21 +1,27 @@
 import {
   AfterContentInit,
   Component,
-  ComponentFactoryResolver,
+  ComponentFactoryResolver, ComponentRef,
   OnInit,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GAMES } from '../game-list/game-list';
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { GameInitial, GameSettings } from './game.interfaces';
+import { Store } from '@ngrx/store';
+import { GameListState } from '../store/reducers/games-list.reduces';
+import { SapperComponent } from '../games/sapper/sapper.component';
 
 
 @Component({
   selector: 'app-game-wrapper',
   styleUrls: ['./game-wrapper.component.scss'],
   template: `
-    <!--<button (click)="addGame()">Add Test Game</button>-->
+    <app-start-game-menu *ngIf="!gameSettings"
+                         [startGameConfig]="currentGame.startGameConfig"
+                         (gameSettingsChosen)="onSettingsChosen($event)"
+    ></app-start-game-menu>
     <div class="game-wrap">
       <div #gameEntry></div>
     </div>
@@ -23,35 +29,29 @@ import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection 
 })
 export class GameWrapperComponent implements OnInit, AfterContentInit {
 
-  games: AngularFirestoreCollection<{name: string}>;
-  private gameDoc: AngularFirestoreDocument<{name: string}>;
-
   @ViewChild('gameEntry', { read: ViewContainerRef }) gameEntry: ViewContainerRef;
+
+  currentGame: GameInitial;
+  gameSettings: GameSettings;
 
   constructor(
     private route: ActivatedRoute,
     private resolver: ComponentFactoryResolver,
-    private db: AngularFirestore,
+    private store: Store<GameListState>,
   ) { }
 
   ngAfterContentInit() {
-    this.games = this.db.collection('games');
-
     this.route.params.subscribe(params => {
-      const componentToResolve = GAMES.find(game => game.name === params.game).component;
-
-      const factory = this.resolver.resolveComponentFactory(componentToResolve);
-      const gameComponent = this.gameEntry.createComponent(factory);
-      // gameComponent.instance.SOME-INPUT = 'something'
+      this.currentGame = GAMES.find(game => game.name === params.game);
     });
   }
 
-  addGame() {
-    this.games.add({ name: 'testGame' });
-  }
+  onSettingsChosen(settings: GameSettings) {
+    this.gameSettings = settings;
 
-  updateGame() {
-    // this.gameDoc = this.db.doc<{ name: string }>('games'/)
+    const factory = this.resolver.resolveComponentFactory(this.currentGame.component);
+    const gameComponent: ComponentRef<any> = this.gameEntry.createComponent(factory);
+    gameComponent.instance.gameSettings = this.gameSettings;
   }
 
   ngOnInit() {
