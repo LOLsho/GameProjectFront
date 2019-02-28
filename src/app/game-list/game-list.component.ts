@@ -9,6 +9,7 @@ import { LoadGames, UpdateGameItem } from '../store/actions/games-list.actions';
 import { Observable, of } from 'rxjs';
 import { GAMES } from './game-list';
 import { emersionAnimation } from '../animations/emersion.animation';
+import { RouterGo } from '../store/actions/router.actions';
 
 
 @Component({
@@ -23,7 +24,6 @@ export class GameListComponent implements OnInit {
 
   games$: Observable<any> = this.store.select(selectGameListLoaded).pipe(
     switchMap((loaded: boolean) => {
-      console.log('i am here!', loaded);
       if (!loaded) {
         this.store.dispatch(new LoadGames());
         return of(null);
@@ -38,7 +38,7 @@ export class GameListComponent implements OnInit {
         map((gamesList: GameList) => gamesList.filter((game: GameItem) => !game.blocked))
       );
     }),
-    // tap(console.log),
+    tap(console.log),
     // delay(90000)
   );
 
@@ -47,6 +47,10 @@ export class GameListComponent implements OnInit {
   ) {}
 
   ngOnInit() {}
+
+  playClicked(game: GameItem) {
+    this.store.dispatch(new RouterGo({ path: ['game', `${game.name}`] }));
+  }
 
   blockGame(game: GameItem) {
     this.store.dispatch(new UpdateGameItem({

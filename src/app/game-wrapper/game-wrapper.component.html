@@ -1,0 +1,7 @@
+<app-start-game-menu *ngIf="conditionToShowStartingMenu"
+                     [startGameConfig]="gameInitials.startGameConfig"
+                     (gameSettingsChosen)="onSettingsChosen($event)"
+></app-start-game-menu>
+<div class="game-wrap">
+  <div #gameEntry></div>
+</div>

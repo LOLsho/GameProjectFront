@@ -10,10 +10,10 @@ import {
   UpdateGameItem, UpdateGameItemFail, UpdateGameItemSuccess,
 } from '../actions/games-list.actions';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { GameListService } from '../../game-list/game-list.service';
 import { GameList } from '../../game-wrapper/game.interfaces';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { NotifierService } from 'angular-notifier';
+import { FirestoreService } from '../../services/firestore.service';
 
 
 @Injectable()
@@ -21,14 +21,14 @@ export class GamesListEffects {
 
   constructor(
     private actions$: Actions,
-    private gameListService: GameListService,
+    private firestoreService: FirestoreService,
     private notifierService: NotifierService,
   ) {}
 
   @Effect()
   getGameList$: Observable<Action> = this.actions$.pipe(
     ofType(LOAD_GAMES),
-    switchMap(() => this.gameListService.getGameList().pipe(
+    switchMap(() => this.firestoreService.getGameListChanges().pipe(
       map((actions: any) => actions.map((item: any) => {
         const data = item.payload.doc.data();
         const id = item.payload.doc.id;
@@ -44,8 +44,8 @@ export class GamesListEffects {
     ofType(UPDATE_GAME_ITEM),
     map((action: UpdateGameItem) => action.payload),
     switchMap((data) => {
-      return fromPromise(
-        this.gameListService.getGameListDoc(data.id).update(data.changes)
+      return fromPromise( // TODO delete id from payload if needed ???
+        this.firestoreService.getGameDocument().update(data.changes)
       ).pipe(
         map(() => new UpdateGameItemSuccess(data)),
         catchError((error: any) => of(new UpdateGameItemFail(error)))

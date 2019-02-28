@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { SapperCell, SapperField, SapperFields } from './sapper.interface';
+import { SapperCell, SapperField, SapperFieldType, SapperFieldTypes } from './sapper.interface';
 import { Language, TranslationService } from 'angular-l10n';
 import { MatDialog } from '@angular/material';
 import { CustomFieldComponent } from './custom-field/custom-field.component';
 import { NotifierService } from 'angular-notifier';
 import { filter } from 'rxjs/operators';
-import { GameMode, GameSettings, SingleModeAction } from '../../game-wrapper/game.interfaces';
+import { GameSettings } from '../../game-wrapper/game.interfaces';
 
 
 @Component({
@@ -19,15 +19,36 @@ export class SapperComponent implements OnInit, OnDestroy {
 
   @Input() gameSettings: GameSettings;
 
-  @Output() newGameCreated = new EventEmitter<any>();
+  @Output() gameCreated = new EventEmitter<{
+    firstClick: boolean;
+    field: string;
+    isGameOver: boolean;
+    timePassed: number;
+  }>();
+
+  @Output() gameUpdated = new EventEmitter<{
+    firstClick: boolean;
+    field: string;
+    isGameOver: boolean;
+    timePassed: number;
+  }>();
+
+  @Output() step = new EventEmitter<{
+    cellId: number;
+    // user: string; // TODO
+    // timeStamp: number; // TODO
+  }>();
+
+  gameSteps: { cellId: number }[] = [];
+
 
   timer: number;
   timePassed = 0;
   losingSellId: number;
   firstClick = true;
-  field = []; // TODO : SapperCell[][]
+  field: SapperField = [];
 
-  defaultFields: SapperFields = {
+  defaultFields: SapperFieldTypes = {
     small: {
       size: [9, 9],
       amountMines: 10,
@@ -41,7 +62,7 @@ export class SapperComponent implements OnInit, OnDestroy {
       amountMines: 99,
     },
   };
-  chosenField: SapperField;
+  chosenField: SapperFieldType;
   initialCell: SapperCell = {
     id: null,
     isOpen: false,
@@ -57,21 +78,22 @@ export class SapperComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    console.log('this.gameSettings - ', this.gameSettings);
+
   }
 
-  initGame(gameConfig: any) {
-    if (gameConfig.newGame) {
-      this.createEmptyField();
-    }
-  }
-
-  chooseField(field: SapperField) {
-    this.chosenField = { ...field };
-
-    // const
-
+  initGame() {
     this.createEmptyField();
+    this.gameCreated.emit({
+      firstClick: this.firstClick,
+      field: JSON.stringify(this.field),
+      isGameOver: this.playerWon || this.playerLost,
+      timePassed: this.timePassed,
+    });
+  }
+
+  chooseField(field: SapperFieldType) {
+    this.chosenField = { ...field };
+    this.initGame();
   }
 
   makeFieldMyself() {
@@ -81,7 +103,7 @@ export class SapperComponent implements OnInit, OnDestroy {
       .pipe(filter(fieldInfo => !!fieldInfo))
       .subscribe(
       ({ columns, rows, mines }) => {
-        const field: SapperField = {
+        const field: SapperFieldType = {
           size: [columns, rows],
           amountMines: mines,
         };
@@ -95,22 +117,37 @@ export class SapperComponent implements OnInit, OnDestroy {
     this.timePassed = 0;
     this.firstClick = true;
     this.chosenField = null;
-    // this.gameMode = null;
-    // this.singleGameAction = null;
+  }
+
+  updateGameState() {
+    this.gameUpdated.emit({
+      firstClick: this.firstClick,
+      field: JSON.stringify(this.field),
+      isGameOver: this.playerWon || this.playerLost,
+      timePassed: this.timePassed,
+    });
+  }
+
+  makeStep(id: number) {
+    this.step.emit({ cellId: id });
   }
 
   cellClick(cell: SapperCell) {
-    if (cell.isOpen || cell.checked || this.gameOver) return;
+    if (cell.isOpen || cell.checked || this.playerLost || this.playerWon) return;
     cell.isOpen = true;
+    // this.makeStep(cell.id); // TODO
 
     if (this.firstClick) {
       cell = this.fillField(cell);
       this.startTimer();
       this.firstClick = false;
+      this.updateGameState();
     }
 
     if (cell.hasMine) {
       this.finishGame(cell);
+      this.updateGameState();
+      return;
     }
 
     if (cell.number === 0) {
@@ -120,6 +157,7 @@ export class SapperComponent implements OnInit, OnDestroy {
     if (this.playerWon) {
       this.stopTimer();
       this.makeAllMinesChecked();
+      this.updateGameState();
       this.notifierService.notify('success', this.translation.translate(`SAPPER_WIN-MESSAGE`));
     }
   }
@@ -139,7 +177,7 @@ export class SapperComponent implements OnInit, OnDestroy {
   }
 
   rightClick(cell: SapperCell) {
-    if (this.playerWon || this.gameOver || this.firstClick || cell.isOpen) return;
+    if (this.playerWon || this.playerLost || this.firstClick || cell.isOpen) return;
     cell.checked = !cell.checked;
   }
 
@@ -198,7 +236,7 @@ export class SapperComponent implements OnInit, OnDestroy {
       return row.map((cell: SapperCell, columnIndex) => {
         if (cell.hasMine) return { ...cell, number: null };
 
-        const minesAround = this.checkAvailableCells(rowIndex, columnIndex, 'checkMines');
+        const minesAround = this.checkAvailableCells(rowIndex, columnIndex, 'checkMines') as number;
         return { ...cell, number: minesAround };
       });
     });
@@ -351,13 +389,15 @@ export class SapperComponent implements OnInit, OnDestroy {
     return this.chosenField.size[0];
   }
 
-  get gameOver() {
+  get playerLost() {
     for (let rowIndex = 0; rowIndex < this.rowsLength; rowIndex++) {
       for (let columnIndex = 0; columnIndex < this.rowsLength; columnIndex++) {
         const currentCell = this.field[rowIndex][columnIndex];
         if (currentCell.hasMine && currentCell.isOpen) return true;
       }
     }
+
+    return false;
   }
 
   get unclearedMines() {
@@ -376,8 +416,6 @@ export class SapperComponent implements OnInit, OnDestroy {
         const currentCell = this.field[rowIndex][columnIndex];
         if (!currentCell.hasMine && !currentCell.isOpen) {
           return false;
-        } else {
-
         }
       }
     }

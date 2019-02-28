@@ -8,6 +8,12 @@ import { TicTacToeComponent } from '../games/tic-tac-toe/tic-tac-toe.component';
 import { SapperComponent } from '../games/sapper/sapper.component';
 import { MenuComponent } from '../elements/menu/menu.component';
 import { StartGameMenuComponent } from './start-game-menu/start-game-menu.component';
+import { StoreModule } from '@ngrx/store';
+import { gameListReducer } from '../store/reducers/games-list.reduces';
+import { EffectsModule } from '@ngrx/effects';
+import { GamesListEffects } from '../store/effects/games-list.effects';
+import { sessionReducer } from './store/reducers/session.reducer';
+import { SessionEffects } from './store/effects/session.effects';
 
 
 const ROUTES: Routes = [
@@ -40,6 +46,9 @@ const gamesComponents = [
     CommonModule,
     SharedModule,
     RouterModule.forChild(ROUTES),
+    StoreModule.forFeature('game', sessionReducer),
+    // StoreModule.forFeature('', '', {}),
+    EffectsModule.forFeature([SessionEffects]),
   ],
   entryComponents: [
     ...gamesComponents,

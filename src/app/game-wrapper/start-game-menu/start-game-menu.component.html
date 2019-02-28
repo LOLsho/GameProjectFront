@@ -1,6 +1,6 @@
 <div class="start-game-menu">
   <div class="start-game-menu__content">
-    <app-menu title="CHOOSE-MODE__TITLE"
+    <app-menu [title]="'CHOOSE-MODE__TITLE'"
               *ngIf="!gameMode"
               [options]="choseModeOptions"
               (optionSelected)="gameMode = $event.value"

@@ -15,7 +15,7 @@
                   class="game-list__button"
                   color="primary"
                   type="button"
-                  routerLink="/game/{{ game.name }}"
+                  (click)="playClicked(game)"
           >
             {{ 'Play' | translate:lang }}
           </button>

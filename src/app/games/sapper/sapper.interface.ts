@@ -6,11 +6,13 @@ export interface SapperCell {
   hasMine: boolean;
 }
 
-export interface SapperFields {
-  [fieldSize: string]: SapperField;
+export interface SapperFieldTypes {
+  [fieldSize: string]: SapperFieldType;
 }
 
-export interface SapperField {
+export interface SapperFieldType {
   size: [number, number];
   amountMines: number;
 }
+
+export type SapperField = SapperCell[][];

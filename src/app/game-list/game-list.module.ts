@@ -7,7 +7,6 @@ import { StoreModule } from '@ngrx/store';
 import { gameListReducer } from '../store/reducers/games-list.reduces';
 import { EffectsModule } from '@ngrx/effects';
 import { GamesListEffects } from '../store/effects/games-list.effects';
-import { GameListService } from './game-list.service';
 
 
 const ROUTES: Routes = [
@@ -29,8 +28,5 @@ const ROUTES: Routes = [
     StoreModule.forFeature('gameList', gameListReducer),
     EffectsModule.forFeature([GamesListEffects]),
   ],
-  providers: [
-    GameListService,
-  ]
 })
 export class GameListModule { }

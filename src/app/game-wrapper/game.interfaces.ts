@@ -24,5 +24,5 @@ export type SingleModeAction = 'newGame' | 'continue' | 'watchSavedGames';
 
 export interface GameSettings {
   gameMode: GameMode;
-  SingleModeAction: SingleModeAction;
+  singleModeAction: SingleModeAction;
 }
