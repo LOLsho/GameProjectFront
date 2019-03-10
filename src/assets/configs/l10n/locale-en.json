@@ -37,6 +37,7 @@
   "CHOOSE-MODE__MULTIPLAYER": "Multiplayer",
 
   "SINGLE-MODE-ACTIONS__NEW": "New game",
+  "SINGLE-MODE-ACTIONS__CONTINUE-LAST": "Continue last",
   "SINGLE-MODE-ACTIONS__CONTINUE": "Continue",
   "SINGLE-MODE-ACTIONS__WATCH": "Watch saved games",
 
@@ -48,5 +49,7 @@
   "SAPPER_WIN-MESSAGE": "The field is completely cleared, congratulations!",
   "SAPPER_CUSTOM-ROWS": "Enter amount of rows",
   "SAPPER_CUSTOM-COLUMNS": "Enter amount of columns",
-  "SAPPER_CUSTOM-MINES": "Enter amount of mines"
+  "SAPPER_CUSTOM-MINES": "Enter amount of mines",
+
+  "GAME-LIST_NO-GAMES": "There are no games to continue"
 }

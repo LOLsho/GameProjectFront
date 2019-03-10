@@ -1,0 +1,15 @@
+@import "../../assets/my-styles/variables";
+
+
+.centered-full-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - #{$header-height});
+}
+
+.content-border {
+  border: 2px solid black;
+  padding: 15px;
+  border-radius: 4px;
+}

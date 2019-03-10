@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { StartGameConfig } from './start-game-menu.interface';
 import { MenuOption } from '../../elements/menu/menu.component';
 import { GameMode, SingleModeAction } from '../game.interfaces';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/reducers';
 
 @Component({
   selector: 'app-start-game-menu',
@@ -19,6 +21,7 @@ export class StartGameMenuComponent implements OnInit {
   ];
   choseSingleModeActions: MenuOption[] = [
     { value: 'newGame', capture: 'SINGLE-MODE-ACTIONS__NEW' },
+    { value: 'continueLast', capture: 'SINGLE-MODE-ACTIONS__CONTINUE-LAST' },
     { value: 'continue', capture: 'SINGLE-MODE-ACTIONS__CONTINUE' },
     { value: 'watchSavedGames', capture: 'SINGLE-MODE-ACTIONS__WATCH', disabled: true },
   ];
@@ -27,14 +30,22 @@ export class StartGameMenuComponent implements OnInit {
 
   @Output() gameSettingsChosen = new EventEmitter();
 
-  constructor() { }
+  constructor(
+    private store: Store<AppState>,
+  ) {
+  }
 
   ngOnInit() {
     this.choseModeOptions[0].disabled = this.startGameConfig.singleMode.disabled;
     this.choseModeOptions[1].disabled = this.startGameConfig.multiplayerMode.disabled;
 
-    this.choseSingleModeActions[1].disabled = this.startGameConfig.singleMode.continueDisabled;
-    this.choseSingleModeActions[2].disabled = this.startGameConfig.singleMode.watchSavedGamesDisabled;
+    this.choseSingleModeActions[1].disabled = this.startGameConfig.singleMode.continueLastDisabled;
+    this.choseSingleModeActions[2].disabled = this.startGameConfig.singleMode.continueDisabled;
+    this.choseSingleModeActions[3].disabled = this.startGameConfig.singleMode.watchSavedGamesDisabled;
+  }
+
+  onGameModeSelected(option: MenuOption) {
+    this.gameMode = option.value;
   }
 
   startingSelected(singleModeAction: SingleModeAction) {

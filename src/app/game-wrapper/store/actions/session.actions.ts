@@ -1,61 +1,47 @@
 import { Action } from '@ngrx/store';
-import { GameState } from '../reducers/session.reducer';
+import { CreatedSession, Session } from '../../game.interfaces';
 
 
-export const SET_GAME_STATE = '[GAME] Set Game State';
-
+export const SET_SESSION = '[FIRESTORE API] Set Session';
 export const CREATE_SESSION = '[GAME] Create New Game Session';
-export const SET_CREATED_SESSION = '[FIRESTORE API] Set Session After Successful Creation';
 
 export const UPDATE_SESSION = '[GAME] Update Session';
-export const SET_UPDATED_SESSION = '[FIRESTORE API] Set Session After Successful Update';
 
-export const LOAD_GAME = '[GAME] Load Game';
-export const LOAD_GAME_SUCCESS = '[FIRESTORE API] Load Game Success';
-export const LOAD_GAME_FAIL = '[FIRESTORE API] Load Game Fail';
+export const SUBSCRIBE_TO_SESSION = '[GAME] Subscribe To Session';
+export const UNSUBSCRIBE_FROM_SESSION = '[GAME] Unsubscribe From Session';
 
 export const SESSION_FAIL = '[FIRESTORE API] Error working with session';
-export const CLEAR_GAME_STATE = '[GAME] Clear Game State';
+
+export const SESSION_EXIT = '[GAME] Exit Session';
+export const CLEAR_SESSION_STATE = '[SESSION EXIT] Clear Session State';
 
 
-
-export class SetGameState implements Action {
-  readonly type = SET_GAME_STATE;
-  constructor(public payload: Partial<GameState>) {}
-}
 
 export class CreateSession implements Action {
   readonly type = CREATE_SESSION;
-  constructor(public payload: { sessionData: any }) {}
+  constructor(public payload: CreatedSession) {}
 }
 
-export class SetCreatedSession implements Action {
-  readonly type = SET_CREATED_SESSION;
-  constructor(public payload: { session: any }) {}
+export class SetSession implements Action {
+  readonly type = SET_SESSION;
+  constructor(public payload: Session) {}
 }
 
 export class UpdateSession implements Action {
   readonly type = UPDATE_SESSION;
-  constructor(public payload: { updatedSessionData: any }) {}
+  constructor(public payload: Partial<Session>) {}
 }
 
-export class SetUpdatedSession implements Action {
-  readonly type = SET_UPDATED_SESSION;
-  constructor(public payload: { updatedSessionData: any }) {}
+export class SessionExit implements Action {
+  readonly type = SESSION_EXIT;
 }
 
-export class LoadGame implements Action {
-  readonly type = LOAD_GAME;
+export class UnsubscribeFromSession implements Action {
+  readonly type = UNSUBSCRIBE_FROM_SESSION;
 }
 
-export class LoadGameSuccess implements Action {
-  readonly type = LOAD_GAME_SUCCESS;
-  constructor(public payload: any) {}
-}
-
-export class LoadGameFail implements Action {
-  readonly type = LOAD_GAME_FAIL;
-  constructor(public payload: any) {}
+export class ClearSessionState implements Action {
+  readonly type = CLEAR_SESSION_STATE;
 }
 
 export class SessionFail implements Action {
@@ -63,20 +49,19 @@ export class SessionFail implements Action {
   constructor(public payload: any) {}
 }
 
-export class ClearGameState {
-  readonly type = CLEAR_GAME_STATE;
+export class SubscribeToSession implements Action {
+  readonly type = SUBSCRIBE_TO_SESSION;
+  constructor(public payload: { id: string }) {}
 }
 
 
 
 export type SessionActions =
-  | SetGameState
-  | CreateSession
+  | SetSession
   | UpdateSession
-  | SetCreatedSession
-  | SetUpdatedSession
-  | SessionFail
-  | LoadGame
-  | LoadGameSuccess
-  | LoadGameFail
-  | ClearGameState;
+  | CreateSession
+  | ClearSessionState
+  | SessionExit
+  | SubscribeToSession
+  | UnsubscribeFromSession
+  | SessionFail;

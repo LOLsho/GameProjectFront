@@ -25,7 +25,7 @@ import { fromPromise } from 'rxjs/internal-compatibility';
 import { auth } from 'firebase';
 import { RouterGo } from '../actions/router.actions';
 import { NotifierService } from 'angular-notifier';
-import { ClearGameList } from '../actions/games-list.actions';
+import { ClearAppState } from '../actions/app.actions';
 
 
 @Injectable()
@@ -154,7 +154,7 @@ export class AuthEffects {
     ofType(LOGOUT_SUCCESS),
     mergeMap(() => [
       new RouterGo({ path: ['authentication/sign-in'] }),
-      new ClearGameList()
+      new ClearAppState()
     ]),
   );
 

@@ -28,7 +28,7 @@ export class GamesListEffects {
   @Effect()
   getGameList$: Observable<Action> = this.actions$.pipe(
     ofType(LOAD_GAMES),
-    switchMap(() => this.firestoreService.getGameListChanges().pipe(
+    switchMap(() => this.firestoreService.getGameListChanges().pipe( // TODO Unsubscription
       map((actions: any) => actions.map((item: any) => {
         const data = item.payload.doc.data();
         const id = item.payload.doc.id;

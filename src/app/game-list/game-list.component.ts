@@ -4,7 +4,7 @@ import { GameInitial, GameItem, GameList } from '../game-wrapper/game.interfaces
 import { Store } from '@ngrx/store';
 import { GameListState } from '../store/reducers/games-list.reduces';
 import { selectGameList, selectGameListLoaded } from '../store/selectors/game-list.selectors';
-import { delay, filter, map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { LoadGames, UpdateGameItem } from '../store/actions/games-list.actions';
 import { Observable, of } from 'rxjs';
 import { GAMES } from './game-list';
@@ -28,7 +28,6 @@ export class GameListComponent implements OnInit {
         this.store.dispatch(new LoadGames());
         return of(null);
       } else return this.store.select(selectGameList).pipe(
-        tap(console.log),
         map((gamesList: GameList) => {
           return gamesList.filter((gameItem: GameItem) => {
             const names = GAMES.map((game: GameInitial) => game.name);
@@ -38,8 +37,6 @@ export class GameListComponent implements OnInit {
         map((gamesList: GameList) => gamesList.filter((game: GameItem) => !game.blocked))
       );
     }),
-    tap(console.log),
-    // delay(90000)
   );
 
   constructor(

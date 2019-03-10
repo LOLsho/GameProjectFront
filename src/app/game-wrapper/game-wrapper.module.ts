@@ -8,12 +8,14 @@ import { TicTacToeComponent } from '../games/tic-tac-toe/tic-tac-toe.component';
 import { SapperComponent } from '../games/sapper/sapper.component';
 import { MenuComponent } from '../elements/menu/menu.component';
 import { StartGameMenuComponent } from './start-game-menu/start-game-menu.component';
-import { StoreModule } from '@ngrx/store';
-import { gameListReducer } from '../store/reducers/games-list.reduces';
 import { EffectsModule } from '@ngrx/effects';
-import { GamesListEffects } from '../store/effects/games-list.effects';
-import { sessionReducer } from './store/reducers/session.reducer';
 import { SessionEffects } from './store/effects/session.effects';
+import { StepsEffects } from './store/effects/steps.effects';
+import { SapperStartMenuComponent } from '../games/sapper/sapper-start-menu/sapper-start-menu.component';
+import { GameInfoEffects } from './store/effects/game-info.effects';
+import { SessionListComponent } from '../elements/session-list/session-list.component';
+import { SessionListEffects } from './store/effects/session-list.effects';
+import { SessionItemComponent } from '../elements/session-item/session-item.component';
 
 
 const ROUTES: Routes = [
@@ -32,23 +34,25 @@ const gamesComponents = [
   CustomFieldComponent,
   TicTacToeComponent,
   SapperComponent,
+  SapperStartMenuComponent,
+  SessionListComponent,
 ];
 
 
 @NgModule({
   declarations: [
+    SessionItemComponent,
     GameWrapperComponent,
-    ...gamesComponents,
     MenuComponent,
     StartGameMenuComponent,
+    ...gamesComponents,
   ],
   imports: [
     CommonModule,
     SharedModule,
     RouterModule.forChild(ROUTES),
-    StoreModule.forFeature('game', sessionReducer),
-    // StoreModule.forFeature('', '', {}),
-    EffectsModule.forFeature([SessionEffects]),
+    // StoreModule.forFeature('appState', []),
+    EffectsModule.forFeature([SessionEffects, SessionListEffects, StepsEffects, GameInfoEffects]),
   ],
   entryComponents: [
     ...gamesComponents,

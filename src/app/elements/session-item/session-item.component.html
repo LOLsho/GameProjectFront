@@ -1,0 +1,6 @@
+<div class="session-item" (click)="onSessionClick()">
+  <div class="session-item__date content-border">
+    Создано: {{ session.created | date:'dd LLLL; HH:mm':false:false:'ru-RU' }}<br>
+    First Cell: {{ !!session.gameData.firstCell }}
+  </div>
+</div>

@@ -1,30 +1,51 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { GameItem } from '../game-wrapper/game.interfaces';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { GameItem, Session } from '../game-wrapper/game.interfaces';
+import { filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { firestore } from 'firebase';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/reducers';
-import { selectGameState } from '../game-wrapper/store/selectors/session.selectors';
-import { GameState } from '../game-wrapper/store/reducers/session.reducer';
+import { selectGameId } from '../game-wrapper/store/selectors/game-info.selectors';
+import { selectSessionId } from '../game-wrapper/store/selectors/session.selectors';
+import { selectUser } from '../store/reducers/auth.reducer';
+import { selectUserId } from '../store/selectors/auth.selectors';
+import DocumentData = firebase.firestore.DocumentData;
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirestoreService {
 
-  currentGameId;
-  currentSessionId;
+  currentGameId: string;
+  currentSessionId: string;
+  userId: string;
 
   constructor(
     private db: AngularFirestore,
     private store: Store<AppState>,
   ) {
-    this.store.select(selectGameState).subscribe((gameState: GameState) => {
-      this.currentGameId = gameState.id;
-      if (gameState.session) this.currentSessionId = gameState.session.id;
+    this.store.select(selectGameId).subscribe((gameId: string) => {
+      this.currentGameId = gameId;
+    });
+    this.store.select(selectSessionId).subscribe((sessionId: string) => {
+      this.currentSessionId = sessionId;
+    });
+    this.store.select(selectUserId).subscribe((id: string) => {
+      this.userId = id;
+    });
+  }
+
+  getSessionList(query: any): AngularFirestoreCollection<DocumentData> {
+    return this.getGameDocument().collection('sessions', (ref: any) => {
+      if (query.where) {
+        query.where.forEach((whereQuery: any) => {
+          ref = ref.where(whereQuery.field, whereQuery.opStr, whereQuery.value);
+        });
+      }
+      return ref;
     });
   }
 
@@ -40,8 +61,20 @@ export class FirestoreService {
     return this.getGameDocument().collection<any>('sessions');
   }
 
-  getSessionDocument(): AngularFirestoreDocument {
-    return this.getSessionsCollection().doc<any>(this.currentSessionId);
+  getSessionDocument(id?: string): AngularFirestoreDocument {
+    if (!id) id = this.currentSessionId; // TODO remove currentSessionId
+    return this.getSessionsCollection().doc<any>(id);
+  }
+
+  getStepsCollection(sessionId: string, query?: any): AngularFirestoreCollection {
+    return this.getSessionDocument(sessionId).collection<any>('steps', (ref: any) => {
+      if (query && query.where) {
+        query.where.forEach((whereQuery: any) => {
+          ref = ref.where(whereQuery.field, whereQuery.opStr, whereQuery.value);
+        });
+      }
+      return ref;
+    });
   }
 
   getGameIdByName(name: string): Observable<string> {
@@ -62,6 +95,10 @@ export class FirestoreService {
 
   getGameListChanges(): Observable<any> {
     return this.getGamesCollection().snapshotChanges();
+  }
+
+  addGameStep(step: any, sessionId: string): Observable<any> {
+    return fromPromise(this.getStepsCollection(sessionId).add(step));
   }
 
   getFirestoreTimestamp() {

@@ -1,11 +1,11 @@
-<div class="start-game-menu">
+<div class="centered-full-screen">
   <div class="start-game-menu__content">
     <app-menu [title]="'CHOOSE-MODE__TITLE'"
               *ngIf="!gameMode"
               [options]="choseModeOptions"
-              (optionSelected)="gameMode = $event.value"
+              (optionSelected)="onGameModeSelected($event)"
     ></app-menu>
-    <app-menu *ngIf="gameMode"
+    <app-menu *ngIf="gameMode && gameMode === 'single'"
               [options]="choseSingleModeActions"
               (optionSelected)="startingSelected($event.value)"
     ></app-menu>

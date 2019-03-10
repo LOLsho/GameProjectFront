@@ -1,4 +1,4 @@
-import { GameItem } from '../../game-wrapper/game.interfaces';
+import { GameItem, Session } from '../../game-wrapper/game.interfaces';
 import {
   CLEAR_GAME_LIST,
   GamesListActions,
@@ -12,6 +12,8 @@ import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 export interface GameListState extends EntityState<GameItem> {
   loaded: boolean;
 }
+
+
 
 export const gameListAdapter: EntityAdapter<GameItem> = createEntityAdapter<GameItem>();
 

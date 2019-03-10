@@ -1,11 +1,9 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { SapperCell, SapperField, SapperFieldType, SapperFieldTypes } from './sapper.interface';
+import { SapperCell, SapperField, SapperFieldType } from './sapper.interface';
 import { Language, TranslationService } from 'angular-l10n';
-import { MatDialog } from '@angular/material';
-import { CustomFieldComponent } from './custom-field/custom-field.component';
 import { NotifierService } from 'angular-notifier';
-import { filter } from 'rxjs/operators';
-import { GameSettings } from '../../game-wrapper/game.interfaces';
+import { Session, Step } from '../../game-wrapper/game.interfaces';
+import { User } from '../../auth/auth.interface';
 
 
 @Component({
@@ -17,51 +15,63 @@ export class SapperComponent implements OnInit, OnDestroy {
 
   @Language() lang: string;
 
-  @Input() gameSettings: GameSettings;
+  @Input()
+  set session(session: Session) {
+    this._session = session;
+    if (session.gameData.firstCell) {
+      this.updateGame();
+    } else {
+      this.initGame();
+    }
+  }
 
-  @Output() gameCreated = new EventEmitter<{
-    firstClick: boolean;
+  @Input()
+  set step(step: Step) {
+
+    const stepAlreadyIncludes = this.steps.find((item: Step) => item.id === step.id);
+
+    if (stepAlreadyIncludes) return;
+    else this.steps.push(step);
+    this.lastStep = step; // TODO Do i really need it?
+
+    if (step.userId === this.userData.uid) return; // Для много пользовательского режима в дальнейшем
+    this.updateCell(step.cellId, step.clickType);
+  }
+
+  @Input() steps: Step[];
+  @Input() userData: User;
+
+  get session() {
+    return this._session;
+  }
+
+  @Output() sessionUpdated = new EventEmitter<{
+    firstCell: SapperCell;
     field: string;
-    isGameOver: boolean;
     timePassed: number;
+    chosenField: SapperFieldType;
   }>();
 
-  @Output() gameUpdated = new EventEmitter<{
-    firstClick: boolean;
+  @Output() sessionFinished = new EventEmitter<{
+    firstCell: SapperCell;
     field: string;
-    isGameOver: boolean;
     timePassed: number;
+    chosenField: SapperFieldType;
   }>();
 
-  @Output() step = new EventEmitter<{
-    cellId: number;
-    // user: string; // TODO
-    // timeStamp: number; // TODO
-  }>();
+  @Output() stepMade = new EventEmitter<any>();
 
-  gameSteps: { cellId: number }[] = [];
-
+  @Output() exitSession = new EventEmitter();
 
   timer: number;
   timePassed = 0;
   losingSellId: number;
-  firstClick = true;
+  firstCell: SapperCell;
   field: SapperField = [];
 
-  defaultFields: SapperFieldTypes = {
-    small: {
-      size: [9, 9],
-      amountMines: 10,
-    },
-    medium: {
-      size: [16, 16],
-      amountMines: 40,
-    },
-    big: {
-      size: [30, 16],
-      amountMines: 99,
-    },
-  };
+  _session: Session;
+  lastStep: Step;
+
   chosenField: SapperFieldType;
   initialCell: SapperCell = {
     id: null,
@@ -72,81 +82,96 @@ export class SapperComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private modal: MatDialog,
     private notifierService: NotifierService,
     private translation: TranslationService,
   ) {}
 
   ngOnInit() {
+    this.prepareGame();
+  }
 
+  prepareGame() {
+    this.steps.forEach((step: Step) => {
+      this.updateCell(step.cellId, step.clickType);
+    });
+  }
+
+  updateCell(cellId: number, clickType: 'left' | 'right') {
+    const [cellRow, cellColumn] = this.getIndexesFromId(cellId);
+    const cell = this.field[cellRow][cellColumn];
+
+    if (clickType === 'left') {
+      cell.isOpen = true;
+      if (cell.number === 0) this.openCellsAround(cell.id);
+
+      if (this.playerWon) {
+        this.stopTimer();
+        this.makeAllMinesChecked();
+        this.notifierService.notify('success', this.translation.translate(`SAPPER_WIN-MESSAGE`));
+      }
+    } else {
+      cell.checked = !cell.checked;
+    }
   }
 
   initGame() {
+    this.chosenField = { ...this.session.gameData.chosenField };
     this.createEmptyField();
-    this.gameCreated.emit({
-      firstClick: this.firstClick,
-      field: JSON.stringify(this.field),
-      isGameOver: this.playerWon || this.playerLost,
-      timePassed: this.timePassed,
-    });
   }
 
-  chooseField(field: SapperFieldType) {
-    this.chosenField = { ...field };
-    this.initGame();
-  }
-
-  makeFieldMyself() {
-    const dialogRef = this.modal.open(CustomFieldComponent);
-
-    dialogRef.afterClosed()
-      .pipe(filter(fieldInfo => !!fieldInfo))
-      .subscribe(
-      ({ columns, rows, mines }) => {
-        const field: SapperFieldType = {
-          size: [columns, rows],
-          amountMines: mines,
-        };
-        this.chooseField(field);
-      }
-    );
+  updateGame() {
+    this.chosenField = this.session.gameData.chosenField;
+    this.timePassed = this.session.gameData.timePassed;
+    this.firstCell = this.session.gameData.firstCell;
+    this.field = JSON.parse(this.session.gameData.field);
   }
 
   restartGame() {
+    this.exitSession.emit();
     this.stopTimer();
+    this.field = [];
     this.timePassed = 0;
-    this.firstClick = true;
+    this.firstCell = null;
     this.chosenField = null;
   }
 
-  updateGameState() {
-    this.gameUpdated.emit({
-      firstClick: this.firstClick,
+  updateSession() {
+    this.sessionUpdated.emit({
+      firstCell: this.firstCell,
       field: JSON.stringify(this.field),
-      isGameOver: this.playerWon || this.playerLost,
       timePassed: this.timePassed,
+      chosenField: this.chosenField,
     });
   }
 
-  makeStep(id: number) {
-    this.step.emit({ cellId: id });
+  finishSession() {
+    this.sessionFinished.emit({
+      firstCell: this.firstCell,
+      field: JSON.stringify(this.field),
+      timePassed: this.timePassed,
+      chosenField: this.chosenField,
+    });
+  }
+
+  makeStep(id: number, clickType: 'right' | 'left') {
+    this.stepMade.emit({ cellId: id, clickType: clickType });
   }
 
   cellClick(cell: SapperCell) {
     if (cell.isOpen || cell.checked || this.playerLost || this.playerWon) return;
     cell.isOpen = true;
-    // this.makeStep(cell.id); // TODO
+    this.makeStep(cell.id, 'left');
 
-    if (this.firstClick) {
+    if (!this.firstCell) {
       cell = this.fillField(cell);
+      if (cell.number === 0) this.openCellsAround(cell.id);
       this.startTimer();
-      this.firstClick = false;
-      this.updateGameState();
+      this.updateSession();
     }
 
     if (cell.hasMine) {
       this.finishGame(cell);
-      this.updateGameState();
+      this.finishSession();
       return;
     }
 
@@ -157,7 +182,7 @@ export class SapperComponent implements OnInit, OnDestroy {
     if (this.playerWon) {
       this.stopTimer();
       this.makeAllMinesChecked();
-      this.updateGameState();
+      this.finishSession();
       this.notifierService.notify('success', this.translation.translate(`SAPPER_WIN-MESSAGE`));
     }
   }
@@ -177,7 +202,8 @@ export class SapperComponent implements OnInit, OnDestroy {
   }
 
   rightClick(cell: SapperCell) {
-    if (this.playerWon || this.playerLost || this.firstClick || cell.isOpen) return;
+    if (this.playerWon || this.playerLost || !this.firstCell || cell.isOpen) return;
+    this.makeStep(cell.id, 'right');
     cell.checked = !cell.checked;
   }
 
@@ -241,7 +267,8 @@ export class SapperComponent implements OnInit, OnDestroy {
       });
     });
 
-    return this.field[firstCellRowIndex][firstCellColumnIndex];
+    this.firstCell = this.field[firstCellRowIndex][firstCellColumnIndex];
+    return this.firstCell;
   }
 
   checkAvailableCells(rowIndex, columnIndex, action: 'checkMines' | 'openCells') {
@@ -270,7 +297,7 @@ export class SapperComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  checkAroundCell(rowIndex, columnIndex, action: 'checkMines' | 'openCells', sides?): number | number[] {
+  checkAroundCell(rowIndex, columnIndex, action: 'checkMines' | 'openCells', sides?: string[]): number | number[] {
     let minesAround = 0; // TODO smart refactor with collbacks
     const otherIdsToOpen: number[] = [];
     const sidesToCheck = sides || ['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l'];
@@ -352,6 +379,7 @@ export class SapperComponent implements OnInit, OnDestroy {
             if (searchedCell.hasMine) minesAround++;
           } else {
             if (searchedCell.number === 0 && !searchedCell.isOpen) otherIdsToOpen.push(searchedCell.id);
+
             searchedCell.isOpen = true;
           }
           break;

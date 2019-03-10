@@ -1,7 +1,13 @@
 <app-start-game-menu *ngIf="conditionToShowStartingMenu"
-                     [startGameConfig]="gameInitials.startGameConfig"
-                     (gameSettingsChosen)="onSettingsChosen($event)"
+                                            [startGameConfig]="gameInitials.startGameConfig"
+                                            (gameSettingsChosen)="onSettingsChosen($event)"
 ></app-start-game-menu>
 <div class="game-wrap">
   <div #gameEntry></div>
 </div>
+
+<div class="centered-full-screen" *ngIf="pending">
+  <app-loader></app-loader>
+</div>
+
+

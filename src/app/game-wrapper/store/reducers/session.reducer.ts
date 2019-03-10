@@ -1,51 +1,43 @@
-import { GameSettings } from '../../game.interfaces';
+import { Session } from '../../game.interfaces';
 import {
-  CLEAR_GAME_STATE,
-  CREATE_SESSION,
-  SessionActions, SESSION_FAIL, SET_CREATED_SESSION, SET_GAME_STATE, SET_UPDATED_SESSION, UPDATE_SESSION,
+  CLEAR_SESSION_STATE,
+  CREATE_SESSION, SESSION_EXIT, SESSION_FAIL,
+  SessionActions, SET_SESSION, SUBSCRIBE_TO_SESSION, UNSUBSCRIBE_FROM_SESSION,
+  UPDATE_SESSION,
 } from '../actions/session.actions';
 
 
-export interface GameState {
-  id: string;
-  name: string;
-  session: any;
-  // chat
-}
+export type SessionState = Session;
 
-export const initialGameState: GameState = {
+export const initialSessionState: SessionState = {
   id: null,
-  name: null,
-  session: null,
+  created: null,
+  creatorId: null,
+  gameData: null,
+  gameMode: null,
+  isSessionOver: null,
 };
 
 
 export function sessionReducer(
-  state: GameState = initialGameState,
-  action: SessionActions,
-): GameState {
-
+  state: SessionState = initialSessionState,
+  action: SessionActions
+): SessionState {
   switch (action.type) {
 
-    case SET_GAME_STATE:
+    case SET_SESSION:
       return { ...state, ...action.payload };
 
-    case SET_CREATED_SESSION:
-      return { ...state, session: action.payload.session };
-
-    case SET_UPDATED_SESSION:
-      return {
-        ...state,
-        session: { ...state.session, ...action.payload.updatedSessionData },
-      };
+    case CLEAR_SESSION_STATE:
+      return initialSessionState;
 
     case CREATE_SESSION:
     case UPDATE_SESSION:
     case SESSION_FAIL:
-      return { ...state };
-
-    case CLEAR_GAME_STATE:
-      return { ...initialGameState };
+    case SESSION_EXIT:
+    case SUBSCRIBE_TO_SESSION:
+    case UNSUBSCRIBE_FROM_SESSION:
+      return state;
   }
 
   return state;

@@ -1,5 +1,7 @@
-import { createFeatureSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { Session } from '../../game.interfaces';
 
 
-export const selectGameState = createFeatureSelector('game');
+export const selectSessionState = createFeatureSelector('session');
 
+export const selectSessionId = createSelector(selectSessionState, (session: Session) => session.id);

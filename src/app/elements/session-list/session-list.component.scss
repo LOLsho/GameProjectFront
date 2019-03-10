@@ -1,0 +1,19 @@
+
+
+
+.session-list {
+
+}
+
+.session-list__list {
+
+}
+
+.session-list__item {
+  cursor: pointer;
+  margin-bottom: 15px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

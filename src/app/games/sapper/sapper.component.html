@@ -1,7 +1,7 @@
 <div class="sapper">
-  <div class="sapper__container">
+  <div class="sapper__container" *ngIf="field.length > 0">
 
-    <div *ngIf="chosenField; else startingMenu" class="sapper__field-wrapper">
+    <div *ngIf="field; else error" class="sapper__field-wrapper">
       <div class="sapper__top-menu">
         <div class="sapper__counter sapper__mines-left">{{ unclearedMines | number:'3.0' }}</div>
         <button class="sapper__button" (click)="restartGame()">{{ 'New-game' | translate:lang }}</button>
@@ -10,9 +10,9 @@
 
       <div class="sapper__field" (contextmenu)="$event.preventDefault()">
 
-        <div class="sapper__row" *ngFor="let row of field; let rowIndex = index">
+        <div class="sapper__row" *ngFor="let row of field">
           <div class="sapper__sell"
-               *ngFor="let cell of row; let cellIndex = index"
+               *ngFor="let cell of row"
                [style.background-color]="cell.hasMine ? 'red' : 'grey'"
                [style.cursor]="cell.isOpen ? 'default' : 'cursor'"
                (click)="cellClick(cell)"
@@ -42,36 +42,12 @@
           </div>
         </div>
       </div>
+
+      <app-loader *ngIf="!steps"></app-loader>
     </div>
 
-    <ng-template #startingMenu>
-      <div class="sapper__startingMenu">
-        <div class="sapper__text">
-          {{ 'SAPPER_SELECT-DIFFICULTY' | translate:lang }}
-        </div>
-        <ul class="sapper__list">
-          <li class="sapper__item" (click)="chooseField(defaultFields.small)">
-            <button mat-raised-button color="primary">
-              {{ 'SAPPER_DIFFICULTY-EASY' | translate:lang }}
-            </button>
-          </li>
-          <li class="sapper__item" (click)="chooseField(defaultFields.medium)">
-            <button mat-raised-button color="primary">
-              {{ 'SAPPER_DIFFICULTY-MIDDLE' | translate:lang }}
-            </button>
-          </li>
-          <li class="sapper__item" (click)="chooseField(defaultFields.big)">
-            <button mat-raised-button color="primary">
-              {{ 'SAPPER_DIFFICULTY-HARD' | translate:lang }}
-            </button>
-          </li>
-          <li class="sapper__item" (click)="makeFieldMyself()">
-            <button mat-stroked-button color="primary">
-              {{ 'SAPPER_SELECT-CUSTOM' | translate:lang }}
-            </button>
-          </li>
-        </ul>
-      </div>
+    <ng-template #error>
+      Sorry, some error occurred
     </ng-template>
 
   </div>

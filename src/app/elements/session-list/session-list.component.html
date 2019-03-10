@@ -1,0 +1,16 @@
+<div class="centered-full-screen">
+  <div class="session-list content-border" *ngIf="sessions; else loader">
+    <ul class="session-list__list">
+      <li class="session-list__item" *ngFor="let session of sessions">
+        <app-session-item [session]="session" (sessionClicked)="sessionClicked($event)"></app-session-item>
+      </li>
+    </ul>
+
+    <span *ngIf="sessions.length === 0">{{ 'GAME-LIST_NO-GAMES' | translate:lang }}</span>
+  </div>
+
+  <ng-template #loader>
+    <app-loader></app-loader>
+  </ng-template>
+</div>
+

@@ -37,6 +37,7 @@
   "CHOOSE-MODE__MULTIPLAYER": "Многопользовательский",
 
   "SINGLE-MODE-ACTIONS__NEW": "Новая игра",
+  "SINGLE-MODE-ACTIONS__CONTINUE-LAST": "Продолжить последнюю",
   "SINGLE-MODE-ACTIONS__CONTINUE": "Продолжить игру",
   "SINGLE-MODE-ACTIONS__WATCH": "Смотреть сохраненные игры",
 
@@ -48,5 +49,7 @@
   "SAPPER_WIN-MESSAGE": "Поле полностью разминированно, поздравляю!",
   "SAPPER_CUSTOM-ROWS": "Введите количество рядов",
   "SAPPER_CUSTOM-COLUMNS": "Введите количество колонок",
-  "SAPPER_CUSTOM-MINES": "Введите количество мин"
+  "SAPPER_CUSTOM-MINES": "Введите количество мин",
+
+  "GAME-LIST_NO-GAMES": "Нет игр для продолжения"
 }

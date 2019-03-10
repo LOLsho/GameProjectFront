@@ -1,0 +1,29 @@
+
+.sapper__startingMenu {
+  border: 2px solid black;
+  padding: 15px;
+  border-radius: 4px;
+  min-width: 240px;
+}
+
+.sapper__text {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.sapper__list {
+
+}
+
+.sapper__item {
+  margin-bottom: 10px;
+
+  button {
+    width: 100%;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

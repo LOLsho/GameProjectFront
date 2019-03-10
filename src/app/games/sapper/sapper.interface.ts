@@ -7,7 +7,9 @@ export interface SapperCell {
 }
 
 export interface SapperFieldTypes {
-  [fieldSize: string]: SapperFieldType;
+  small: SapperFieldType;
+  medium: SapperFieldType;
+  big: SapperFieldType;
 }
 
 export interface SapperFieldType {

@@ -6,6 +6,7 @@ export interface StartGameConfig {
 export interface SingleModeConfig {
   disabled?: boolean;
   continueDisabled?: boolean;
+  continueLastDisabled?: boolean;
   watchSavedGamesDisabled?: boolean;
 }
 
