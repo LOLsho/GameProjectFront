@@ -161,6 +161,7 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
     const query = {
       where: [
         { field: 'isSessionOver', opStr: '==', value: false },
+        { field: 'gameMode', opStr: '==', value: 'single' },
         { field: 'creatorId', opStr: '==', value: this.user.uid },
       ]
     };

@@ -1,12 +1,14 @@
 import { Action } from '@ngrx/store';
 
 
-export const CLEAR_APP_STATE = '[LOGOUT] Clear App State';
+export enum AppActionTypes {
+  ClearAppState = '[LOGOUT] Clear App State',
+}
 
 
 
 export class ClearAppState implements Action {
-  readonly type = CLEAR_APP_STATE;
+  readonly type = AppActionTypes.ClearAppState;
 }
 
 

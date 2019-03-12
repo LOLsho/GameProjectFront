@@ -5,18 +5,10 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
 import {
-  AUTH_FAIL,
+  AuthActionTypes,
   Authenticated,
   AuthFail,
-  EMAIL_AND_PASSWORD_LOGIN,
-  EMAIL_AND_PASSWORD_REGISTER,
   EmailAndPasswordLogin, EmailAndPasswordRegister,
-  FACEBOOK_LOGIN,
-  GET_USER,
-  GITHUB_LOGIN,
-  GOOGLE_LOGIN,
-  LOGOUT,
-  LOGOUT_SUCCESS,
   LogoutSuccess,
   NotAuthenticated,
 } from '../actions/auth.actions';
@@ -39,7 +31,7 @@ export class AuthEffects {
 
   @Effect()
   getUser$: Observable<Action> = this.actions$.pipe(
-    ofType(GET_USER),
+    ofType(AuthActionTypes.GetUser),
     switchMap(() => this.afAuth.authState),
     map((authData) => {
       if (authData) {
@@ -60,7 +52,7 @@ export class AuthEffects {
 
   @Effect()
   emailAndPasswordRegister$: Observable<Action | Action[]> = this.actions$.pipe(
-    ofType(EMAIL_AND_PASSWORD_REGISTER),
+    ofType(AuthActionTypes.EmailAndPasswordRegister),
     map((action: EmailAndPasswordRegister) => action.payload),
     switchMap((payload: AuthWithEmailAndPasswordData) => {
       return fromPromise(this.afAuth.auth.createUserWithEmailAndPassword(payload.email, payload.password)).pipe(
@@ -75,7 +67,7 @@ export class AuthEffects {
 
   @Effect()
   emailAndPasswordLogin$: Observable<Action | Action[]> = this.actions$.pipe(
-    ofType(EMAIL_AND_PASSWORD_LOGIN),
+    ofType(AuthActionTypes.EmailAndPasswordLogin),
     map((action: EmailAndPasswordLogin) => action.payload),
     switchMap((payload: AuthWithEmailAndPasswordData) => {
       return fromPromise(this.afAuth.auth.signInWithEmailAndPassword(payload.email, payload.password)).pipe(
@@ -90,7 +82,7 @@ export class AuthEffects {
 
   @Effect()
   googleLogin$: Observable<Action | Action[]> = this.actions$.pipe(
-    ofType(GOOGLE_LOGIN),
+    ofType(AuthActionTypes.GoogleLogin),
     switchMap(() => {
       const provider = new auth.GoogleAuthProvider();
       return fromPromise(this.afAuth.auth.signInWithPopup(provider)).pipe(
@@ -105,7 +97,7 @@ export class AuthEffects {
 
   @Effect()
   facebookLogin$: Observable<Action | Action[]> = this.actions$.pipe(
-    ofType(FACEBOOK_LOGIN),
+    ofType(AuthActionTypes.FacebookLogin),
     switchMap(() => {
       const provider = new auth.FacebookAuthProvider();
       return fromPromise(this.afAuth.auth.signInWithPopup(provider)).pipe(
@@ -122,7 +114,7 @@ export class AuthEffects {
 
   @Effect()
   githubLogin$: Observable<Action | Action[]> = this.actions$.pipe(
-    ofType(GITHUB_LOGIN),
+    ofType(AuthActionTypes.GithubLogin),
     switchMap(() => {
       const provider = new auth.GithubAuthProvider();
       return fromPromise(this.afAuth.auth.signInWithPopup(provider)).pipe(
@@ -139,7 +131,7 @@ export class AuthEffects {
 
   @Effect()
   logout$: Observable<Action> = this.actions$.pipe(
-    ofType(LOGOUT),
+    ofType(AuthActionTypes.Logout),
     switchMap(() => of(this.afAuth.auth.signOut()).pipe(
       map(() => {
         this.notifierService.notify('default', 'You have signed out');
@@ -151,7 +143,7 @@ export class AuthEffects {
 
   @Effect()
   onLogout$: Observable<Action> = this.actions$.pipe(
-    ofType(LOGOUT_SUCCESS),
+    ofType(AuthActionTypes.LogoutSuccess),
     mergeMap(() => [
       new RouterGo({ path: ['authentication/sign-in'] }),
       new ClearAppState()
@@ -160,7 +152,7 @@ export class AuthEffects {
 
   @Effect({ dispatch: false })
   onAuthError$ = this.actions$.pipe(
-    ofType(AUTH_FAIL),
+    ofType(AuthActionTypes.AuthFail),
     map((action: AuthFail) => action.payload),
     tap((error: any) => {
       if (error.massage) this.notifierService.notify('error', error.message);
