@@ -46,7 +46,7 @@ import { notifierConfig } from '../assets/configs/notifier/notifier.config';
     ),
     EffectsModule.forRoot(appEffects),
     StoreRouterConnectingModule,
-    // storeDevtoolsModule,
+    storeDevtoolsModule,
 
     NotifierModule.withConfig(notifierConfig)
   ],

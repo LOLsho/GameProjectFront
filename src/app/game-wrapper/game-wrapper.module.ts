@@ -16,6 +16,9 @@ import { GameInfoEffects } from './store/effects/game-info.effects';
 import { SessionListComponent } from '../elements/session-list/session-list.component';
 import { SessionListEffects } from './store/effects/session-list.effects';
 import { SessionItemComponent } from '../elements/session-item/session-item.component';
+import { EnterIdComponent } from './start-game-menu/enter-id/enter-id.component';
+import { CreateNewMultiGameComponent } from './start-game-menu/create-new-multi-game/create-new-multi-game.component';
+import { BoxComponent } from '../elements/box/box.component';
 
 
 const ROUTES: Routes = [
@@ -36,6 +39,8 @@ const gamesComponents = [
   SapperComponent,
   SapperStartMenuComponent,
   SessionListComponent,
+  CreateNewMultiGameComponent,
+  EnterIdComponent,
 ];
 
 
@@ -45,6 +50,7 @@ const gamesComponents = [
     GameWrapperComponent,
     MenuComponent,
     StartGameMenuComponent,
+    BoxComponent,
     ...gamesComponents,
   ],
   imports: [

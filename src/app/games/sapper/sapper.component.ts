@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { SapperCell, SapperField, SapperFieldType } from './sapper.interface';
+import { SapperCell, SapperField, SapperFieldType } from './sapper.interfaces';
 import { Language, TranslationService } from 'angular-l10n';
 import { NotifierService } from 'angular-notifier';
 import { Session, Step } from '../../game-wrapper/game.interfaces';
@@ -104,6 +104,11 @@ export class SapperComponent implements OnInit, OnDestroy {
       cell.isOpen = true;
       if (cell.number === 0) this.openCellsAround(cell.id);
 
+      if (cell.hasMine) {
+        this.finishGame(cell);
+        return;
+      }
+
       if (this.playerWon) {
         this.stopTimer();
         this.makeAllMinesChecked();
@@ -124,6 +129,8 @@ export class SapperComponent implements OnInit, OnDestroy {
     this.timePassed = this.session.gameData.timePassed;
     this.firstCell = this.session.gameData.firstCell;
     this.field = JSON.parse(this.session.gameData.field);
+
+    if (this.firstCell) this.startTimer();
   }
 
   restartGame() {

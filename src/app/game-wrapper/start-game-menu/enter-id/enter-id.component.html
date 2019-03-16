@@ -1,0 +1,29 @@
+<div class="enter-id">
+  <app-menu [title]="'Enter ID'">
+    <div class="inter-id__form" [formGroup]="idForm">
+      <mat-form-field class="inter-id__input">
+        <input matInput
+               formControlName="id"
+               type="text"
+               placeholder="{{ 'ID' | translate:lang }}"
+               autocomplete="off"
+        >
+      </mat-form-field>
+
+      <button mat-raised-button
+              [disabled]="idForm.invalid"
+              color="primary"
+              type="button"
+              (click)="onSubmit()"
+      >
+        {{ 'Join' | translate:lang }}
+      </button>
+    </div>
+  </app-menu>
+
+  <div [@emersionAnimation] *ngIf="pending">
+    <app-loader></app-loader>
+  </div>
+</div>
+
+

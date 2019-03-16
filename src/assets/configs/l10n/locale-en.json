@@ -15,6 +15,16 @@
   "tic-tac-toe": "Tic-tac-toe",
   "sapper": "Sapper",
   "Block": "Block",
+  "ID": "ID",
+  "Enter ID": "Enter ID",
+  "Game ID:": "Game ID:",
+  "Join": "Join",
+  "Game settings": "Game settings",
+  "Privacy": "Privacy",
+  "Game course": "Game course",
+  "Closed game": "Closed game",
+  "You can only connect using ID": "You can only connect using ID",
+  "Apply settings": "Apply settings",
 
   "HEADER__SIGN-IN": "Sign in",
   "HEADER__SIGN-UP": "Sign up",
@@ -41,6 +51,11 @@
   "SINGLE-MODE-ACTIONS__CONTINUE": "Continue",
   "SINGLE-MODE-ACTIONS__WATCH": "Watch saved games",
 
+  "MULTI-MODE-ACTIONS__JOIN-GAME": "Join",
+  "MULTI-MODE-ACTIONS__JOIN-GAME-BY-ID": "Join by ID",
+  "MULTI-MODE-ACTIONS__CREATE-NEW": "Create new game",
+  "MULTI-MODE-ACTIONS__WATCH": "Watch saved games",
+
   "SAPPER_SELECT-DIFFICULTY": "Select difficulty:",
   "SAPPER_DIFFICULTY-EASY": "Easy (9х9, 10 mines)",
   "SAPPER_DIFFICULTY-MIDDLE": "Middle (16х16, 40 mines)",
@@ -51,5 +66,9 @@
   "SAPPER_CUSTOM-COLUMNS": "Enter amount of columns",
   "SAPPER_CUSTOM-MINES": "Enter amount of mines",
 
-  "GAME-LIST_NO-GAMES": "There are no games to continue"
+  "GAME-LIST_NO-GAMES": "There are no games to continue",
+
+  "ENTER-ID_NO-SUCH-GAME": "Game with entered ID does not exist",
+  "ENTER-ID_GAME-FINISHED": "Game with entered ID is already finished",
+  "ENTER-ID_GAME-INCORRECT-ID": "You entered incorrect ID"
 }

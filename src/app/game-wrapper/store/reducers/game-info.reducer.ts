@@ -4,19 +4,19 @@ import {
   GameInfoActions,
   SET_GAME_INFO,
 } from '../actions/game-info.actions';
-import { GameSettings } from '../../game.interfaces';
+import { GameMode } from '../../game.interfaces';
 
 
 export interface GameInfoState {
   id: string;
   name: string;
-  settings: GameSettings;
+  gameMode: GameMode;
 }
 
 export const initialGameInfoState: GameInfoState = {
   id: null,
   name: null,
-  settings: null,
+  gameMode: null,
 };
 
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable, Subject } from 'rxjs';
+import { Observable, pipe, Subject } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import {
   ClearStepsState, LOAD_STEPS,
@@ -88,7 +88,8 @@ export class StepsEffects {
             case 'removed':
             // return new StepCanceled(step); // TODO later
           }
-        })
+        }),
+        // tap(console.log)
       );
     }),
   );

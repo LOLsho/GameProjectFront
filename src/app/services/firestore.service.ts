@@ -38,10 +38,14 @@ export class FirestoreService {
     });
   }
 
-  getSessionList(query: any): AngularFirestoreCollection<DocumentData> {
+  getSessionById(sessionId: string): Observable<any> {
+    return this.getSessionDocument(sessionId).get();
+  }
+
+  getSessionList(query: Query): AngularFirestoreCollection<DocumentData> {
     return this.getGameDocument().collection('sessions', (ref: any) => {
       if (query.where) {
-        query.where.forEach((whereQuery: any) => {
+        query.where.forEach((whereQuery: Where) => {
           ref = ref.where(whereQuery.field, whereQuery.opStr, whereQuery.value);
         });
       }
@@ -66,10 +70,10 @@ export class FirestoreService {
     return this.getSessionsCollection().doc<any>(id);
   }
 
-  getStepsCollection(sessionId: string, query?: any): AngularFirestoreCollection {
+  getStepsCollection(sessionId: string, query?: Query): AngularFirestoreCollection {
     return this.getSessionDocument(sessionId).collection<any>('steps', (ref: any) => {
       if (query && query.where) {
-        query.where.forEach((whereQuery: any) => {
+        query.where.forEach((whereQuery: Where) => {
           ref = ref.where(whereQuery.field, whereQuery.opStr, whereQuery.value);
         });
       }
@@ -104,4 +108,15 @@ export class FirestoreService {
   getFirestoreTimestamp() {
     return firestore.Timestamp.fromDate(new Date());
   }
+}
+
+
+export interface Query {
+  where?: Where[];
+}
+
+export interface Where {
+  field: string;
+  opStr: string;
+  value: any;
 }

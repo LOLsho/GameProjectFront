@@ -1,6 +1,10 @@
 <div class="sapper">
   <div class="sapper__container" *ngIf="field.length > 0">
 
+    <div class="sapper__game-id" *ngIf="session.gameMode === 'multiplayer' && session.private">
+      {{ 'Game ID:' | translate:lang }} <span>{{ session.id }}</span>
+    </div>
+
     <div *ngIf="field; else error" class="sapper__field-wrapper">
       <div class="sapper__top-menu">
         <div class="sapper__counter sapper__mines-left">{{ unclearedMines | number:'3.0' }}</div>

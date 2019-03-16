@@ -1,0 +1,21 @@
+
+
+
+.box {
+  border: 2px solid black;
+  padding: 15px;
+  border-radius: 4px;
+  min-width: 240px;
+
+  &.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.box__title {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 12px;
+}

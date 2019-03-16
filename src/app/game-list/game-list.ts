@@ -20,7 +20,6 @@ export const GAMES: GameInitial[] = [
       },
     },
   },
-  // {gameTitle: 'spaceship'},
   {
     name: 'sapper',
     imageSrc: '../../assets/games/sapper/images/card-bg.jpg',
@@ -33,7 +32,11 @@ export const GAMES: GameInitial[] = [
         watchSavedGamesDisabled: true,
       },
       multiplayerMode: {
-        disabled: true,
+        disabled: false,
+        createNewDisabled: false,
+        joinGameByIdDisabled: false,
+        joinGameDisabled: false,
+        watchSavedGamesDisabled: true,
       },
     },
   },

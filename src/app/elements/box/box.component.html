@@ -1,0 +1,8 @@
+<div class="box"
+     [class.centered]="centered"
+>
+  <div class="box__title" *ngIf="boxTitle">
+    {{ boxTitle | translate:lang }}
+  </div>
+  <ng-content></ng-content>
+</div>

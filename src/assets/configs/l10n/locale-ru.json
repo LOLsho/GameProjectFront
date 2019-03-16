@@ -15,6 +15,16 @@
   "tic-tac-toe": "Крестики-нолики",
   "sapper": "Сапер",
   "Block": "Заблокировать",
+  "ID": "ID",
+  "Enter ID": "Введите ID",
+  "Game ID:": "ID игры:",
+  "Join": "Присоединиться",
+  "Game settings": "Настройки игры",
+  "Privacy": "Приватность",
+  "Game course": "Ход игры",
+  "Closed game": "Закрытая игра",
+  "You can only connect using ID": "Поключиться можно только с помощью ID",
+  "Apply settings": "Применить настройки",
 
   "HEADER__SIGN-IN": "Вход",
   "HEADER__SIGN-UP": "Регистрация",
@@ -41,6 +51,11 @@
   "SINGLE-MODE-ACTIONS__CONTINUE": "Продолжить игру",
   "SINGLE-MODE-ACTIONS__WATCH": "Смотреть сохраненные игры",
 
+  "MULTI-MODE-ACTIONS__JOIN-GAME": "Присоединиться",
+  "MULTI-MODE-ACTIONS__JOIN-GAME-BY-ID": "Присоединиться по ID",
+  "MULTI-MODE-ACTIONS__CREATE-NEW": "Создать новую игру",
+  "MULTI-MODE-ACTIONS__WATCH": "Смотреть сохраненные игры",
+
   "SAPPER_SELECT-DIFFICULTY": "Выберите сложность:",
   "SAPPER_DIFFICULTY-EASY": "Просто (9х9, 10 мин)",
   "SAPPER_DIFFICULTY-MIDDLE": "Средне (16х16, 40 мин)",
@@ -51,5 +66,9 @@
   "SAPPER_CUSTOM-COLUMNS": "Введите количество колонок",
   "SAPPER_CUSTOM-MINES": "Введите количество мин",
 
-  "GAME-LIST_NO-GAMES": "Нет игр для продолжения"
+  "GAME-LIST_NO-GAMES": "Нет игр для продолжения",
+
+  "ENTER-ID_NO-SUCH-GAME": "Игра с введенным ID не найдена",
+  "ENTER-ID_GAME-FINISHED": "Игра с веденным ID уже завершилась",
+  "ENTER-ID_GAME-INCORRECT-ID": "Вы ввели некорректный ID"
 }

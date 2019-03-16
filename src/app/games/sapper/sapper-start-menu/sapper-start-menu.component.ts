@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Language } from 'angular-l10n';
-import { SapperFieldType, SapperFieldTypes } from '../sapper.interface';
+import { SapperFieldType, SapperFieldTypes } from '../sapper.interfaces';
 import { CustomFieldComponent } from '../custom-field/custom-field.component';
 import { filter, take } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';

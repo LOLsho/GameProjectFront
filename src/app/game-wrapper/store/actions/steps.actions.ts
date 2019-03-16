@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
-import { NewStep, Step } from '../../game.interfaces';
+import { Step } from '../../game.interfaces';
+import { GameStep } from '../../../games/games.models';
 
 
 export const SUBSCRIBE_TO_STEPS = '[GAME] Subscribe To Steps';
@@ -37,7 +38,7 @@ export class StepCanceled implements Action {
 
 export class MakeStep implements Action {
   readonly type = MAKE_STEP;
-  constructor(public payload: { step: NewStep, sessionId: string }) {}
+  constructor(public payload: { step: GameStep, sessionId: string }) {}
 }
 
 export class StepsLoaded implements Action {

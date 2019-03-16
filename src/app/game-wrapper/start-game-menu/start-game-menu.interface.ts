@@ -1,6 +1,8 @@
+
 export interface StartGameConfig {
   singleMode: SingleModeConfig;
   multiplayerMode: MultiplayerModeConfig;
+  menuComponent?: any;
 }
 
 export interface SingleModeConfig {
@@ -12,4 +14,8 @@ export interface SingleModeConfig {
 
 export interface MultiplayerModeConfig {
   disabled?: boolean;
+  createNewDisabled?: boolean;
+  joinGameByIdDisabled?: boolean;
+  joinGameDisabled?: boolean;
+  watchSavedGamesDisabled?: boolean;
 }

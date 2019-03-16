@@ -1,4 +1,6 @@
 import { StartGameConfig } from './start-game-menu/start-game-menu.interface';
+import { GameData, GameStep } from '../games/games.models';
+import { User } from '../auth/auth.interface';
 
 export interface GameItem {
   name: string;
@@ -22,11 +24,8 @@ export interface GameInitial {
 
 export type GameMode = 'single' | 'multiplayer';
 export type SingleModeAction = 'newGame' | 'continue' | 'continueLast' | 'watchSavedGames';
+export type MultiModeAction = 'createNewGame' | 'joinGameById' | 'joinGame' | 'watchSavedGames';
 
-export interface GameSettings {
-  gameMode: GameMode;
-  singleModeAction: SingleModeAction;
-}
 
 export interface Session extends CreatedSession {
   id: string;
@@ -36,17 +35,19 @@ export interface CreatedSession {
   isSessionOver: boolean;
   created: any;
   creatorId: string;
-  gameData: any;
+  gameData: GameData;
   gameMode: GameMode;
+  private?: boolean;
 }
 
-export interface Step extends NewStep {
+export interface Step extends GameStep {
   id: string;
 }
 
-export interface NewStep {
-  clickType: 'left' | 'right';
-  cellId: number;
-  userId: string;
-  timestamp: any;
+export interface GameDataForLaunching {
+  gameMode: GameMode;
+  action: SingleModeAction | MultiModeAction;
+  gameComponent: any;
+  user: User;
+  withFirebaseConnection: boolean;
 }

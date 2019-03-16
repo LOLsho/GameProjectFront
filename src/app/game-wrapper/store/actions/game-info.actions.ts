@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { GameSettings } from '../../game.interfaces';
+import { GameMode } from '../../game.interfaces';
 
 
 export const CLEAR_GAME_RELATED_STATES = '[GAME ON_DESTROY] Clear All States Related To The Game';
@@ -9,7 +9,7 @@ export const CLEAR_GAME_INFO_STATE = '[GAME ON_DESTROY] Clear Game Info State';
 
 export class SetGameInfo implements Action {
   readonly type = SET_GAME_INFO;
-  constructor(public payload: { id?: string, name?: string, settings?: GameSettings }) {}
+  constructor(public payload: { id?: string, name?: string, gameMode?: GameMode }) {}
 }
 
 export class ClearGameInfoState implements Action {

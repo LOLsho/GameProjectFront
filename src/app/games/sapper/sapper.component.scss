@@ -14,7 +14,22 @@ $border-color: #808080;
 }
 
 .sapper__container {
+  position: relative;
+}
 
+.sapper__game-id {
+  border-radius: 5px;
+  border: 2px solid black;
+  font-size: 18px;
+  position: absolute;
+  top: -32px;
+  width: 100%;
+  text-align: center;
+  padding: 2px;
+
+  span {
+    color: #955d00;
+  }
 }
 
 .sapper__field-wrapper {

@@ -1,0 +1,21 @@
+
+
+
+.create-new-multi-game {
+
+}
+
+.create-new-multi-game__row {
+  display: flex;
+
+  app-box {
+    margin-right: 10px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  margin-bottom: 15px;
+}
+

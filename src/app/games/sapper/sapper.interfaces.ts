@@ -18,3 +18,18 @@ export interface SapperFieldType {
 }
 
 export type SapperField = SapperCell[][];
+
+
+export interface SapperGameData {
+  chosenField: SapperFieldType;
+  field: string;
+  firstCell: SapperCell;
+  timePassed: number;
+}
+
+export interface SapperStep {
+  clickType: 'left' | 'right';
+  cellId: number;
+  userId: string;
+  timestamp: any;
+}

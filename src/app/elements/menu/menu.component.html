@@ -2,6 +2,9 @@
   <div class="menu__title" *ngIf="title">
     {{ title | translate:lang }}
   </div>
+
+  <ng-content></ng-content>
+
   <button *ngFor="let option of options"
           mat-raised-button
           [disabled]="option.disabled"

@@ -1,94 +1,60 @@
-import {
-  Component,
-  ComponentFactoryResolver, ComponentRef, OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { GAMES } from '../game-list/game-list';
-import { CreatedSession, GameInitial, GameSettings, NewStep, Session, Step } from './game.interfaces';
+import { Component, ComponentFactoryResolver, ComponentRef, OnDestroy, OnInit, ViewChild, ViewContainerRef, } from '@angular/core';
+import { GameDataForLaunching, Session, Step } from './game.interfaces';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/reducers';
-import { getUser } from '../store/selectors/auth.selectors';
-import { User } from '../auth/auth.interface';
-import { of, pipe, Subscription } from 'rxjs';
-import {
-  CreateSession, SessionExit, SetSession, SubscribeToSession,
-  UpdateSession,
-} from './store/actions/session.actions';
+import { of, Subscription } from 'rxjs';
+import { SessionExit, UpdateSession } from './store/actions/session.actions';
 import { FirestoreService } from '../services/firestore.service';
-import { ClearGameRelatedStates, SetGameInfo } from './store/actions/game-info.actions';
-import { filter, pluck, switchMap, take } from 'rxjs/operators';
-import { GameInfoState } from './store/reducers/game-info.reducer';
-import { selectGameInfoState } from './store/selectors/game-info.selectors';
+import { ClearGameRelatedStates } from './store/actions/game-info.actions';
+import { filter, switchMap, take } from 'rxjs/operators';
 import { selectSessionState } from './store/selectors/session.selectors';
 import { selectAllSteps, selectLastStep, selectStepsLoaded } from './store/selectors/steps.selectors';
-import { SessionListComponent } from '../elements/session-list/session-list.component';
-import { SubscribeToSessionList, UnsubscribeFromSessionList } from './store/actions/session-list.actions';
-import { selectAllSessions, selectSessionListLoaded } from './store/selectors/session-list.selectors';
-import { LoadSteps, MakeStep } from './store/actions/steps.actions';
+import { MakeStep } from './store/actions/steps.actions';
+import { GameStep } from '../games/games.models';
+import { emersionAnimation } from '../animations/emersion.animation';
 
 
 @Component({
   selector: 'app-game-wrapper',
   styleUrls: ['./game-wrapper.component.scss'],
-  templateUrl: './game-wrapper.component.html'
+  templateUrl: './game-wrapper.component.html',
+  animations: [emersionAnimation],
 })
 export class GameWrapperComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = [];
 
   gameLaunched: boolean;
-
-  user: User;
-  gameInfo: GameInfoState;
   session: Session;
   steps: Step[];
 
   gameRef: ComponentRef<any>;
   pending: boolean;
 
+  gameData: GameDataForLaunching;
+
   @ViewChild('gameEntry', { read: ViewContainerRef }) gameEntry: ViewContainerRef;
 
-  gameInitials: GameInitial;
-  gameSettings: GameSettings;
-
   constructor(
-    private route: ActivatedRoute,
     private resolver: ComponentFactoryResolver,
     private store: Store<AppState>,
     private firestoreService: FirestoreService,
-  ) {
-    this.subscribeToRequiredData();
-  }
+  ) {}
 
-  subscribeToRequiredData(): void {
-    this.subscriptions = [
+  ngOnInit(): void {}
 
-      this.route.params.pipe(
-        pluck('game')
-      ).subscribe((gameName: string) => {
-        this.gameInitials = GAMES.find(gameInitial => gameInitial.name === gameName);
+  onGameDataPrepared(gameData: GameDataForLaunching) {
+    this.gameData = gameData;
 
-        this.firestoreService.getGameIdByName(gameName).subscribe((id: string) => {
-          this.store.dispatch(new SetGameInfo({ id: id, name: gameName }));
-        });
-      }),
-
-      this.store.select(getUser).subscribe((user: User) => {
-        this.user = user;
-      }),
-
-      this.store.select(selectGameInfoState).subscribe((gameInfoState: GameInfoState) => {
-        this.gameInfo = gameInfoState;
-      }),
-    ];
+    if (this.gameData.withFirebaseConnection) {
+      this.launchGame();
+    } else {
+      this.runGame();
+    }
   }
 
   launchGame() {
     this.pending = true;
-
     const sessionStream = this.store.select(selectSessionState).pipe(
       filter((session: Session) => !!session.created)
     );
@@ -97,13 +63,13 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
       switchMap(() => this.store.select(selectAllSteps)),
       take(1),
     );
-    // TODO change structure of gameSetting
-    if (this.gameSettings.gameMode === 'single') {
+
+    if (this.gameData.gameMode === 'single') {
       sessionStream.pipe(take(1));
 
-      if (this.gameSettings.singleModeAction === 'newGame') {
+      if (this.gameData.action === 'newGame') {
         stepsStream = sessionStream.pipe(switchMap(() => of([])), take(1));
-      } else if (this.gameSettings.singleModeAction === 'continue') {
+      } else if (this.gameData.action === 'continue') {
 
       }
     }
@@ -122,7 +88,7 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
         this.pending = false;
         this.runGame();
 
-        if (this.gameSettings.gameMode === 'multiplayer') {
+        if (this.gameData.gameMode === 'multiplayer') {
           this.subscriptions.push(this.store.select(selectLastStep).pipe(
             filter((lastStep: Step) => !!lastStep),
           ).subscribe((lastStep: Step) => {
@@ -133,87 +99,14 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
     );
   }
 
-  updateGameSessionInput() {
-    this.gameRef.instance.session = this.session;
-  }
-
-  onSettingsChosen(settings: GameSettings): void {
-    this.store.dispatch(new SetGameInfo({ settings }));
-    this.gameSettings = settings;
-
-    if (this.gameSettings.gameMode === 'single') {
-
-      switch (this.gameSettings.singleModeAction) {
-        case 'newGame':
-          if (this.gameInitials.menuComponent) this.showGameMenu();
-          else this.runGame(); // TODO REMOVE
-          break;
-        case 'continue':
-          this.showSessionList();
-          break;
-      }
-    }
-  }
-
-  showSessionList(): void {
-    const sessionListRef = this.createComponent(SessionListComponent);
-
-    const query = {
-      where: [
-        { field: 'isSessionOver', opStr: '==', value: false },
-        { field: 'gameMode', opStr: '==', value: 'single' },
-        { field: 'creatorId', opStr: '==', value: this.user.uid },
-      ]
-    };
-
-    this.store.dispatch(new SubscribeToSessionList(query));
-    this.subscriptions.push(this.store.select(selectSessionListLoaded).pipe(
-      filter((loaded: boolean) => !!loaded),
-      switchMap(() => this.store.select(selectAllSessions)),
-    ).subscribe((sessionList: Session[]) => {
-      sessionListRef.instance.sessions = sessionList;
-    }));
-
-    this.subscriptions.push(sessionListRef.instance.sessionChosen.subscribe((session: Session) => {
-      sessionListRef.destroy();
-      this.store.dispatch(new UnsubscribeFromSessionList());
-      this.store.dispatch(new SetSession(session));
-
-
-      // TODO move all subscriptions to launch game
-      this.store.dispatch(new LoadSteps({ sessionId: session.id }));
-      if (this.gameSettings.gameMode === 'multiplayer') {
-        this.store.dispatch(new SubscribeToSession({ id: session.id }));
-      }
-
-      this.launchGame();
-    }));
-  }
-
-  showGameMenu() {
-    const gameMenuRef = this.createComponent(this.gameInitials.menuComponent);
-    this.subscriptions.push(
-      gameMenuRef.instance.menuClosed.subscribe((specificGameDetails) => {
-        gameMenuRef.destroy();
-        this.createSession(specificGameDetails);
-        this.launchGame();
-      })
-    );
-  }
-
-  createSession(specificGameDetails) {
-    const payload: CreatedSession = this.generateDataForCreatedSession(specificGameDetails);
-    this.store.dispatch(new CreateSession(payload));
-  }
-
   runGame() {
-    this.gameRef = this.createComponent(this.gameInitials.component);
     this.gameLaunched = true;
+    this.gameRef = this.createComponent(this.gameData.gameComponent);
     const gameInstance = this.gameRef.instance;
 
     this.updateGameSessionInput();
     gameInstance.steps = this.steps;
-    gameInstance.userData = this.user;
+    gameInstance.userData = this.gameData.user;
 
 
     if (gameInstance.sessionUpdated) {
@@ -232,7 +125,7 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
 
     if (gameInstance.stepMade) {
       this.subscriptions.push(gameInstance.stepMade.subscribe((step: any) => {
-        const stepPayload: NewStep = this.generateDataForGameStep(step);
+        const stepPayload: GameStep = this.generateDataForGameStep(step);
         this.store.dispatch(new MakeStep({
           step: stepPayload,
           sessionId: this.session.id,
@@ -245,28 +138,14 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
         this.store.dispatch(new SessionExit());
         this.gameRef.destroy();
         this.gameLaunched = false;
-        this.gameSettings = null;
-        this.unsubscribeAll(); // TODO not quite right
+        this.gameData = null;
+        this.unsubscribeAll();
       }));
     }
   }
 
-  ngOnInit(): void {
-
-  }
-
-  get conditionToShowStartingMenu(): boolean {
-    return !!this.user && !!this.gameInfo && !this.gameSettings;
-  }
-
-  generateDataForCreatedSession(createdGameData: any): CreatedSession {
-    return {
-      created: this.firestoreService.getFirestoreTimestamp(),
-      creatorId: this.user.uid,
-      gameMode: this.gameSettings.gameMode,
-      gameData: createdGameData,
-      isSessionOver: false,
-    };
+  updateGameSessionInput() {
+    this.gameRef.instance.session = this.session;
   }
 
   generateDataForUpdatedSession(updatedGameData: any): Partial<Session> {
@@ -282,10 +161,10 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
     };
   }
 
-  generateDataForGameStep(step: any): NewStep {
+  generateDataForGameStep(step: any): GameStep {
     return {
       ...step,
-      userId: this.user.uid,
+      userId: this.gameData.user.uid,
       timestamp: this.firestoreService.getFirestoreTimestamp(),
     };
   }
@@ -296,9 +175,7 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
   }
 
   unsubscribeAll() {
-    this.subscriptions.forEach((sub) => {
-      if (sub) sub.unsubscribe();
-    });
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   ngOnDestroy(): void {

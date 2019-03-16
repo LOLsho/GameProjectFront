@@ -1,0 +1,27 @@
+<div class="create-new-multi-game">
+  <app-box boxTitle="Game settings" [centered]="true">
+    <div class="create-new-multi-game__row">
+      <app-box boxTitle="Privacy" [centered]="true">
+        <mat-checkbox
+          matTooltip="{{ 'You can only connect using ID' | translate:lang }}"
+          [value]="multiGameSettings.private"
+          (change)="multiGameSettings.private = $event.checked"
+        >
+          {{ 'Closed game' | translate:lang }}
+        </mat-checkbox>
+      </app-box>
+
+      <app-box boxTitle="Game course" [centered]="true">
+        Потом сделаю
+      </app-box>
+    </div>
+
+    <button mat-raised-button
+            color="primary"
+            type="button"
+            (click)="submitSettings()"
+    >
+      {{ 'Apply settings' | translate:lang }}
+    </button>
+  </app-box>
+</div>
