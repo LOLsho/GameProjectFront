@@ -185,13 +185,13 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sessionListRef.instance.sessionChosen.subscribe((session: Session) => {
       sessionListRef.destroy();
       this.store.dispatch(new UnsubscribeFromSessionList());
-      this.store.dispatch(new SetSession(session));
 
-
-      this.store.dispatch(new LoadSteps({ sessionId: session.id }));
       if (this.gameMode === 'multiplayer') {
         this.store.dispatch(new SubscribeToSession({ id: session.id }));
+      } else if (this.gameMode === 'single') {
+        this.store.dispatch(new SetSession(session));
       }
+      this.store.dispatch(new LoadSteps({ sessionId: session.id }));
 
       this.emitPreparedGameData();
     }));

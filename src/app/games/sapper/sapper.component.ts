@@ -27,7 +27,6 @@ export class SapperComponent implements OnInit, OnDestroy {
 
   @Input()
   set step(step: Step) {
-
     const stepAlreadyIncludes = this.steps.find((item: Step) => item.id === step.id);
 
     if (stepAlreadyIncludes) return;
@@ -165,7 +164,12 @@ export class SapperComponent implements OnInit, OnDestroy {
   }
 
   cellClick(cell: SapperCell) {
+    // Conditions when you can not click cell
     if (cell.isOpen || cell.checked || this.playerLost || this.playerWon) return;
+
+    // The first click should do the creator. So if not - return
+    if (!this.firstCell && this.session.creatorId !== this.userData.uid) return;
+
     cell.isOpen = true;
     this.makeStep(cell.id, 'left');
 
