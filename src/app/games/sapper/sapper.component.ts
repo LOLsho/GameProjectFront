@@ -130,7 +130,7 @@ export class SapperComponent implements OnInit, OnDestroy {
     this.firstCell = this.session.gameData.firstCell;
     this.field = JSON.parse(this.session.gameData.field);
 
-    if (this.firstCell) this.startTimer();
+    if (!this.timer) this.startTimer();
   }
 
   restartGame() {
