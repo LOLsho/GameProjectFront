@@ -5,6 +5,8 @@ import { AuthWithEmailAndPasswordData, User } from '../../auth/auth.interface';
 export enum AuthActionTypes {
   GetUser = '[Auth] Get User',
 
+  UpdateUserName = '[App] Update User Name',
+
   EmailAndPasswordRegister = '[Auth] Email And Password Register Attempt',
   EmailAndPasswordLogin = '[Auth] Email And Password Login Attempt',
   GoogleLogin = '[Auth] Google Login Attempt',
@@ -23,6 +25,11 @@ export enum AuthActionTypes {
 
 export class GetUser implements Action {
   readonly type = AuthActionTypes.GetUser;
+}
+
+export class UpdateUserName implements Action {
+  readonly type = AuthActionTypes.UpdateUserName;
+  constructor(public payload: Partial<User>) {}
 }
 
 export class EmailAndPasswordLogin implements Action {
@@ -74,6 +81,7 @@ export class AuthFail implements Action {
 
 export type AuthActions =
   | GetUser
+  | UpdateUserName
   | EmailAndPasswordRegister
   | EmailAndPasswordLogin
   | GoogleLogin

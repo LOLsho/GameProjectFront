@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { SapperCell, SapperField, SapperFieldType } from './sapper.interfaces';
+import { SapperCell, SapperField, SapperFieldType, SapperStep } from './sapper.interfaces';
 import { Language, TranslationService } from 'angular-l10n';
 import { NotifierService } from 'angular-notifier';
 import { Session, Step } from '../../game-wrapper/game.interfaces';
 import { User } from '../../auth/auth.interface';
+import { createEmptyField, fillEachCell } from '../../../assets/functions/game-functions';
 
 
 @Component({
@@ -37,7 +38,7 @@ export class SapperComponent implements OnInit, OnDestroy {
     this.updateCell(step.cellId, step.clickType);
   }
 
-  @Input() steps: Step[];
+  @Input() steps: SapperStep[];
   @Input() userData: User;
 
   get session() {
@@ -236,17 +237,12 @@ export class SapperComponent implements OnInit, OnDestroy {
     this.field = [];
 
     // Создаем массив нужного размера, заполненный undefined
-    const fieldRow = Array(this.chosenField.size[0]);
-    for (let rowIndex = 0; rowIndex < this.chosenField.size[1]; rowIndex++) {
-      this.field.push([...fieldRow]);
-    }
+    this.field = createEmptyField(this.chosenField.size[0], this.chosenField.size[1]);
 
     // Заполняем массив начальными данными
-    for (let rowIndex = 0; rowIndex < this.chosenField.size[1]; rowIndex++) {
-      for (let columnIndex = 0; columnIndex < this.chosenField.size[0]; columnIndex++) {
-        this.field[rowIndex][columnIndex] = { ...this.initialCell, id: this.getIdFromIndexes(rowIndex, columnIndex) };
-      }
-    }
+    fillEachCell<SapperCell>(this.field, (rowIndex, columnIndex) => {
+      return { ...this.initialCell, id: this.getIdFromIndexes(rowIndex, columnIndex) };
+    });
   }
 
   fillField(firstClickedCell) {

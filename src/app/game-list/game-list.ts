@@ -2,6 +2,7 @@ import { SapperComponent } from '../games/sapper/sapper.component';
 import { TicTacToeComponent } from '../games/tic-tac-toe/tic-tac-toe.component';
 import { GameInitial } from '../game-wrapper/game.interfaces';
 import { SapperStartMenuComponent } from '../games/sapper/sapper-start-menu/sapper-start-menu.component';
+import { ChessComponent } from '../games/chess/chess.component';
 
 export const GAMES: GameInitial[] = [
   {
@@ -11,6 +12,7 @@ export const GAMES: GameInitial[] = [
     // menuComponent: '',
     startGameConfig: {
       singleMode: {
+        disabled: false,
         continueLastDisabled: true,
         continueDisabled: true,
         watchSavedGamesDisabled: true,
@@ -27,6 +29,28 @@ export const GAMES: GameInitial[] = [
     menuComponent: SapperStartMenuComponent,
     startGameConfig: {
       singleMode: {
+        disabled: false,
+        continueLastDisabled: true,
+        continueDisabled: false,
+        watchSavedGamesDisabled: true,
+      },
+      multiplayerMode: {
+        disabled: false,
+        createNewDisabled: false,
+        joinGameByIdDisabled: false,
+        joinGameDisabled: false,
+        watchSavedGamesDisabled: true,
+      },
+    },
+  },
+  {
+    name: 'chess',
+    imageSrc: '../../assets/games/chess/images/chess-card-bg.jpg',
+    component: ChessComponent,
+    // menuComponent: SapperStartMenuComponent,
+    startGameConfig: {
+      singleMode: {
+        disabled: false,
         continueLastDisabled: true,
         continueDisabled: false,
         watchSavedGamesDisabled: true,

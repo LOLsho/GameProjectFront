@@ -13,9 +13,11 @@
   "From": "From",
   "To": "To",
   "tic-tac-toe": "Tic-tac-toe",
+  "chess": "Chess",
   "sapper": "Sapper",
   "Block": "Block",
   "ID": "ID",
+  "Nickname": "Nickname",
   "Enter ID": "Enter ID",
   "Game ID:": "Game ID:",
   "Join": "Join",
@@ -25,6 +27,10 @@
   "Closed game": "Closed game",
   "You can only connect using ID": "You can only connect using ID",
   "Apply settings": "Apply settings",
+  "Enter nickname": "Enter nickname",
+  "Under this nickname you will be seen by other players": "Under this nickname you will be seen by other players",
+  "Enter": "Enter",
+  "Choose piece": "Choose piece:",
 
   "HEADER__SIGN-IN": "Sign in",
   "HEADER__SIGN-UP": "Sign up",
@@ -70,5 +76,10 @@
 
   "ENTER-ID_NO-SUCH-GAME": "Game with entered ID does not exist",
   "ENTER-ID_GAME-FINISHED": "Game with entered ID is already finished",
-  "ENTER-ID_GAME-INCORRECT-ID": "You entered incorrect ID"
+  "ENTER-ID_GAME-INCORRECT-ID": "You entered incorrect ID",
+
+  "CHESS_BLACK-WON": "White mat. Black won!",
+  "CHESS_WHITE-WON": "Black mat. White won!",
+  "CHESS_STALEMATE-TO-WHITE": "White pat. Draw!",
+  "CHESS_STALEMATE-TO-BLACK": "Black pat. Draw!"
 }

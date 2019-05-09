@@ -1,5 +1,6 @@
-<app-start-game-menu *ngIf="!gameLaunched"
-                     (gameDataPrepared)="onGameDataPrepared($event)"
+<app-start-game-menu
+  *ngIf="!gameLaunched"
+  (gameDataPrepared)="onGameDataPrepared($event)"
 ></app-start-game-menu>
 
 <div class="game-wrap">

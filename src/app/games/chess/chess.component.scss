@@ -1,0 +1,35 @@
+@import "../../../assets/my-styles/variables";
+
+
+.chess {
+  background-color: #312E2B;
+  height: calc(100vh - #{$header-height});
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chess__field {
+  user-select: none;
+  position: relative;
+}
+
+.chess__row {
+  display: flex;
+}
+
+.chess__cell {
+  position: relative;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chess__available-mark {
+  width: 25px;
+  height: 25px;
+  border-radius: 100px;
+  background-color: rgba(black, .5);
+  z-index: 10;
+}

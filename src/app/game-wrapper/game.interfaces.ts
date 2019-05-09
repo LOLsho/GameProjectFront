@@ -42,6 +42,8 @@ export interface CreatedSession {
 
 export interface Step extends GameStep {
   id: string;
+  userId: string;
+  timestamp: any;
 }
 
 export interface GameDataForLaunching {

@@ -23,7 +23,7 @@
                (contextmenu)="rightClick(cell)"
           >
 
-            <div class="sapper__mistake-flag" *ngIf="cell.checked && !cell.hasMine && gameOver"></div>
+            <div class="sapper__mistake-flag" *ngIf="cell.checked && !cell.hasMine && playerLost"></div>
 
             <div class="sapper__opened-cell" *ngIf="cell.isOpen">
               <div class="sapper__mine" [style.background-color]="losingSellId === cell.id ? '#FF0200' : ''" *ngIf="cell.hasMine">
@@ -41,7 +41,6 @@
             <div class="sapper__closed-cell" *ngIf="!cell.isOpen">
               <i class="fas fa-flag" *ngIf="cell.checked"></i>
             </div>
-
 
           </div>
         </div>

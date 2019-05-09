@@ -1,0 +1,29 @@
+<div class="choose-piece">
+  <app-menu [title]="'Choose piece'">
+    <div
+      class="chess__field"
+      [style.width.px]="config.rows * config.cellWidth"
+      (contextmenu)="$event.preventDefault()"
+    >
+      <div class="chess__row" *ngFor="let row of field; let rowIndex = index">
+        <div
+          class="chess__cell"
+          *ngFor="let cell of row; let colIndex = index"
+          [style.width.px]="config.cellWidth"
+          [style.height.px]="config.cellHeight"
+          [style.backgroundColor]="getCellBackground(rowIndex, colIndex)"
+        ></div>
+      </div>
+
+      <app-chess-piece
+        [style.cursor]="'pointer'"
+        *ngFor="let piece of piecesToChoose"
+        name="{{ piece.name }}"
+        fraction="{{ fraction }}"
+        [cellId]="piece.id"
+        [config]="config"
+        (click)="pieceChosen(piece)"
+      ></app-chess-piece>
+    </div>
+  </app-menu>
+</div>

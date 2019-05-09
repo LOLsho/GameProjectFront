@@ -13,9 +13,11 @@
   "From": "От",
   "To": "До",
   "tic-tac-toe": "Крестики-нолики",
+  "chess": "Шахматы",
   "sapper": "Сапер",
   "Block": "Заблокировать",
   "ID": "ID",
+  "Nickname": "Никнейм",
   "Enter ID": "Введите ID",
   "Game ID:": "ID игры:",
   "Join": "Присоединиться",
@@ -25,6 +27,10 @@
   "Closed game": "Закрытая игра",
   "You can only connect using ID": "Поключиться можно только с помощью ID",
   "Apply settings": "Применить настройки",
+  "Enter nickname": "Введите никнейм",
+  "Under this nickname you will be seen by other players": "Под этим никнеймом вас будут видеть другие игроки",
+  "Enter": "Ввести",
+  "Choose piece": "Выберите фигуру:",
 
   "HEADER__SIGN-IN": "Вход",
   "HEADER__SIGN-UP": "Регистрация",
@@ -70,5 +76,10 @@
 
   "ENTER-ID_NO-SUCH-GAME": "Игра с введенным ID не найдена",
   "ENTER-ID_GAME-FINISHED": "Игра с веденным ID уже завершилась",
-  "ENTER-ID_GAME-INCORRECT-ID": "Вы ввели некорректный ID"
+  "ENTER-ID_GAME-INCORRECT-ID": "Вы ввели некорректный ID",
+
+  "CHESS_BLACK-WON": "Белым мат. Победили черные!",
+  "CHESS_WHITE-WON": "Черным мат. Победили белые!",
+  "CHESS_STALEMATE-TO-WHITE": "Белым пат. Ничья!",
+  "CHESS_STALEMATE-TO-BLACK": "Черным пат. Ничья!"
 }

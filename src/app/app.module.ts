@@ -3,7 +3,6 @@ import { AppComponent } from './app.component';
 import { l10nConfig, L10nProvider } from '../assets/configs/l10n/l10n.config';
 import { HeaderComponent } from './elements/header/header.component';
 import { GreetingComponent } from './greeting/greeting.component';
-import { RadioComponent } from './elements/radio/radio.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { ROUTES } from './app-routing.module';
@@ -22,14 +21,15 @@ import { appEffects } from './store/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { NotifierModule } from 'angular-notifier';
 import { notifierConfig } from '../assets/configs/notifier/notifier.config';
+import { EnterNicknameComponent } from './elements/enter-nickname/enter-nickname.component';
 
 
 @NgModule({
   declarations: [
     HeaderComponent,
     GreetingComponent,
-    RadioComponent,
     AppComponent,
+    EnterNicknameComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,6 +49,9 @@ import { notifierConfig } from '../assets/configs/notifier/notifier.config';
     // storeDevtoolsModule,
 
     NotifierModule.withConfig(notifierConfig)
+  ],
+  entryComponents: [
+    EnterNicknameComponent,
   ],
   providers: [
     L10nProvider,

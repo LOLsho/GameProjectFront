@@ -42,6 +42,9 @@ export class AuthEffects {
           photoURL: authData.photoURL,
           authenticated: true,
         };
+        // this.afAuth.auth.updateCurrentUser({
+        //
+        // });
         this.notifierService.notify('default', `You are signed in with email "${user.email}"`);
         return new Authenticated(user);
       } else {
@@ -50,8 +53,19 @@ export class AuthEffects {
     }),
   );
 
+  // @Effect({ dispatch: false })
+  // updateCurrentUser$: Observable<Action> = this.actions$.pipe(
+  //   ofType(AuthActionTypes.UpdateCurrentUser),
+  //   map((action: UpdateCurrentUser) => action.payload),
+  //   switchMap((updateData: Partial<User>) => {
+  //     return fromPromise(this.afAuth.auth.currentUser.updateProfile({ displayName: updateData.nickname })).pipe(
+  //       tap(console.log)
+  //     );
+  //   })
+  // );
+
   @Effect()
-  emailAndPasswordRegister$: Observable<Action | Action[]> = this.actions$.pipe(
+  emailAndPasswordRegister$: Observable<Action> = this.actions$.pipe(
     ofType(AuthActionTypes.EmailAndPasswordRegister),
     map((action: EmailAndPasswordRegister) => action.payload),
     switchMap((payload: AuthWithEmailAndPasswordData) => {

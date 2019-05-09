@@ -30,6 +30,4 @@ export interface SapperGameData {
 export interface SapperStep {
   clickType: 'left' | 'right';
   cellId: number;
-  userId: string;
-  timestamp: any;
 }

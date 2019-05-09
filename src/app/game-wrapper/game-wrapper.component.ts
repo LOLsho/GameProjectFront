@@ -41,7 +41,7 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
     private firestoreService: FirestoreService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit() {}
 
   onGameDataPrepared(gameData: GameDataForLaunching) {
     this.gameData = gameData;

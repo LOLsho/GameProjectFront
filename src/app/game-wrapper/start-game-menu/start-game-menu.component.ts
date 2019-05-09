@@ -39,7 +39,7 @@ import { EnterIdComponent } from './enter-id/enter-id.component';
 @Component({
   selector: 'app-start-game-menu',
   templateUrl: './start-game-menu.component.html',
-  styleUrls: ['./start-game-menu.component.scss']
+  styleUrls: ['./start-game-menu.component.scss'],
 })
 export class StartGameMenuComponent implements OnInit, OnDestroy {
 
@@ -111,6 +111,7 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
     this.choseModeOptions[0].disabled = this.gameInitials.startGameConfig.singleMode.disabled;
     this.choseModeOptions[1].disabled = this.gameInitials.startGameConfig.multiplayerMode.disabled;
 
+    this.choseSingleModeActions[0].disabled = this.gameInitials.startGameConfig.singleMode.disabled;
     this.choseSingleModeActions[1].disabled = this.gameInitials.startGameConfig.singleMode.continueLastDisabled;
     this.choseSingleModeActions[2].disabled = this.gameInitials.startGameConfig.singleMode.continueDisabled;
     this.choseSingleModeActions[3].disabled = this.gameInitials.startGameConfig.singleMode.watchSavedGamesDisabled;

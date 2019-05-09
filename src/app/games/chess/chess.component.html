@@ -1,0 +1,44 @@
+<div class="chess">
+  <div
+    class="chess__field"
+    [style.width.px]="config.rows * config.cellWidth"
+    (contextmenu)="rightClick($event)"
+  >
+
+    <div class="chess__row" *ngFor="let row of field; let rowIndex = index">
+      <div
+        class="chess__cell"
+        *ngFor="let cell of row; let colIndex = index"
+        [class.active]="isCellActive(rowIndex, colIndex)"
+        [style.width.px]="config.cellWidth"
+        [style.height.px]="config.cellHeight"
+        [style.backgroundColor]="getCellBackground(rowIndex, colIndex)"
+        (click)="cellClicked(getIdFromIndexes(rowIndex, colIndex))"
+      >
+        <div class="chess__available-mark" *ngIf="availableMoves.includes(getIdFromIndexes(rowIndex, colIndex))"></div>
+        <span style="position: absolute; top: 0; left: 0;">{{ getIdFromIndexes(rowIndex, colIndex) }}</span>
+      </div>
+    </div>
+
+    <app-chess-piece
+      *ngFor="let whitePiece of whitePieces"
+      name="{{ whitePiece.name }}"
+      fraction="{{ whitePiece.fraction }}"
+      [cellId]="whitePiece.cellId"
+      [config]="config"
+      (click)="cellClicked(whitePiece.cellId, whitePiece)"
+      [@emersionAnimation]
+    ></app-chess-piece>
+
+    <app-chess-piece
+      *ngFor="let blackPiece of blackPieces"
+      name="{{ blackPiece.name }}"
+      fraction="{{ blackPiece.fraction }}"
+      [cellId]="blackPiece.cellId"
+      [config]="config"
+      (click)="cellClicked(blackPiece.cellId, blackPiece)"
+      [@emersionAnimation]
+    ></app-chess-piece>
+
+  </div>
+</div>
