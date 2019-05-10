@@ -31,6 +31,13 @@
   "Under this nickname you will be seen by other players": "Под этим никнеймом вас будут видеть другие игроки",
   "Enter": "Ввести",
   "Choose piece": "Выберите фигуру:",
+  "Move order": "Порядок хода",
+  "No order": "Без порядка",
+  "Player by player": "Игроки по очереди",
+  "Teem by teem": "Команды по очереди",
+  "Maximum number of players": "Максимальное количество игроков",
+  "No restrictions": "Без ограничений",
+  "Players": "Игроков",
 
   "HEADER__SIGN-IN": "Вход",
   "HEADER__SIGN-UP": "Регистрация",

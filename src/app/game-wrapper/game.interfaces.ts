@@ -1,6 +1,7 @@
 import { StartGameConfig } from './start-game-menu/start-game-menu.interface';
 import { GameData, GameStep } from '../games/games.models';
 import { User } from '../auth/auth.interface';
+import { GameMoveOrder } from './start-game-menu/create-new-multi-game/multi-game-setting.model';
 
 export interface GameItem {
   name: string;
@@ -38,6 +39,9 @@ export interface CreatedSession {
   gameData: GameData;
   gameMode: GameMode;
   private?: boolean;
+  maxParticipants?: number;
+  moveOrder?: GameMoveOrder;
+  playerIds?: string[];
 }
 
 export interface Step extends GameStep {
@@ -51,5 +55,4 @@ export interface GameDataForLaunching {
   action: SingleModeAction | MultiModeAction;
   gameComponent: any;
   user: User;
-  withFirebaseConnection: boolean;
 }

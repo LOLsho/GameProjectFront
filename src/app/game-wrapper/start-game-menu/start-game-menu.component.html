@@ -1,19 +1,22 @@
 <div class="centered-full-screen">
   <div class="start-game-menu__content">
-    <app-menu [title]="'CHOOSE-MODE__TITLE'"
-              *ngIf="!gameMode"
-              [options]="choseModeOptions"
-              (optionSelected)="gameModeSelected($event.value)"
+    <app-menu
+      [title]="'CHOOSE-MODE__TITLE'"
+      *ngIf="!gameMode"
+      [options]="choseModeOptions"
+      (optionSelected)="gameModeSelected($event.value)"
     ></app-menu>
 
-    <app-menu *ngIf="gameMode && gameMode === 'single' && !singleModeAction"
-              [options]="choseSingleModeActions"
-              (optionSelected)="singleModeActionSelected($event.value)"
+    <app-menu
+      *ngIf="gameMode && gameMode === 'single' && !singleModeAction"
+      [options]="choseSingleModeActions"
+      (optionSelected)="singleModeActionSelected($event.value)"
     ></app-menu>
 
-    <app-menu *ngIf="gameMode && gameMode === 'multiplayer' && !multiModeAction"
-              [options]="choseMultiModeActions"
-              (optionSelected)="multiModeActionSelected($event.value)"
+    <app-menu
+      *ngIf="gameMode && gameMode === 'multiplayer' && !multiModeAction"
+      [options]="choseMultiModeActions"
+      (optionSelected)="multiModeActionSelected($event.value)"
     ></app-menu>
 
     <div class="start-game-menu__component-wrap">

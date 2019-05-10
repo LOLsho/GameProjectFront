@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ChessConfig,
   ChessFraction,
@@ -50,6 +50,16 @@ export class ChessComponent implements OnInit {
   @Input() session;
   @Input() userData: User;
   @Input() steps: ChessStep[] = [];
+  @Output() sessionFinished = new EventEmitter();
+
+  @Input()
+  set step(value) {
+    this.updateStep(value);
+    this.steps.push(value);
+  }
+
+  @Output() sessionUpdated = new EventEmitter();
+  @Output() stepMade = new EventEmitter();
 
   private readonly _config: ChessConfig = getChessConfig();
 
@@ -61,8 +71,30 @@ export class ChessComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('this.session -', this.session);
     this.initNewGame();
+
+    if (this.steps.length) {
+      this.updateGameUpToLastStep();
+    }
+  }
+
+  updateGameUpToLastStep() {
+    this.steps.forEach(((step) => {
+      this.updateStep(step);
+    }));
+  }
+
+  updateStep(step) {
+    this.activeCellId = step.from;
+
+    if (step.transformation) {
+      const piece = this.getPieceByCellId(this.activeCellId, this.whoseTurn);
+      piece.name = step.transformation;
+    }
+
+    this.lastStep = step;
+
+    this.makeMove(step.to, true);
   }
 
   initNewGame() {
@@ -78,6 +110,12 @@ export class ChessComponent implements OnInit {
 
   cellClicked(clickedCellId: number, piece?: ChessPieceData) {
     if (this.gameOver) return;
+
+    if (this.session.creatorId === this.userData.uid) {
+      if (this.steps.length % 2 !== 0) return;
+    } else {
+      if (this.steps.length % 2 === 0) return;
+    }
 
     if (this.activeCellId !== null) {
       if (this.availableMoves.includes(clickedCellId)) {
@@ -110,6 +148,7 @@ export class ChessComponent implements OnInit {
     }
 
     this.notifier.notify('success', this.translation.translate(message));
+    this.sessionFinished.emit({});
   }
 
   get checkmate() {
@@ -135,14 +174,18 @@ export class ChessComponent implements OnInit {
     this.removeActiveCell();
   }
 
-  makeMove(cellId: number) {
+  makeMove(cellId: number, rewind = false, transformedTo?: ChessPieceName) {
     this.checkIfMoveTakeOnAisle(cellId, this.activePiece);
     this.checkIfMoveCastling(cellId);
-    const reached = this.checkIfPawnReachedEnd(cellId);
 
-    if (reached) return;
+    if (!rewind) {
+      const reached = this.checkIfPawnReachedEnd(cellId);
+      if (reached) return;
+    }
 
-    this.writeDownStep(cellId);
+    if (!rewind) {
+      this.writeDownStep(cellId, transformedTo);
+    }
 
     if (this.checkCellHasEnemy(cellId, this.activePiece.fraction)) {
       this.removePiece(cellId, this.oppositeFraction(this.activePiece.fraction));
@@ -160,8 +203,6 @@ export class ChessComponent implements OnInit {
     } else if (this.stalemate) {
       this.completeGame('stalemate');
     }
-
-    console.log('this.steps -', this.steps);
   }
 
   checkIfPawnReachedEnd(cellId: number): boolean {
@@ -180,13 +221,12 @@ export class ChessComponent implements OnInit {
         .pipe(take(1))
         .subscribe((name: ChessPieceName) => {
           this.activePiece.name = name;
-          this.makeMove(cellId);
+          this.makeMove(cellId, false, name);
         });
 
       return true;
     }
   }
-
 
   removeActiveCell() {
     this.activeCellId = null;
@@ -228,13 +268,18 @@ export class ChessComponent implements OnInit {
     }
   }
 
-  writeDownStep(cellId: number) {
+  writeDownStep(cellId: number, transformedTo?: ChessPieceName) {
     this.lastStep = { from: this.activePiece.cellId, to: cellId };
+
     if (this.checkCellHasEnemy(cellId, this.activePiece.fraction)) {
       this.lastStep.wasEaten = this.getPieceByCellId(cellId, this.oppositeFraction(this.whoseTurn));
     }
-    // TODO
+    if (transformedTo) {
+      this.lastStep.transformation = transformedTo;
+    }
+
     this.steps.push(this.lastStep);
+    this.stepMade.emit(this.lastStep);
   }
 
   removePiece(cellId: number, fraction: ChessFraction) {

@@ -40,6 +40,10 @@ export const GAMES: GameInitial[] = [
         joinGameByIdDisabled: false,
         joinGameDisabled: false,
         watchSavedGamesDisabled: true,
+        multiModeConfig: {
+          moveOrder: 'no-order',
+          maxParticipants: null,
+        },
       },
     },
   },
@@ -50,7 +54,7 @@ export const GAMES: GameInitial[] = [
     // menuComponent: SapperStartMenuComponent,
     startGameConfig: {
       singleMode: {
-        disabled: false,
+        disabled: true,
         continueLastDisabled: true,
         continueDisabled: false,
         watchSavedGamesDisabled: true,
@@ -61,6 +65,10 @@ export const GAMES: GameInitial[] = [
         joinGameByIdDisabled: false,
         joinGameDisabled: false,
         watchSavedGamesDisabled: true,
+        multiModeConfig: {
+          maxParticipants: 2,
+          moveOrder: 'player-by-player',
+        },
       },
     },
   },

@@ -1,7 +1,13 @@
 import { NgModule } from '@angular/core';
 import {
   MatIconModule,
-  MatButtonModule, MatSelectModule, MatBadgeModule, MatMenuModule, MatDialogModule, MatCheckboxModule,
+  MatButtonModule,
+  MatSelectModule,
+  MatBadgeModule,
+  MatMenuModule,
+  MatDialogModule,
+  MatCheckboxModule,
+  MatAutocompleteModule,
 } from '@angular/material';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,6 +32,7 @@ const matElements = [
   MatProgressSpinnerModule,
   MatCheckboxModule,
   MatTooltipModule,
+  MatAutocompleteModule,
   // DragDropModule,
 ];
 

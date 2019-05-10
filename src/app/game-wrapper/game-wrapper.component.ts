@@ -6,7 +6,7 @@ import { of, Subscription } from 'rxjs';
 import { SessionExit, UpdateSession } from './store/actions/session.actions';
 import { FirestoreService } from '../services/firestore.service';
 import { ClearGameRelatedStates } from './store/actions/game-info.actions';
-import { filter, switchMap, take } from 'rxjs/operators';
+import { delay, filter, skip, switchMap, take, tap } from 'rxjs/operators';
 import { selectSessionState } from './store/selectors/session.selectors';
 import { selectAllSteps, selectLastStep, selectStepsLoaded } from './store/selectors/steps.selectors';
 import { MakeStep } from './store/actions/steps.actions';
@@ -45,18 +45,14 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
 
   onGameDataPrepared(gameData: GameDataForLaunching) {
     this.gameData = gameData;
-
-    if (this.gameData.withFirebaseConnection) {
-      this.launchGame();
-    } else {
-      this.runGame();
-    }
+    this.launchGame();
   }
 
   launchGame() {
     this.pending = true;
+
     const sessionStream = this.store.select(selectSessionState).pipe(
-      filter((session: Session) => !!session.created)
+      filter((session: Session) => !!session.created),
     );
     let stepsStream = this.store.select(selectStepsLoaded).pipe(
       filter((loaded: boolean) => !!loaded),
@@ -87,11 +83,18 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
       () => {
         this.pending = false;
         this.runGame();
+        const skipFirst = this.steps.length > 0;
 
         if (this.gameData.gameMode === 'multiplayer') {
           this.subscriptions.push(this.store.select(selectLastStep).pipe(
             filter((lastStep: Step) => !!lastStep),
+            // tap((res) => console.log('tap1 -', res)),
+            skip(skipFirst ? 1 : 0),
+            // tap((res) => console.log('tap2 -', res)),
+            filter((lastStep: Step) => lastStep.userId !== this.gameData.user.uid),
+            // tap((res) => console.log('tap3 -', res)),
           ).subscribe((lastStep: Step) => {
+            // console.log('lastStep from sub -', lastStep);
             this.gameRef.instance.step = lastStep;
           }));
         }
@@ -107,7 +110,6 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
     this.updateGameSessionInput();
     gameInstance.steps = this.steps;
     gameInstance.userData = this.gameData.user;
-
 
     if (gameInstance.sessionUpdated) {
       this.subscriptions.push(gameInstance.sessionUpdated.subscribe((updatedSessionData: any) => {

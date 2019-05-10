@@ -16,7 +16,6 @@
         (click)="cellClicked(getIdFromIndexes(rowIndex, colIndex))"
       >
         <div class="chess__available-mark" *ngIf="availableMoves.includes(getIdFromIndexes(rowIndex, colIndex))"></div>
-        <span style="position: absolute; top: 0; left: 0;">{{ getIdFromIndexes(rowIndex, colIndex) }}</span>
       </div>
     </div>
 

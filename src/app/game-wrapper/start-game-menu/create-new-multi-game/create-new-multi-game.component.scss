@@ -1,21 +1,41 @@
 
 
 
+app-box {
+  display: block;
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
 .create-new-multi-game {
 
 }
 
 .create-new-multi-game__row {
   display: flex;
-
-  app-box {
-    margin-right: 10px;
-
-    &:last-child {
-      margin-right: 0;
-    }
-  }
-
   margin-bottom: 15px;
 }
 
+.create-new-multi-game__left {
+  margin-right: 10px;
+
+
+}
+
+.create-new-multi-game__right {
+
+}
+
+.create-new-multi-game__vertical {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+
+  mat-form-field {
+    width: 100%;
+  }
+}

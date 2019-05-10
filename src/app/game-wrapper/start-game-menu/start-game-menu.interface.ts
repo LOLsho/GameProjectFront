@@ -1,3 +1,4 @@
+import { MultiGameSettings } from './create-new-multi-game/multi-game-setting.model';
 
 export interface StartGameConfig {
   singleMode: SingleModeConfig;
@@ -18,4 +19,5 @@ export interface MultiplayerModeConfig {
   joinGameByIdDisabled?: boolean;
   joinGameDisabled?: boolean;
   watchSavedGamesDisabled?: boolean;
+  multiModeConfig?: Partial<MultiGameSettings>;
 }

@@ -1,25 +1,62 @@
-<div class="create-new-multi-game">
+<div class="create-new-multi-game" [formGroup]="form">
   <app-box boxTitle="Game settings" [centered]="true">
     <div class="create-new-multi-game__row">
-      <app-box boxTitle="Privacy" [centered]="true">
-        <mat-checkbox
-          matTooltip="{{ 'You can only connect using ID' | translate:lang }}"
-          [value]="multiGameSettings.private"
-          (change)="multiGameSettings.private = $event.checked"
-        >
-          {{ 'Closed game' | translate:lang }}
-        </mat-checkbox>
-      </app-box>
 
-      <app-box boxTitle="Game course" [centered]="true">
-        Потом сделаю
-      </app-box>
+      <div class="create-new-multi-game__left">
+        <app-box boxTitle="Privacy" [centered]="true" style="margin-bottom: 10px;">
+          <mat-checkbox
+            matTooltip="{{ 'You can only connect using ID' | translate:lang }}"
+            formControlName="private"
+          >
+            {{ 'Closed game' | translate:lang }}
+          </mat-checkbox>
+        </app-box>
+
+        <app-box boxTitle="Maximum number of players">
+          <div class="create-new-multi-game__vertical">
+            <mat-checkbox
+              style="margin-bottom: 8px;"
+              checked="checked"
+              [disabled]="disabledFields.includes('maxParticipants')"
+              (change)="noRestrictionsClicked($event)"
+            >
+              {{ 'No restrictions' | translate:lang }}
+            </mat-checkbox>
+
+            <mat-form-field class="card__input card__input-email">
+              <input matInput
+                     placeholder="{{ 'Players' | translate:lang }}"
+                     autocomplete="off"
+                     formControlName="maxParticipants"
+              >
+            </mat-form-field>
+          </div>
+        </app-box>
+      </div>
+
+      <div class="create-new-multi-game__right">
+        <app-box boxTitle="Move order" [centered]="true">
+
+          <mat-form-field>
+            <mat-select formControlName="moveOrder">
+              <mat-option *ngFor="let option of moveOrderOptions" [value]="option.value">
+                {{ option.caption | translate:lang }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </app-box>
+      </div>
+
+
+
     </div>
 
     <button mat-raised-button
             color="primary"
             type="button"
             (click)="submitSettings()"
+            [disabled]="form.invalid"
     >
       {{ 'Apply settings' | translate:lang }}
     </button>

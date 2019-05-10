@@ -203,8 +203,7 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
 
     switch (this.multiModeAction) {
       case 'createNewGame':
-        if (this.gameInitials.menuComponent) this.showCreateNewMultiGameMenu();
-        break;
+        this.showCreateNewMultiGameMenu(); break;
       case 'joinGameById':
         this.showEnterIdComponent(); break;
       case 'joinGame':
@@ -229,11 +228,18 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
   showCreateNewMultiGameMenu() {
     const componentRef = this.createComponent(CreateNewMultiGameComponent);
 
+    componentRef.instance.preConfig = this.gameInitials.startGameConfig.multiplayerMode.multiModeConfig;
     this.subscriptions.push(
       componentRef.instance.multiSettingsChosen.subscribe((multiGameSettings: MultiGameSettings) => {
         componentRef.destroy();
         this.multiGameSettings = multiGameSettings;
-        this.showGameMenu();
+
+        if (this.gameInitials.menuComponent) {
+          this.showGameMenu();
+        } else {
+          this.createSession({});
+          this.emitPreparedGameData();
+        }
       })
     );
   }
@@ -259,6 +265,9 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
 
     if (newSession.gameMode === 'multiplayer') {
       newSession.private = this.multiGameSettings.private;
+      newSession.maxParticipants = this.multiGameSettings.maxParticipants;
+      newSession.moveOrder = this.multiGameSettings.moveOrder;
+      newSession.playerIds = [this.user.uid];
     }
 
     return newSession;
@@ -270,7 +279,6 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
       action: this.gameMode === 'single' ? this.singleModeAction : this.multiModeAction,
       gameComponent: this.gameInitials.component,
       user: this.user,
-      withFirebaseConnection: !!this.gameInitials.menuComponent,
     });
   }
 

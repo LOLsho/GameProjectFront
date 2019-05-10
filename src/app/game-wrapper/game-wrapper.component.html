@@ -1,5 +1,5 @@
 <app-start-game-menu
-  *ngIf="!gameLaunched"
+  *ngIf="!gameLaunched && !pending"
   (gameDataPrepared)="onGameDataPrepared($event)"
 ></app-start-game-menu>
 

@@ -28,13 +28,8 @@ export class SapperComponent implements OnInit, OnDestroy {
 
   @Input()
   set step(step: Step) {
-    const stepAlreadyIncludes = this.steps.find((item: Step) => item.id === step.id);
-
-    if (stepAlreadyIncludes) return;
-    else this.steps.push(step);
+    this.steps.push(step);
     this.lastStep = step; // TODO Do i really need it?
-
-    if (step.userId === this.userData.uid) return; // Для много пользовательского режима в дальнейшем
     this.updateCell(step.cellId, step.clickType);
   }
 
