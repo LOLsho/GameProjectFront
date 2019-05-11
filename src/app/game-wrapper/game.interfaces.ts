@@ -1,5 +1,4 @@
 import { StartGameConfig } from './start-game-menu/start-game-menu.interface';
-import { GameData, GameStep } from '../games/games.models';
 import { User } from '../auth/auth.interface';
 import { GameMoveOrder } from './start-game-menu/create-new-multi-game/multi-game-setting.model';
 
@@ -28,26 +27,28 @@ export type SingleModeAction = 'newGame' | 'continue' | 'continueLast' | 'watchS
 export type MultiModeAction = 'createNewGame' | 'joinGameById' | 'joinGame' | 'watchSavedGames';
 
 
-export interface Session extends CreatedSession {
-  id: string;
-}
+export interface Session<T = any> {
+  id?: string;
 
-export interface CreatedSession {
+  // For single and multi modes
   isSessionOver: boolean;
   created: any;
   creatorId: string;
-  gameData: GameData;
+  gameData: T;
   gameMode: GameMode;
+
+  // For multi mode only
   private?: boolean;
   maxParticipants?: number;
   moveOrder?: GameMoveOrder;
   playerIds?: string[];
 }
 
-export interface Step extends GameStep {
-  id: string;
+export interface Step<T = any> {
+  id?: string;
   userId: string;
   timestamp: any;
+  data: T;
 }
 
 export interface GameDataForLaunching {

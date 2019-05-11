@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { SapperCell, SapperField, SapperFieldType, SapperStep } from './sapper.interfaces';
+import { SapperCell, SapperField, SapperFieldType, SapperGameData, SapperStep } from './sapper.interfaces';
 import { Language, TranslationService } from 'angular-l10n';
 import { NotifierService } from 'angular-notifier';
 import { Session, Step } from '../../game-wrapper/game.interfaces';
@@ -16,6 +16,8 @@ export class SapperComponent implements OnInit, OnDestroy {
 
   @Language() lang: string;
 
+  @Input() generateStepData: Function;
+
   @Input()
   set session(session: Session) {
     this._session = session;
@@ -27,35 +29,22 @@ export class SapperComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  set step(step: Step) {
+  set step(step: Step<SapperStep>) {
     this.steps.push(step);
     this.lastStep = step; // TODO Do i really need it?
-    this.updateCell(step.cellId, step.clickType);
+    this.updateCell(step.data.cellId, step.data.clickType);
   }
 
-  @Input() steps: SapperStep[];
+  @Input() steps: Step<SapperStep>[];
   @Input() userData: User;
 
   get session() {
     return this._session;
   }
 
-  @Output() sessionUpdated = new EventEmitter<{
-    firstCell: SapperCell;
-    field: string;
-    timePassed: number;
-    chosenField: SapperFieldType;
-  }>();
-
-  @Output() sessionFinished = new EventEmitter<{
-    firstCell: SapperCell;
-    field: string;
-    timePassed: number;
-    chosenField: SapperFieldType;
-  }>();
-
-  @Output() stepMade = new EventEmitter<any>();
-
+  @Output() sessionUpdated = new EventEmitter<SapperGameData>();
+  @Output() sessionFinished = new EventEmitter<SapperGameData>();
+  @Output() stepMade = new EventEmitter<Step<SapperStep>>();
   @Output() exitSession = new EventEmitter();
 
   timer: number;
@@ -65,7 +54,7 @@ export class SapperComponent implements OnInit, OnDestroy {
   field: SapperField = [];
 
   _session: Session;
-  lastStep: Step;
+  lastStep: Step<SapperStep>;
 
   chosenField: SapperFieldType;
   initialCell: SapperCell = {
@@ -86,8 +75,8 @@ export class SapperComponent implements OnInit, OnDestroy {
   }
 
   prepareGame() {
-    this.steps.forEach((step: Step) => {
-      this.updateCell(step.cellId, step.clickType);
+    this.steps.forEach((step: Step<SapperStep>) => {
+      this.updateCell(step.data.cellId, step.data.clickType);
     });
   }
 
@@ -130,11 +119,13 @@ export class SapperComponent implements OnInit, OnDestroy {
 
   restartGame() {
     this.exitSession.emit();
-    this.stopTimer();
-    this.field = [];
-    this.timePassed = 0;
-    this.firstCell = null;
-    this.chosenField = null;
+
+    // TODO delete if there will be no errors
+    // this.stopTimer();
+    // this.field = [];
+    // this.timePassed = 0;
+    // this.firstCell = null;
+    // this.chosenField = null;
   }
 
   updateSession() {
@@ -156,7 +147,12 @@ export class SapperComponent implements OnInit, OnDestroy {
   }
 
   makeStep(id: number, clickType: 'right' | 'left') {
-    this.stepMade.emit({ cellId: id, clickType: clickType });
+    const step = this.generateStepData({
+      cellId: id,
+      clickType: clickType
+    });
+
+    this.stepMade.emit(step);
   }
 
   cellClick(cell: SapperCell) {

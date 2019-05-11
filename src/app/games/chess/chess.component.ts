@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material';
 import { ChoosePieceComponent } from './choose-piece/choose-piece.component';
 import { take } from 'rxjs/operators';
 import { User } from '../../auth/auth.interface';
+import { Step } from '../../game-wrapper/game.interfaces';
 
 
 @Component({
@@ -22,6 +23,8 @@ import { User } from '../../auth/auth.interface';
   animations: [emersionAnimation],
 })
 export class ChessComponent implements OnInit {
+
+  @Input() generateStepData: Function;
 
   gameOver: boolean;
 
@@ -44,16 +47,16 @@ export class ChessComponent implements OnInit {
 
   field: [][];
 
-  lastStep: ChessStep;
-  testLastStep: ChessStep;
+  lastStep: Step<ChessStep>;
+  testLastStep: Step<ChessStep>;
 
   @Input() session;
   @Input() userData: User;
-  @Input() steps: ChessStep[] = [];
+  @Input() steps: Step<ChessStep>[] = [];
   @Output() sessionFinished = new EventEmitter();
 
   @Input()
-  set step(value) {
+  set step(value: Step<ChessStep>) {
     this.updateStep(value);
     this.steps.push(value);
   }
@@ -85,16 +88,16 @@ export class ChessComponent implements OnInit {
   }
 
   updateStep(step) {
-    this.activeCellId = step.from;
+    this.activeCellId = step.data.from;
 
-    if (step.transformation) {
+    if (step.data.transformation) {
       const piece = this.getPieceByCellId(this.activeCellId, this.whoseTurn);
-      piece.name = step.transformation;
+      piece.name = step.data.transformation;
     }
 
     this.lastStep = step;
 
-    this.makeMove(step.to, true);
+    this.makeMove(step.data.to, true);
   }
 
   initNewGame() {
@@ -245,7 +248,7 @@ export class ChessComponent implements OnInit {
     if (moveToId === leftAttackCellId || moveToId === rightAttackCellId) {
       const cellHasEnemy = this.checkCellHasEnemy(moveToId, piece.fraction);
       if (!cellHasEnemy) {
-        this.removePiece(this.lastStep.to, this.oppositeFraction(piece.fraction));
+        this.removePiece(this.lastStep.data.to, this.oppositeFraction(piece.fraction));
       }
     }
   }
@@ -269,13 +272,16 @@ export class ChessComponent implements OnInit {
   }
 
   writeDownStep(cellId: number, transformedTo?: ChessPieceName) {
-    this.lastStep = { from: this.activePiece.cellId, to: cellId };
+    this.lastStep = this.generateStepData({
+      from: this.activePiece.cellId,
+      to: cellId
+    });
 
     if (this.checkCellHasEnemy(cellId, this.activePiece.fraction)) {
-      this.lastStep.wasEaten = this.getPieceByCellId(cellId, this.oppositeFraction(this.whoseTurn));
+      this.lastStep.data.wasEaten = this.getPieceByCellId(cellId, this.oppositeFraction(this.whoseTurn));
     }
     if (transformedTo) {
-      this.lastStep.transformation = transformedTo;
+      this.lastStep.data.transformation = transformedTo;
     }
 
     this.steps.push(this.lastStep);
@@ -367,7 +373,7 @@ export class ChessComponent implements OnInit {
   checkCanTakeOnAisle(piece: ChessPieceData, inspectingCellId: number): boolean {
     if (!this.lastStep) return false;
 
-    const lastSteppingPiece = this.getPieceByCellId(this.lastStep.to, this.oppositeFraction(piece.fraction));
+    const lastSteppingPiece = this.getPieceByCellId(this.lastStep.data.to, this.oppositeFraction(piece.fraction));
     if (lastSteppingPiece.name !== 'pawn') return false;
 
     const rowIndexToStandToTake = piece.fraction === 'white' ? 3 : 4;
@@ -376,8 +382,8 @@ export class ChessComponent implements OnInit {
     const [curRowIndex, curColIndex] = this.getIndexesFromId(piece.cellId);
 
     if (curRowIndex === rowIndexToStandToTake) {
-      const [lastFromRowIndex, lastFromColIndex] = this.getIndexesFromId(this.lastStep.from);
-      const [lastToRowIndex, lastToColIndex] = this.getIndexesFromId(this.lastStep.to);
+      const [lastFromRowIndex, lastFromColIndex] = this.getIndexesFromId(this.lastStep.data.from);
+      const [lastToRowIndex, lastToColIndex] = this.getIndexesFromId(this.lastStep.data.to);
 
       const [inspectingRowIndex, inspectingColIndex] = this.getIndexesFromId(inspectingCellId);
 
@@ -613,9 +619,9 @@ export class ChessComponent implements OnInit {
 
       this.checkIfMoveTakeOnAisle(moveId, piece);
 
-      this.testLastStep = { from: activePieceTest.cellId, to: moveId };
+      this.testLastStep = this.generateStepData({ from: activePieceTest.cellId, to: moveId });
       if (this.checkCellHasEnemy(moveId, myFraction)) {
-        this.testLastStep.wasEaten = this.getPieceByCellId(moveId, enemyFraction);
+        this.testLastStep.data.wasEaten = this.getPieceByCellId(moveId, enemyFraction);
         this.removePiece(moveId, enemyFraction);
       }
 
@@ -643,13 +649,13 @@ export class ChessComponent implements OnInit {
 
   cancelLastMove(activePiece: ChessPieceData) {
     if (this.testMode) {
-      if (this.testLastStep.wasEaten) {
+      if (this.testLastStep.data.wasEaten) {
         const enemyFraction = this.oppositeFraction(this.whoseTurn);
         const enemyPieces = enemyFraction === 'white' ? this.testWhitePieces : this.testBlackPieces;
-        enemyPieces.push(this.testLastStep.wasEaten);
+        enemyPieces.push(this.testLastStep.data.wasEaten);
       }
 
-      activePiece.cellId = this.testLastStep.from;
+      activePiece.cellId = this.testLastStep.data.from;
     }
   }
 
@@ -692,7 +698,7 @@ export class ChessComponent implements OnInit {
     const cellId = this.getIdFromIndexes(rowIndex, colIndex);
 
     const sellIsActive = this.isCellActive(rowIndex, colIndex);
-    const cellOfLastStep = this.lastStep && (this.lastStep.from === cellId || this.lastStep.to === cellId);
+    const cellOfLastStep = this.lastStep && (this.lastStep.data.from === cellId || this.lastStep.data.to === cellId);
 
     if (sellIsActive || cellOfLastStep) {
       return (rowIndex + colIndex) % 2 === 0 ? this.config.evenActiveColor : this.config.oddActiveColor;

@@ -21,10 +21,10 @@ export type SapperField = SapperCell[][];
 
 
 export interface SapperGameData {
-  chosenField: SapperFieldType;
-  field: string;
   firstCell: SapperCell;
+  field: string;
   timePassed: number;
+  chosenField: SapperFieldType;
 }
 
 export interface SapperStep {

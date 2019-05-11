@@ -17,7 +17,7 @@ import {
   UpdateSession,
 } from '../actions/session.actions';
 import { NotifierService } from 'angular-notifier';
-import { CreatedSession, GameMode, Session } from '../../game.interfaces';
+import { GameMode, Session } from '../../game.interfaces';
 import { LoadSteps, UnsubscribeFromSteps } from '../actions/steps.actions';
 import { AppState } from '../../../store/reducers';
 import { selectGameMode } from '../selectors/game-info.selectors';
@@ -43,7 +43,7 @@ export class SessionEffects {
     switchMap((sessionId: string) => {
       return this.firestoreService.getSessionDocument(sessionId).valueChanges().pipe(
         takeUntil(this.unsubscribeFromSession$),
-        map((session) => ({ ...session, id: sessionId})),
+        map((session: Session): Session => ({ ...session, id: sessionId})),
         map((session: Session) => new SetSession(session)),
       );
     }),
@@ -53,7 +53,7 @@ export class SessionEffects {
   createNewSession$: Observable<Action> = this.actions$.pipe(
     ofType(CREATE_SESSION),
     map((action: CreateSession) => action.payload),
-    switchMap((createdSession: CreatedSession) => this.firestoreService.createNewGameSession(createdSession).pipe(
+    switchMap((createdSession: Session) => this.firestoreService.createNewGameSession(createdSession).pipe(
       map((docRef) => ({ ...createdSession, id: docRef.id })),
       withLatestFrom(this.store.select(selectGameMode)),
       mergeMap(([session, gameMode]: [Session, GameMode]) => {

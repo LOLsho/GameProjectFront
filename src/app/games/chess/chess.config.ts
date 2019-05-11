@@ -74,3 +74,5 @@ export const getInitialBlackPieces = (): ChessPieceData[] => [
   { fraction: 'black', name: 'pawn', cellId: 14, hasEverMoved: false },
   { fraction: 'black', name: 'pawn', cellId: 15, hasEverMoved: false },
 ];
+
+

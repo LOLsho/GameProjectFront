@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { CreatedSession, Session } from '../../game.interfaces';
+import { Session } from '../../game.interfaces';
 
 
 export const SET_SESSION = '[FIRESTORE API] Set Session';
@@ -19,7 +19,7 @@ export const CLEAR_SESSION_STATE = '[SESSION EXIT] Clear Session State';
 
 export class CreateSession implements Action {
   readonly type = CREATE_SESSION;
-  constructor(public payload: CreatedSession) {}
+  constructor(public payload: Session) {}
 }
 
 export class SetSession implements Action {

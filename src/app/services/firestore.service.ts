@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { GameItem, Session } from '../game-wrapper/game.interfaces';
-import { filter, map, switchMap, take, tap } from 'rxjs/operators';
+import { GameItem } from '../game-wrapper/game.interfaces';
+import { map, take } from 'rxjs/operators';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { firestore } from 'firebase';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/reducers';
 import { selectGameId } from '../game-wrapper/store/selectors/game-info.selectors';
 import { selectSessionId } from '../game-wrapper/store/selectors/session.selectors';
-import { selectUser } from '../store/reducers/auth.reducer';
 import { selectUserId } from '../store/selectors/auth.selectors';
 import DocumentData = firebase.firestore.DocumentData;
 

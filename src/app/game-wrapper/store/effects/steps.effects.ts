@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable, pipe, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import {
   ClearStepsState, LOAD_STEPS,
@@ -35,7 +35,7 @@ export class StepsEffects {
     ofType(LOAD_STEPS),
     map((action: SubscribeToSteps) => action.payload.sessionId),
     switchMap((sessionId: string) => this.firestoreService.getStepsCollection(sessionId).get().pipe(
-      map((res) => {
+      map((res: any): Step[] => {
         return res.docs.map((item) => {
           const stepData = item.data();
           stepData.timestamp = stepData.timestamp.toDate();

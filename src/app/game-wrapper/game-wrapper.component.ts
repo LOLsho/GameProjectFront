@@ -10,7 +10,6 @@ import { delay, filter, skip, switchMap, take, tap } from 'rxjs/operators';
 import { selectSessionState } from './store/selectors/session.selectors';
 import { selectAllSteps, selectLastStep, selectStepsLoaded } from './store/selectors/steps.selectors';
 import { MakeStep } from './store/actions/steps.actions';
-import { GameStep } from '../games/games.models';
 import { emersionAnimation } from '../animations/emersion.animation';
 
 
@@ -108,8 +107,10 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
     const gameInstance = this.gameRef.instance;
 
     this.updateGameSessionInput();
+
     gameInstance.steps = this.steps;
     gameInstance.userData = this.gameData.user;
+    gameInstance.generateStepData = this.generateDataForGameStep.bind(this);
 
     if (gameInstance.sessionUpdated) {
       this.subscriptions.push(gameInstance.sessionUpdated.subscribe((updatedSessionData: any) => {
@@ -126,10 +127,9 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
     }
 
     if (gameInstance.stepMade) {
-      this.subscriptions.push(gameInstance.stepMade.subscribe((step: any) => {
-        const stepPayload: GameStep = this.generateDataForGameStep(step);
+      this.subscriptions.push(gameInstance.stepMade.subscribe((step: Step) => {
         this.store.dispatch(new MakeStep({
-          step: stepPayload,
+          step: step,
           sessionId: this.session.id,
         }));
       }));
@@ -163,9 +163,9 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
     };
   }
 
-  generateDataForGameStep(step: any): GameStep {
+  generateDataForGameStep(step: any): Step {
     return {
-      ...step,
+      data: step,
       userId: this.gameData.user.uid,
       timestamp: this.firestoreService.getFirestoreTimestamp(),
     };
