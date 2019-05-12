@@ -2,56 +2,64 @@ import { Action } from '@ngrx/store';
 import { Step } from '../../game.interfaces';
 
 
-export const SUBSCRIBE_TO_STEPS = '[GAME] Subscribe To Steps';
-export const UNSUBSCRIBE_FROM_STEPS = '[GAME] Unsubscribe From Steps';
+export enum StepsActionTypes {
+  SubscribeToSteps = '[GAME] Subscribe To Steps',
+  UnsubscribeFromSteps = '[GAME] Unsubscribe From Steps',
 
-export const LOAD_STEPS = '[GAME] Load Steps';
-export const STEPS_LOADED = '[FIRESTORE API] Steps Loaded';
-export const STEP_MADE = '[FIRESTORE API] Somebody Made Step';
-export const STEP_CANCELED = '[FIRESTORE API] Somebody Canceled Step';
+  LoadSteps = '[GAME] Load Steps',
+  StepsLoaded = '[FIRESTORE API] Steps Loaded',
+  StepMade = '[FIRESTORE API] Somebody Made Step',
+  StepCanceled = '[FIRESTORE API] Somebody Canceled Step',
 
-export const MAKE_STEP = '[GAME] Make New Step';
+  MakeStep = '[GAME] Make New Step',
 
-export const CLEAR_STEPS_STATE = '[SESSION EXIT] Clear Steps State';
+  ClearStepsState = '[SESSION EXIT] Clear Steps State',
 
+  StepsFail = '[FIRESTORE API] Steps Failed',
+}
 
 
 export class SubscribeToSteps implements Action {
-  readonly type = SUBSCRIBE_TO_STEPS;
+  readonly type = StepsActionTypes.SubscribeToSteps;
   constructor(public payload: { sessionId: string }) {}
 }
 
 export class UnsubscribeFromSteps implements Action {
-  readonly type = UNSUBSCRIBE_FROM_STEPS;
+  readonly type = StepsActionTypes.UnsubscribeFromSteps;
 }
 
 export class StepMade implements Action {
-  readonly type = STEP_MADE;
+  readonly type = StepsActionTypes.StepMade;
   constructor(public payload: Step) {}
 }
 
 export class StepCanceled implements Action {
-  readonly type = STEP_CANCELED;
+  readonly type = StepsActionTypes.StepCanceled;
   constructor(public payload: Step) {}
 }
 
 export class MakeStep implements Action {
-  readonly type = MAKE_STEP;
+  readonly type = StepsActionTypes.MakeStep;
   constructor(public payload: { step: Step, sessionId: string }) {}
 }
 
 export class StepsLoaded implements Action {
-  readonly type = STEPS_LOADED;
+  readonly type = StepsActionTypes.StepsLoaded;
   constructor(public payload: Step[]) {}
 }
 
 export class LoadSteps implements Action {
-  readonly type = LOAD_STEPS;
+  readonly type = StepsActionTypes.LoadSteps;
   constructor(public payload: { sessionId: string }) {}
 }
 
 export class ClearStepsState implements Action {
-  readonly type = CLEAR_STEPS_STATE;
+  readonly type = StepsActionTypes.ClearStepsState;
+}
+
+export class StepsFail implements Action {
+  readonly type = StepsActionTypes.StepsFail;
+  constructor(public payload: any) {}
 }
 
 
@@ -63,4 +71,5 @@ export type StepsActions =
   | StepMade
   | StepCanceled
   | ClearStepsState
+  | StepsFail
   | MakeStep;

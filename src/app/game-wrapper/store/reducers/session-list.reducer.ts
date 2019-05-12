@@ -1,10 +1,6 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { Session } from '../../game.interfaces';
-import {
-  ADD_ONE_SESSION_TO_LIST, CLEAR_SESSION_LIST_STATE, REMOVE_ONE_SESSION_FROM_LIST, SESSION_LIST_LOADED,
-  SessionListActions,
-  SUBSCRIBE_TO_SESSION_LIST, UNSUBSCRIBE_FROM_SESSION_LIST, UPDATE_ONE_SESSION_IN_LIST,
-} from '../actions/session-list.actions';
+import { SessionListActions, SessionListActionTypes } from '../actions/session-list.actions';
 
 
 export interface SessionListState extends EntityState<Session> {
@@ -30,23 +26,23 @@ export function sessionListReducer(
 ): SessionListState {
   switch (action.type) {
 
-    case SESSION_LIST_LOADED:
+    case SessionListActionTypes.SessionListLoaded:
       return { ...state, loaded: true };
 
-    case ADD_ONE_SESSION_TO_LIST:
+    case SessionListActionTypes.AddOneSessionToList:
       return sessionListAdapter.addOne(action.payload, { ...state, loaded: true });
 
-    case UPDATE_ONE_SESSION_IN_LIST:
+    case SessionListActionTypes.UpdateOneSessionInList:
       return sessionListAdapter.upsertOne(action.payload, { ...state, loaded: true });
 
-    case REMOVE_ONE_SESSION_FROM_LIST:
+    case SessionListActionTypes.RemoveOneSessionFromList:
       return sessionListAdapter.removeOne(action.payload.id, { ...state, loaded: true });
 
-    case CLEAR_SESSION_LIST_STATE:
+    case SessionListActionTypes.ClearSessionListState:
       return sessionListAdapter.removeAll({ ...state, loaded: false });
 
-    case SUBSCRIBE_TO_SESSION_LIST:
-    case UNSUBSCRIBE_FROM_SESSION_LIST:
+    case SessionListActionTypes.SubscribeToSessionList:
+    case SessionListActionTypes.UnsubscribeFromSessionList:
       return state;
   }
 

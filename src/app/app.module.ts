@@ -14,7 +14,7 @@ import { firebaseConfig } from '../assets/configs/firebase/firebase.config';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslationModule } from 'angular-l10n';
 import { StoreModule } from '@ngrx/store';
-import { storeMetaReducers, RouterSerializerProvider, storeDevtoolsModule } from '../assets/configs/store/store.config';
+import { RouterSerializerProvider } from '../assets/configs/store/store.config';
 import { appReducers } from './store/reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { appEffects } from './store/effects';
@@ -22,6 +22,9 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { NotifierModule } from 'angular-notifier';
 import { notifierConfig } from '../assets/configs/notifier/notifier.config';
 import { EnterNicknameComponent } from './elements/enter-nickname/enter-nickname.component';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { storeFreeze } from 'ngrx-store-freeze';
+
 
 
 @NgModule({
@@ -40,15 +43,14 @@ import { EnterNicknameComponent } from './elements/enter-nickname/enter-nickname
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
-
-    StoreModule.forRoot(appReducers,
-      // { metaReducers: storeMetaReducers } // TODO
-    ),
     EffectsModule.forRoot(appEffects),
     StoreRouterConnectingModule,
-    // storeDevtoolsModule,
+    NotifierModule.withConfig(notifierConfig),
 
-    NotifierModule.withConfig(notifierConfig)
+    StoreModule.forRoot(appReducers,
+      // { metaReducers: [storeFreeze] }
+    ),
+    StoreDevtoolsModule.instrument(),
   ],
   entryComponents: [
     EnterNicknameComponent,

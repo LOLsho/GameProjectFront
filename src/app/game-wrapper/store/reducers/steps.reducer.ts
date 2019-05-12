@@ -1,10 +1,4 @@
-import {
-  CLEAR_STEPS_STATE, LOAD_STEPS,
-  MAKE_STEP,
-  STEP_CANCELED,
-  STEP_MADE, STEPS_LOADED,
-  StepsActions, SUBSCRIBE_TO_STEPS, UNSUBSCRIBE_FROM_STEPS,
-} from '../actions/steps.actions';
+import { StepsActions, StepsActionTypes } from '../actions/steps.actions';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { Step } from '../../game.interfaces';
 
@@ -32,22 +26,22 @@ export function stepsReducer(
 ): StepsState {
   switch (action.type) {
 
-    case STEPS_LOADED:
+    case StepsActionTypes.StepsLoaded:
       return stepsAdapter.addAll(action.payload, { ...state, loaded: true });
 
-    case STEP_MADE:
+    case StepsActionTypes.StepMade:
       return stepsAdapter.addOne(action.payload, { ...state, loaded: true });
 
-    case STEP_CANCELED:
+    case StepsActionTypes.StepCanceled:
       return stepsAdapter.removeOne(action.payload.id, state);
 
-    case CLEAR_STEPS_STATE:
+    case StepsActionTypes.ClearStepsState:
       return stepsAdapter.removeAll({ ...state, loaded: false });
 
-    case LOAD_STEPS:
-    case MAKE_STEP:
-    case SUBSCRIBE_TO_STEPS:
-    case UNSUBSCRIBE_FROM_STEPS:
+    case StepsActionTypes.LoadSteps:
+    case StepsActionTypes.MakeStep:
+    case StepsActionTypes.SubscribeToSteps:
+    case StepsActionTypes.UnsubscribeFromSteps:
       return state;
   }
 

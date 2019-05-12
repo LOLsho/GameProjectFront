@@ -2,49 +2,56 @@ import { Action } from '@ngrx/store';
 import { Session } from '../../game.interfaces';
 
 
+export enum SessionListActionTypes {
+  SubscribeToSessionList = '[GAME] Subscribe To Session List',
+  UnsubscribeFromSessionList= '[GAME] Unsubscribe From Session List',
 
-export const SUBSCRIBE_TO_SESSION_LIST = '[GAME] Subscribe To Session List';
-export const UNSUBSCRIBE_FROM_SESSION_LIST = '[GAME] Unsubscribe From Session List';
+  SessionListLoaded= '[FIRESTORE API] Session List Loaded',
+  AddOneSessionToList = '[FIRESTORE API] Add One Session To List',
+  UpdateOneSessionInList = '[FIRESTORE API] Update One Session In List',
+  RemoveOneSessionFromList = '[FIRESTORE API] Remove One Session From List',
 
-export const SESSION_LIST_LOADED = '[FIRESTORE API] Session List Loaded';
-export const ADD_ONE_SESSION_TO_LIST = '[FIRESTORE API] Add One Session To List';
-export const UPDATE_ONE_SESSION_IN_LIST = '[FIRESTORE API] Update One Session In List';
-export const REMOVE_ONE_SESSION_FROM_LIST = '[FIRESTORE API] Remove One Session From List';
+  ClearSessionListState = '[SESSION LIST EXIT] Clear Session List State',
 
-export const CLEAR_SESSION_LIST_STATE = '[SESSION LIST EXIT] Clear Session List State';
-
+  SessionListFail = '[FIRESTORE API] Session List Failed',
+}
 
 
 export class SubscribeToSessionList implements Action {
-  readonly type = SUBSCRIBE_TO_SESSION_LIST;
+  readonly type = SessionListActionTypes.SubscribeToSessionList;
   constructor(public payload: any) {}
 }
 
 export class SessionListLoaded implements Action {
-  readonly type = SESSION_LIST_LOADED;
+  readonly type = SessionListActionTypes.SessionListLoaded;
 }
 
 export class UnsubscribeFromSessionList implements Action {
-  readonly type = UNSUBSCRIBE_FROM_SESSION_LIST;
+  readonly type = SessionListActionTypes.UnsubscribeFromSessionList;
 }
 
 export class AddOneSessionToList implements Action {
-  readonly type = ADD_ONE_SESSION_TO_LIST;
+  readonly type = SessionListActionTypes.AddOneSessionToList;
   constructor(public payload: Session) {}
 }
 
 export class UpdateOneSessionInList implements Action {
-  readonly type = UPDATE_ONE_SESSION_IN_LIST;
+  readonly type = SessionListActionTypes.UpdateOneSessionInList;
   constructor(public payload: Session) {}
 }
 
 export class RemoveOneSessionFromList implements Action {
-  readonly type = REMOVE_ONE_SESSION_FROM_LIST;
+  readonly type = SessionListActionTypes.RemoveOneSessionFromList;
   constructor(public payload: Session) {}
 }
 
 export class ClearSessionListState implements Action {
-  readonly type = CLEAR_SESSION_LIST_STATE;
+  readonly type = SessionListActionTypes.ClearSessionListState;
+}
+
+export class SessionListFail implements Action {
+  readonly type = SessionListActionTypes.SessionListFail;
+  constructor(public payload: any) {}
 }
 
 
@@ -56,4 +63,5 @@ export type SessionListActions =
   | RemoveOneSessionFromList
   | ClearSessionListState
   | UnsubscribeFromSessionList
+  | SessionListFail
   | AddOneSessionToList;

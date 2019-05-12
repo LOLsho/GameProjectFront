@@ -1,28 +1,23 @@
 import { Injectable } from '@angular/core';
 import { FirestoreService } from '../../../services/firestore.service';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable, pipe, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
-import {
-  debounce,
-  debounceTime,
-  first,
-  map,
-  mergeMap,
-  sample,
-  sampleTime,
-  switchMap, takeUntil,
-  tap,
-  withLatestFrom,
-} from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { Session } from '../../game.interfaces';
 import {
-  AddOneSessionToList, ClearSessionListState, RemoveOneSessionFromList, SessionListLoaded,
-  SUBSCRIBE_TO_SESSION_LIST,
-  SubscribeToSessionList, UNSUBSCRIBE_FROM_SESSION_LIST, UpdateOneSessionInList,
+  AddOneSessionToList,
+  ClearSessionListState,
+  RemoveOneSessionFromList,
+  SessionListActionTypes,
+  SessionListFail,
+  SessionListLoaded,
+  SubscribeToSessionList,
+  UpdateOneSessionInList,
 } from '../actions/session-list.actions';
 import { AppState } from '../../../store/reducers';
-import { selectAllSessions, selectSessionListIds } from '../selectors/session-list.selectors';
+import { UpdateGameItem } from '../../../store/actions/games-list.actions';
+import { NotifierService } from 'angular-notifier';
 
 
 @Injectable()
@@ -34,11 +29,12 @@ export class SessionListEffects {
     private actions$: Actions,
     private store: Store<AppState>,
     private firestoreService: FirestoreService,
+    private notifierService: NotifierService,
   ) {}
 
   @Effect()
   subscribeToSessionList$: Observable<Action> = this.actions$.pipe(
-    ofType(SUBSCRIBE_TO_SESSION_LIST),
+    ofType(SessionListActionTypes.SubscribeToSessionList),
     tap(() => this.unsubscribeFromSessionList$ = new Subject()),
     map((action: SubscribeToSessionList) => action.payload),
     switchMap((query: any) => {
@@ -64,14 +60,15 @@ export class SessionListEffects {
             case 'removed':
               return new RemoveOneSessionFromList(session);
           }
-        }), // TODO Catch Errors
+        }),
+        catchError((error) => of(new SessionListFail(error))),
       );
     })
   );
 
-  @Effect()
+  @Effect({ dispatch: false })
   sessionListUnsubscribe$: Observable<Action> = this.actions$.pipe(
-    ofType(UNSUBSCRIBE_FROM_SESSION_LIST),
+    ofType(SessionListActionTypes.UnsubscribeFromSessionList),
     tap(() => {
       if (this.unsubscribeFromSessionList$) {
         this.unsubscribeFromSessionList$.next();
@@ -79,5 +76,15 @@ export class SessionListEffects {
       }
     }),
     map(() => new ClearSessionListState()),
+  );
+
+  @Effect({ dispatch: false })
+  onSessionListError$ = this.actions$.pipe(
+    ofType(SessionListActionTypes.SessionListFail),
+    map((action: UpdateGameItem) => action.payload),
+    tap((error: any) => {
+      console.log('Error caught in SESSION LIST effects:', error);
+      if (error.massage) this.notifierService.notify('error', error.massage);
+    }),
   );
 }

@@ -6,14 +6,10 @@ import { catchError, map, mergeMap, switchMap, takeUntil, tap, withLatestFrom } 
 import { FirestoreService } from '../../../services/firestore.service';
 import {
   ClearSessionState,
-  CREATE_SESSION,
-  CreateSession, SESSION_EXIT,
-  SESSION_FAIL,
+  CreateSession, SessionActionTypes,
   SessionFail,
   SetSession,
-  SUBSCRIBE_TO_SESSION,
-  SubscribeToSession, UNSUBSCRIBE_FROM_SESSION, UnsubscribeFromSession,
-  UPDATE_SESSION,
+  SubscribeToSession, UnsubscribeFromSession,
   UpdateSession,
 } from '../actions/session.actions';
 import { NotifierService } from 'angular-notifier';
@@ -37,7 +33,7 @@ export class SessionEffects {
 
   @Effect()
   subscribeToSession: Observable<Action> = this.actions$.pipe(
-    ofType(SUBSCRIBE_TO_SESSION),
+    ofType(SessionActionTypes.SubscribeToSession),
     tap(() => this.unsubscribeFromSession$ = new Subject()),
     map((action: SubscribeToSession) => action.payload.id),
     switchMap((sessionId: string) => {
@@ -51,7 +47,7 @@ export class SessionEffects {
 
   @Effect()
   createNewSession$: Observable<Action> = this.actions$.pipe(
-    ofType(CREATE_SESSION),
+    ofType(SessionActionTypes.CreateSession),
     map((action: CreateSession) => action.payload),
     switchMap((createdSession: Session) => this.firestoreService.createNewGameSession(createdSession).pipe(
       map((docRef) => ({ ...createdSession, id: docRef.id })),
@@ -76,7 +72,7 @@ export class SessionEffects {
 
   @Effect({ dispatch: false })
   updateSession$: Observable<Action> = this.actions$.pipe(
-    ofType(UPDATE_SESSION),
+    ofType(SessionActionTypes.UpdateSession),
     map((action: UpdateSession) => action.payload),
     switchMap((updatedSessionData: Partial<Session>) => {
       return this.firestoreService.updateGameSession(updatedSessionData).pipe(
@@ -85,19 +81,9 @@ export class SessionEffects {
     }),
   );
 
-  @Effect({ dispatch: false })
-  catchErrors$ = this.actions$.pipe(
-    ofType(SESSION_FAIL),
-    map((action: SessionFail) => action.payload),
-    tap((error: any) => {
-      console.log('Error from FIREBASE API (SESSION-ERROR):', error);
-      if (error.massage) this.notifierService.notify('error', error.massage);
-    }),
-  );
-
   @Effect()
   sessionUnsubscribe$: Observable<Action> = this.actions$.pipe(
-    ofType(UNSUBSCRIBE_FROM_SESSION),
+    ofType(SessionActionTypes.UnsubscribeFromSession),
     tap(() => {
       if (this.unsubscribeFromSession$) {
         this.unsubscribeFromSession$.next();
@@ -109,10 +95,20 @@ export class SessionEffects {
 
   @Effect()
   sessionExit$: Observable<Action> = this.actions$.pipe(
-    ofType(SESSION_EXIT),
+    ofType(SessionActionTypes.SessionExit),
     mergeMap(() => [
       new UnsubscribeFromSession(),
       new UnsubscribeFromSteps(),
     ]),
+  );
+
+  @Effect({ dispatch: false })
+  catchErrors$ = this.actions$.pipe(
+    ofType(SessionActionTypes.SessionFail),
+    map((action: SessionFail) => action.payload),
+    tap((error: any) => {
+      console.log('Error from FIREBASE API (SESSION-ERROR):', error);
+      if (error.massage) this.notifierService.notify('error', error.massage);
+    }),
   );
 }

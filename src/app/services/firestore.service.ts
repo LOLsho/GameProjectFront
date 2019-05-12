@@ -65,7 +65,7 @@ export class FirestoreService {
   }
 
   getSessionDocument(id?: string): AngularFirestoreDocument {
-    if (!id) id = this.currentSessionId; // TODO remove currentSessionId
+    if (!id) id = this.currentSessionId;
     return this.getSessionsCollection().doc<any>(id);
   }
 

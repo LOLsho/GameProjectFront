@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import {
-  ClearStepsState, LOAD_STEPS,
-  MAKE_STEP,
+  ClearStepsState,
   MakeStep,
-  StepMade, StepsLoaded,
-  SUBSCRIBE_TO_STEPS,
+  StepMade, StepsActionTypes, StepsFail, StepsLoaded,
   SubscribeToSteps,
-  UNSUBSCRIBE_FROM_STEPS,
 } from '../actions/steps.actions';
-import { map, mergeMap, switchMap, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
 import { FirestoreService } from '../../../services/firestore.service';
 import { GameMode, Step } from '../../game.interfaces';
 import { AppState } from '../../../store/reducers';
 import { selectLastStep } from '../selectors/steps.selectors';
 import { selectGameMode } from '../selectors/game-info.selectors';
+import { UpdateGameItem } from '../../../store/actions/games-list.actions';
+import { NotifierService } from 'angular-notifier';
 
 
 @Injectable()
@@ -28,11 +27,12 @@ export class StepsEffects {
     private actions$: Actions,
     private store$: Store<AppState>,
     private firestoreService: FirestoreService,
+    private notifierService: NotifierService,
   ) {}
 
   @Effect()
   loadSteps$: Observable<Action> = this.actions$.pipe(
-    ofType(LOAD_STEPS),
+    ofType(StepsActionTypes.LoadSteps),
     map((action: SubscribeToSteps) => action.payload.sessionId),
     switchMap((sessionId: string) => this.firestoreService.getStepsCollection(sessionId).get().pipe(
       map((res: any): Step[] => {
@@ -53,12 +53,13 @@ export class StepsEffects {
 
         return actionsToDispatch;
       }),
+      catchError((error) => of(new StepsFail(error))),
     )),
   );
 
   @Effect()
   subscribeToSteps$: Observable<Action> = this.actions$.pipe(
-    ofType(SUBSCRIBE_TO_STEPS),
+    ofType(StepsActionTypes.SubscribeToSteps),
     tap(() => this.unsubscribeFromSteps$ = new Subject()),
     withLatestFrom(this.store$.select(selectLastStep)),
     map(([action, lastStep]: [SubscribeToSteps, Step]) => {
@@ -89,25 +90,23 @@ export class StepsEffects {
             // return new StepCanceled(step); // TODO later
           }
         }),
-        // tap(console.log)
+        catchError((error) => of(new StepsFail(error))),
       );
     }),
   );
 
   @Effect({ dispatch: false })
   makeStep$: Observable<Action> = this.actions$.pipe(
-    ofType(MAKE_STEP),
+    ofType(StepsActionTypes.MakeStep),
     map((action: MakeStep) => action.payload),
     switchMap((payload: any) => this.firestoreService.addGameStep(payload.step, payload.sessionId).pipe(
-      // map((docRef) => ({ ...payload.step, id: docRef.id })),
-      // map((step: Step) => new StepMade(step)),
-      // TODO Catch Error
+      catchError((error) => of(new StepsFail(error))),
     ))
   );
 
   @Effect()
   stepsUnsubscribe$: Observable<Action> = this.actions$.pipe(
-    ofType(UNSUBSCRIBE_FROM_STEPS),
+    ofType(StepsActionTypes.UnsubscribeFromSteps),
     tap(() => {
       if (this.unsubscribeFromSteps$) {
         this.unsubscribeFromSteps$.next();
@@ -115,5 +114,15 @@ export class StepsEffects {
       }
     }),
     map(() => new ClearStepsState()),
+  );
+
+  @Effect({ dispatch: false })
+  onStepsError$ = this.actions$.pipe(
+    ofType(StepsActionTypes.StepsFail),
+    map((action: UpdateGameItem) => action.payload),
+    tap((error: any) => {
+      console.log('Error caught in STEPS effects:', error);
+      if (error.massage) this.notifierService.notify('error', error.massage);
+    }),
   );
 }

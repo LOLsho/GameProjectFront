@@ -2,22 +2,24 @@ import { Action } from '@ngrx/store';
 import { GameMode } from '../../game.interfaces';
 
 
-export const CLEAR_GAME_RELATED_STATES = '[GAME ON_DESTROY] Clear All States Related To The Game';
-export const SET_GAME_INFO = '[GAME] Set Game Info';
-export const CLEAR_GAME_INFO_STATE = '[GAME ON_DESTROY] Clear Game Info State';
+export enum GameInfoActionTypes {
+  ClearGameRelatedStates = '[GAME ON_DESTROY] Clear All States Related To The Game',
+  SetGameInfo = '[GAME] Set Game Info',
+  ClearGameInfoState = '[GAME ON_DESTROY] Clear Game Info State',
+}
 
 
 export class SetGameInfo implements Action {
-  readonly type = SET_GAME_INFO;
+  readonly type = GameInfoActionTypes.SetGameInfo;
   constructor(public payload: { id?: string, name?: string, gameMode?: GameMode }) {}
 }
 
 export class ClearGameInfoState implements Action {
-  readonly type = CLEAR_GAME_INFO_STATE;
+  readonly type = GameInfoActionTypes.ClearGameInfoState;
 }
 
 export class ClearGameRelatedStates implements Action {
-  readonly type = CLEAR_GAME_RELATED_STATES;
+  readonly type = GameInfoActionTypes.ClearGameRelatedStates;
 }
 
 

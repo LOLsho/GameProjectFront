@@ -1,9 +1,4 @@
-import {
-  CLEAR_GAME_INFO_STATE,
-  CLEAR_GAME_RELATED_STATES,
-  GameInfoActions,
-  SET_GAME_INFO,
-} from '../actions/game-info.actions';
+import { GameInfoActions, GameInfoActionTypes } from '../actions/game-info.actions';
 import { GameMode } from '../../game.interfaces';
 
 
@@ -25,13 +20,13 @@ export function gameInfoReducer(
   action: GameInfoActions): GameInfoState {
   switch (action.type) {
 
-    case SET_GAME_INFO:
+    case GameInfoActionTypes.SetGameInfo:
       return { ...state, ...action.payload };
 
-    case CLEAR_GAME_INFO_STATE:
+    case GameInfoActionTypes.ClearGameInfoState:
       return initialGameInfoState;
 
-    case CLEAR_GAME_RELATED_STATES:
+    case GameInfoActionTypes.ClearGameRelatedStates:
       return state;
   }
 

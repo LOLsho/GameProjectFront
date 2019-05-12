@@ -1,10 +1,5 @@
 import { Session } from '../../game.interfaces';
-import {
-  CLEAR_SESSION_STATE,
-  CREATE_SESSION, SESSION_EXIT, SESSION_FAIL,
-  SessionActions, SET_SESSION, SUBSCRIBE_TO_SESSION, UNSUBSCRIBE_FROM_SESSION,
-  UPDATE_SESSION,
-} from '../actions/session.actions';
+import { SessionActions, SessionActionTypes } from '../actions/session.actions';
 
 
 export type SessionState = Session;
@@ -25,18 +20,18 @@ export function sessionReducer(
 ): SessionState {
   switch (action.type) {
 
-    case SET_SESSION:
+    case SessionActionTypes.SetSession:
       return { ...state, ...action.payload };
 
-    case CLEAR_SESSION_STATE:
+    case SessionActionTypes.ClearSessionState:
       return initialSessionState;
 
-    case CREATE_SESSION:
-    case UPDATE_SESSION:
-    case SESSION_FAIL:
-    case SESSION_EXIT:
-    case SUBSCRIBE_TO_SESSION:
-    case UNSUBSCRIBE_FROM_SESSION:
+    case SessionActionTypes.CreateSession:
+    case SessionActionTypes.UpdateSession:
+    case SessionActionTypes.SessionFail:
+    case SessionActionTypes.SessionExit:
+    case SessionActionTypes.SubscribeToSession:
+    case SessionActionTypes.UnsubscribeFromSession:
       return state;
   }
 

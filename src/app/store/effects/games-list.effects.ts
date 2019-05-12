@@ -3,10 +3,9 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
 import {
-  LOAD_GAMES, LOAD_GAMES_FAIL,
+  GamesListActionTypes,
   LoadGamesFail,
   LoadGamesSuccess,
-  UPDATE_GAME_ITEM, UPDATE_GAME_ITEM_FAIL,
   UpdateGameItem, UpdateGameItemFail, UpdateGameItemSuccess,
 } from '../actions/games-list.actions';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
@@ -27,8 +26,8 @@ export class GamesListEffects {
 
   @Effect()
   getGameList$: Observable<Action> = this.actions$.pipe(
-    ofType(LOAD_GAMES),
-    switchMap(() => this.firestoreService.getGameListChanges().pipe( // TODO Unsubscription
+    ofType(GamesListActionTypes.LoadGames),
+    switchMap(() => this.firestoreService.getGameListChanges().pipe(
       map((actions: any) => actions.map((item: any) => {
         const data = item.payload.doc.data();
         const id = item.payload.doc.id;
@@ -41,10 +40,10 @@ export class GamesListEffects {
 
   @Effect()
   updateGameList$: Observable<Action> = this.actions$.pipe(
-    ofType(UPDATE_GAME_ITEM),
+    ofType(GamesListActionTypes.UpdateGameItem),
     map((action: UpdateGameItem) => action.payload),
     switchMap((data) => {
-      return fromPromise( // TODO delete id from payload if needed ???
+      return fromPromise(
         this.firestoreService.getGameDocument().update(data.changes)
       ).pipe(
         map(() => new UpdateGameItemSuccess(data)),
@@ -55,7 +54,7 @@ export class GamesListEffects {
 
   @Effect({ dispatch: false })
   catchErrors$ = this.actions$.pipe(
-    ofType(LOAD_GAMES_FAIL, UPDATE_GAME_ITEM_FAIL),
+    ofType(GamesListActionTypes.LoadGamesFail, GamesListActionTypes.UpdateGameItemFail),
     map((action: UpdateGameItem) => action.payload),
     tap((error: any) => {
       console.log('Error loading or updating game list:', error);
