@@ -2,7 +2,6 @@ import { defaultUser, User } from '../../auth/auth.interface';
 import { AuthActions, AuthActionTypes } from '../actions/auth.actions';
 
 
-
 export interface AuthState {
   user: User;
   pending: boolean;
@@ -23,9 +22,10 @@ export function authReducer(state: AuthState = initialAuthState, action: AuthAct
     case AuthActionTypes.FacebookLogin:
     case AuthActionTypes.GithubLogin:
     case AuthActionTypes.Logout:
+    case AuthActionTypes.Authenticated:
       return { ...state, pending: true };
 
-    case AuthActionTypes.Authenticated:
+    case AuthActionTypes.SetUser:
       return { ...state, user: action.payload, pending: false };
 
     case AuthActionTypes.NotAuthenticated:
@@ -33,6 +33,7 @@ export function authReducer(state: AuthState = initialAuthState, action: AuthAct
       return { ...state, user: defaultUser, pending: false };
 
     case AuthActionTypes.AuthFail:
+    case AuthActionTypes.NewUserRegistered:
       return { ...state, pending: false };
   }
 

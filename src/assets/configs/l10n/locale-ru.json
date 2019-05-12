@@ -38,6 +38,8 @@
   "Maximum number of players": "Максимальное количество игроков",
   "No restrictions": "Без ограничений",
   "Players": "Игроков",
+  "You have signed out": "Вы вышли из аккаунта",
+  "You are signed in with email": "Вы вошли по электронной почте",
 
   "HEADER__SIGN-IN": "Вход",
   "HEADER__SIGN-UP": "Регистрация",

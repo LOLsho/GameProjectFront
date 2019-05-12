@@ -66,7 +66,7 @@ export class SessionListEffects {
     })
   );
 
-  @Effect({ dispatch: false })
+  @Effect()
   sessionListUnsubscribe$: Observable<Action> = this.actions$.pipe(
     ofType(SessionListActionTypes.UnsubscribeFromSessionList),
     tap(() => {

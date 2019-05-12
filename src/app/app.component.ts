@@ -32,12 +32,11 @@ export class AppComponent {
     //     });
     //   }
     // }),
-    delay(1500),
+    // delay(1500),
   );
 
   constructor(
     private store: Store<AppState>,
     private modal: MatDialog,
-    // private fire
   ) {}
 }

@@ -57,3 +57,11 @@ export interface GameDataForLaunching {
   gameComponent: any;
   user: User;
 }
+
+export interface Player {
+  uid: string;
+  name: string;
+  email: string;
+  online: string;
+  photoURL: string;
+}

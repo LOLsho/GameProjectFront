@@ -11,6 +11,7 @@ import { selectGameId } from '../game-wrapper/store/selectors/game-info.selector
 import { selectSessionId } from '../game-wrapper/store/selectors/session.selectors';
 import { selectUserId } from '../store/selectors/auth.selectors';
 import DocumentData = firebase.firestore.DocumentData;
+import { User } from '../auth/auth.interface';
 
 
 @Injectable({
@@ -35,6 +36,24 @@ export class FirestoreService {
     this.store.select(selectUserId).subscribe((id: string) => {
       this.userId = id;
     });
+  }
+
+  getUser(uid: string) {
+    return this.db.collection('users').doc(uid)
+      .get().pipe(
+        map((res) => res.data()),
+      );
+  }
+
+  addNewUser(user: any): Observable<any> {
+    const newUser: User = {
+      uid: user.uid,
+      name: user.displayName,
+      email: user.email,
+      photoURL: user.photoURL,
+    };
+
+    return fromPromise(this.db.collection<User>('users').doc(newUser.uid).set(newUser));
   }
 
   getSessionById(sessionId: string): Observable<any> {

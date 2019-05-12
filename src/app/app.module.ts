@@ -24,6 +24,7 @@ import { notifierConfig } from '../assets/configs/notifier/notifier.config';
 import { EnterNicknameComponent } from './elements/enter-nickname/enter-nickname.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { storeFreeze } from 'ngrx-store-freeze';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 
 
@@ -39,18 +40,23 @@ import { storeFreeze } from 'ngrx-store-freeze';
     BrowserAnimationsModule,
     RouterModule.forRoot(ROUTES, { preloadingStrategy: PreloadAllModules }),
     TranslationModule.forRoot(l10nConfig),
+
     SharedModule,
+    NotifierModule.withConfig(notifierConfig),
+
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
+
     EffectsModule.forRoot(appEffects),
     StoreRouterConnectingModule,
-    NotifierModule.withConfig(notifierConfig),
 
     StoreModule.forRoot(appReducers,
       // { metaReducers: [storeFreeze] }
     ),
     StoreDevtoolsModule.instrument(),
+
+    AngularFireDatabaseModule,
   ],
   entryComponents: [
     EnterNicknameComponent,
