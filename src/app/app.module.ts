@@ -40,23 +40,20 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
     BrowserAnimationsModule,
     RouterModule.forRoot(ROUTES, { preloadingStrategy: PreloadAllModules }),
     TranslationModule.forRoot(l10nConfig),
-
-    SharedModule,
     NotifierModule.withConfig(notifierConfig),
+    SharedModule,
 
+    // ----- Firebase -----
     AngularFireModule.initializeApp(firebaseConfig, { timestampsInSnapshots: true }),
     AngularFirestoreModule,
     AngularFireAuthModule,
-
-    EffectsModule.forRoot(appEffects),
-    StoreRouterConnectingModule,
-
-    StoreModule.forRoot(appReducers,
-      // { metaReducers: [storeFreeze] }
-    ),
-    StoreDevtoolsModule.instrument(),
-
     AngularFireDatabaseModule,
+
+    // ----- Store -----
+    StoreModule.forRoot(appReducers, { /*metaReducers: [storeFreeze]*/ }),
+    StoreRouterConnectingModule,
+    EffectsModule.forRoot(appEffects),
+    StoreDevtoolsModule.instrument(),
   ],
   entryComponents: [
     EnterNicknameComponent,

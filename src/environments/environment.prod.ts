@@ -1,4 +1,5 @@
 export const environment = {
   headerHeight: 56,
-  production: true
+  approximateServerLatency: 5000,
+  production: true,
 };

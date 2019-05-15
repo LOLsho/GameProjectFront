@@ -16,6 +16,10 @@ import { selectLastStep } from '../selectors/steps.selectors';
 import { selectGameMode } from '../selectors/game-info.selectors';
 import { UpdateGameItem } from '../../../store/actions/games-list.actions';
 import { NotifierService } from 'angular-notifier';
+import { environment } from '../../../../environments/environment';
+
+
+const serverLatency = environment.approximateServerLatency;
 
 
 @Injectable()
@@ -53,8 +57,6 @@ export class StepsEffects {
           actionsToDispatch.push(new SubscribeToSteps({sessionId}));
         }
 
-        // console.log('steps -', steps);
-
         return actionsToDispatch;
       }),
       catchError((error) => of(new StepsFail(error))),
@@ -67,30 +69,21 @@ export class StepsEffects {
     tap(() => this.unsubscribeFromSteps$ = new Subject()),
     withLatestFrom(this.store$.select(selectLastStep)),
     map(([action, lastStep]: [SubscribeToSteps, Step]) => {
-      // console.log('from subscribeToSteps$. lastStep -', lastStep);
-      let query: Query = {};
+      let timestamp;
       if (lastStep) {
-        query = {
-          where: [{
-            field: 'timestamp',
-            opStr: '>',
-            value: this.firestoreService.getTimestampFromDate(lastStep.timestamp),
-          }],
-        };
+        timestamp = this.firestoreService.getTimestampFromDate(lastStep.timestamp);
+      } else {
+        timestamp = this.firestoreService.getTimestampFromDate(Date.now() - serverLatency);
       }
+      const query: Query = { where: [{ field: 'timestamp', opStr: '>', value: timestamp }] };
       return [action.payload.sessionId, query];
     }),
     switchMap(([sessionId, query]: [string, Query]) => {
       return this.firestoreService.getStepsCollection(sessionId, query).stateChanges().pipe(
-        // tap(console.log),
         takeUntil(this.unsubscribeFromSteps$),
         mergeMap((actions) => actions),
         map((res: any) => {
           const stepData = res.payload.doc.data();
-
-          // console.log('stepData -', stepData);
-          // console.log('stepData.timestamp -', stepData.timestamp);
-
           stepData.timestamp = stepData.timestamp.toMillis();
           const stepId = res.payload.doc.id;
           const step: Step = { ...stepData, id: stepId };
@@ -115,7 +108,7 @@ export class StepsEffects {
     map((action: MakeStep) => action.payload),
     switchMap((payload: any) => this.firestoreService.addGameStep(payload.step, payload.sessionId).pipe(
       catchError((error) => of(new StepsFail(error))),
-    ))
+    )),
   );
 
   @Effect()

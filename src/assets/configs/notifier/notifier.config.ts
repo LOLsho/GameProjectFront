@@ -4,15 +4,15 @@ import { NotifierOptions } from 'angular-notifier';
 export const notifierConfig: NotifierOptions = {
   position: {
     horizontal: {
-      position: 'right'
+      position: 'right',
     },
     vertical: {
       position: 'top',
-      distance: 71
-    }
+      distance: 71,
+    },
   },
   behaviour: {
     onMouseover: 'resetAutoHide',
-    stacking: 5
-  }
+    stacking: 5,
+  },
 };

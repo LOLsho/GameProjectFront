@@ -4,20 +4,17 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/reducers';
 import { of, Subscription } from 'rxjs';
 import { SessionExit, UpdateSession } from './store/actions/session.actions';
-import { FirestoreService } from '../services/firestore.service';
 import { ClearGameRelatedStates } from './store/actions/game-info.actions';
-import { delay, filter, skip, switchMap, take, tap } from 'rxjs/operators';
+import { filter, skip, switchMap, take } from 'rxjs/operators';
 import { selectSessionState } from './store/selectors/session.selectors';
 import { selectAllSteps, selectLastStep, selectStepsLoaded } from './store/selectors/steps.selectors';
 import { MakeStep } from './store/actions/steps.actions';
-import { emersionAnimation } from '../animations/emersion.animation';
 
 
 @Component({
   selector: 'app-game-wrapper',
   styleUrls: ['./game-wrapper.component.scss'],
   templateUrl: './game-wrapper.component.html',
-  animations: [emersionAnimation],
 })
 export class GameWrapperComponent implements OnInit, OnDestroy {
 
@@ -37,7 +34,6 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
   constructor(
     private resolver: ComponentFactoryResolver,
     private store: Store<AppState>,
-    private firestoreService: FirestoreService,
   ) {}
 
   ngOnInit() {}
@@ -87,13 +83,9 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
         if (this.gameData.gameMode === 'multiplayer') {
           this.subscriptions.push(this.store.select(selectLastStep).pipe(
             filter((lastStep: Step) => !!lastStep),
-            // tap((res) => console.log('tap1 -', res)),
             skip(skipFirst ? 1 : 0),
-            // tap((res) => console.log('tap2 -', res)),
             filter((lastStep: Step) => lastStep.userId !== this.gameData.user.uid),
-            // tap((res) => console.log('tap3 -', res)),
           ).subscribe((lastStep: Step) => {
-            // console.log('lastStep from sub -', lastStep);
             this.gameRef.instance.step = lastStep;
           }));
         }
@@ -167,7 +159,6 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
     return {
       data: step,
       userId: this.gameData.user.uid,
-      timestamp: this.firestoreService.getFirestoreTimestamp(),
     };
   }
 

@@ -47,7 +47,7 @@ export interface Session<T = any> {
 export interface Step<T = any> {
   id?: string;
   userId: string;
-  timestamp: any;
+  timestamp?: any;
   data: T;
 }
 
