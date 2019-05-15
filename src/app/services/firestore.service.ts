@@ -124,12 +124,20 @@ export class FirestoreService {
     return fromPromise(this.getStepsCollection(sessionId).add(step));
   }
 
+  getTimestampFromDate(date) {
+    return firestore.Timestamp.fromDate(new Date(date));
+  }
+
   getFirestoreTimestamp() {
-    return firebase.firestore.FieldValue.serverTimestamp(); // TODO test. In presence use another timestamp
+    // return firebase.firestore.FieldValue.serverTimestamp(); // TODO test. In presence use another timestamp
     // console.log('firebase.firestore.FieldValue.serverTimestamp() -', firebase.firestore.FieldValue.serverTimestamp());
 
+    // console.log('now -', firebase.firestore.Timestamp.now());
+    // console.log('fromDate -', firestore.Timestamp.fromDate(new Date()));
+    // console.log('------------------');
+
     // TODO Old version. Delete if no errors
-    // return firestore.Timestamp.fromDate(new Date());
+    return firebase.firestore.Timestamp.now();
   }
 }
 

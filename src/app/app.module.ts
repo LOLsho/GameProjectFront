@@ -44,7 +44,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
     SharedModule,
     NotifierModule.withConfig(notifierConfig),
 
-    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireModule.initializeApp(firebaseConfig, { timestampsInSnapshots: true }),
     AngularFirestoreModule,
     AngularFireAuthModule,
 
@@ -54,7 +54,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
     StoreModule.forRoot(appReducers,
       // { metaReducers: [storeFreeze] }
     ),
-    // StoreDevtoolsModule.instrument(),
+    StoreDevtoolsModule.instrument(),
 
     AngularFireDatabaseModule,
   ],

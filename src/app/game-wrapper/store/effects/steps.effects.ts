@@ -9,7 +9,7 @@ import {
   SubscribeToSteps,
 } from '../actions/steps.actions';
 import { catchError, map, mergeMap, switchMap, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
-import { FirestoreService } from '../../../services/firestore.service';
+import { FirestoreService, Query } from '../../../services/firestore.service';
 import { GameMode, Step } from '../../game.interfaces';
 import { AppState } from '../../../store/reducers';
 import { selectLastStep } from '../selectors/steps.selectors';
@@ -53,6 +53,8 @@ export class StepsEffects {
           actionsToDispatch.push(new SubscribeToSteps({sessionId}));
         }
 
+        // console.log('steps -', steps);
+
         return actionsToDispatch;
       }),
       catchError((error) => of(new StepsFail(error))),
@@ -65,20 +67,30 @@ export class StepsEffects {
     tap(() => this.unsubscribeFromSteps$ = new Subject()),
     withLatestFrom(this.store$.select(selectLastStep)),
     map(([action, lastStep]: [SubscribeToSteps, Step]) => {
-      let query = {};
+      // console.log('from subscribeToSteps$. lastStep -', lastStep);
+      let query: Query = {};
       if (lastStep) {
         query = {
-          where: [{ field: 'timestamp', opStr: '>', value: lastStep.timestamp }]
+          where: [{
+            field: 'timestamp',
+            opStr: '>',
+            value: this.firestoreService.getTimestampFromDate(lastStep.timestamp),
+          }],
         };
       }
       return [action.payload.sessionId, query];
     }),
-    switchMap(([sessionId, query]: [string, any]) => {
+    switchMap(([sessionId, query]: [string, Query]) => {
       return this.firestoreService.getStepsCollection(sessionId, query).stateChanges().pipe(
+        // tap(console.log),
         takeUntil(this.unsubscribeFromSteps$),
         mergeMap((actions) => actions),
         map((res: any) => {
           const stepData = res.payload.doc.data();
+
+          // console.log('stepData -', stepData);
+          // console.log('stepData.timestamp -', stepData.timestamp);
+
           stepData.timestamp = stepData.timestamp.toMillis();
           const stepId = res.payload.doc.id;
           const step: Step = { ...stepData, id: stepId };
@@ -123,7 +135,7 @@ export class StepsEffects {
     ofType(StepsActionTypes.StepsFail),
     map((action: UpdateGameItem) => action.payload),
     tap((error: any) => {
-      console.log('Error caught in STEPS effects:', error);
+      console.error('Error caught in STEPS effects:', error);
       if (error.massage) this.notifierService.notify('error', error.massage);
     }),
   );

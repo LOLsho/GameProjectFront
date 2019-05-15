@@ -57,7 +57,6 @@ export class ChessComponent implements OnInit {
 
   @Input()
   set step(value: Step<ChessStep>) {
-    console.log('step -', value);
     this.updateStep(value);
     this.steps.push(value);
   }
@@ -75,7 +74,6 @@ export class ChessComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('this.steps -', this.steps);
     this.initNewGame();
 
     if (this.steps.length) {
