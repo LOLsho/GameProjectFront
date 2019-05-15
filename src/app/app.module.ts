@@ -54,7 +54,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
     StoreModule.forRoot(appReducers,
       // { metaReducers: [storeFreeze] }
     ),
-    StoreDevtoolsModule.instrument(),
+    // StoreDevtoolsModule.instrument(),
 
     AngularFireDatabaseModule,
   ],

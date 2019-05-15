@@ -12,6 +12,7 @@ import { selectSessionId } from '../game-wrapper/store/selectors/session.selecto
 import { selectUserId } from '../store/selectors/auth.selectors';
 import DocumentData = firebase.firestore.DocumentData;
 import { User } from '../auth/auth.interface';
+import * as firebase from 'firebase/app';
 
 
 @Injectable({
@@ -124,7 +125,11 @@ export class FirestoreService {
   }
 
   getFirestoreTimestamp() {
-    return firestore.Timestamp.fromDate(new Date());
+    return firebase.firestore.FieldValue.serverTimestamp(); // TODO test. In presence use another timestamp
+    // console.log('firebase.firestore.FieldValue.serverTimestamp() -', firebase.firestore.FieldValue.serverTimestamp());
+
+    // TODO Old version. Delete if no errors
+    // return firestore.Timestamp.fromDate(new Date());
   }
 }
 

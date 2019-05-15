@@ -15,6 +15,7 @@
         [style.backgroundColor]="getCellBackground(rowIndex, colIndex)"
         (click)="cellClicked(getIdFromIndexes(rowIndex, colIndex))"
       >
+        <span style="position: absolute; top: 0; left: 0;">{{ getIdFromIndexes(rowIndex, colIndex) }}</span>
         <div class="chess__available-mark" *ngIf="availableMoves.includes(getIdFromIndexes(rowIndex, colIndex))"></div>
       </div>
     </div>

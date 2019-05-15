@@ -57,6 +57,7 @@ export class ChessComponent implements OnInit {
 
   @Input()
   set step(value: Step<ChessStep>) {
+    console.log('step -', value);
     this.updateStep(value);
     this.steps.push(value);
   }
@@ -74,6 +75,7 @@ export class ChessComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('this.steps -', this.steps);
     this.initNewGame();
 
     if (this.steps.length) {
@@ -95,9 +97,7 @@ export class ChessComponent implements OnInit {
       piece.name = step.data.transformation;
     }
 
-    this.lastStep = step;
-
-    this.makeMove(step.data.to, true);
+    this.makeMove(step.data.to, true, null, step);
   }
 
   initNewGame() {
@@ -177,7 +177,7 @@ export class ChessComponent implements OnInit {
     this.removeActiveCell();
   }
 
-  makeMove(cellId: number, rewind = false, transformedTo?: ChessPieceName) {
+  makeMove(cellId: number, rewind = false, transformedTo?: ChessPieceName, step?: Step<ChessStep>) {
     this.checkIfMoveTakeOnAisle(cellId, this.activePiece);
     this.checkIfMoveCastling(cellId);
 
@@ -188,6 +188,8 @@ export class ChessComponent implements OnInit {
 
     if (!rewind) {
       this.writeDownStep(cellId, transformedTo);
+    } else {
+      this.lastStep = step;
     }
 
     if (this.checkCellHasEnemy(cellId, this.activePiece.fraction)) {

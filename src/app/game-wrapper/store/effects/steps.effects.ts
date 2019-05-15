@@ -38,7 +38,7 @@ export class StepsEffects {
       map((res: any): Step[] => {
         return res.docs.map((item) => {
           const stepData = item.data();
-          stepData.timestamp = stepData.timestamp.toDate();
+          stepData.timestamp = stepData.timestamp.toMillis();
           const stepId = item.id;
           return { ...stepData, id: stepId };
         });
@@ -49,7 +49,9 @@ export class StepsEffects {
           new StepsLoaded(steps),
         ];
 
-        if (gameMode === 'multiplayer') actionsToDispatch.push(new SubscribeToSteps({sessionId}));
+        if (gameMode === 'multiplayer') {
+          actionsToDispatch.push(new SubscribeToSteps({sessionId}));
+        }
 
         return actionsToDispatch;
       }),
@@ -77,10 +79,10 @@ export class StepsEffects {
         mergeMap((actions) => actions),
         map((res: any) => {
           const stepData = res.payload.doc.data();
-          stepData.timestamp = stepData.timestamp.toDate();
+          stepData.timestamp = stepData.timestamp.toMillis();
           const stepId = res.payload.doc.id;
           const step: Step = { ...stepData, id: stepId };
-          return { step, action: res.type };
+          return { step: step, action: res.type };
         }),
         map(({ step, action }) => {
           switch (action) {

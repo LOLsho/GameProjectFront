@@ -9,6 +9,7 @@ import { delay, filter, tap } from 'rxjs/operators';
 import { emersionAnimation } from './animations/emersion.animation';
 import { MatDialog } from '@angular/material';
 import { EnterNicknameComponent } from './elements/enter-nickname/enter-nickname.component';
+import { PresenceService } from './services/presence.service';
 
 
 @Component({
@@ -38,5 +39,6 @@ export class AppComponent {
   constructor(
     private store: Store<AppState>,
     private modal: MatDialog,
+    private presence: PresenceService,
   ) {}
 }

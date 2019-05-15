@@ -23,6 +23,7 @@ import { FirestoreService } from '../../services/firestore.service';
 import { TranslationService } from 'angular-l10n';
 import { AppState } from '../reducers';
 import { selectCurrentUrl } from '../selectors/router.selectors';
+import { PresenceService } from '../../services/presence.service';
 
 
 @Injectable()
@@ -36,6 +37,7 @@ export class AuthEffects {
     private fireDatabase: AngularFireDatabase,
     private translation: TranslationService,
     private store: Store<AppState>,
+    private presenceService: PresenceService,
   ) {
     // console.log('this.fireDatabase -', this.fireDatabase);
     //
@@ -53,7 +55,6 @@ export class AuthEffects {
     ofType(AuthActionTypes.GetUser),
     switchMap(() => this.afAuth.authState),
     map((user: any) => {
-      console.log('user -', user);
       if (user) {
         this.notifierService.notify(
           'default',
@@ -186,6 +187,7 @@ export class AuthEffects {
   @Effect()
   logout$: Observable<Action> = this.actions$.pipe(
     ofType(AuthActionTypes.Logout),
+    tap(() => this.presenceService.onSignOut()),
     switchMap(() => of(this.afAuth.auth.signOut()).pipe(
       map(() => {
         this.notifierService.notify('default', this.translation.translate('You have signed out'));
@@ -214,3 +216,4 @@ export class AuthEffects {
     })
   );
 }
+
