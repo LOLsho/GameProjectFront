@@ -74,6 +74,7 @@ export class ChessComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('steps form CHESS:', this.steps);
     this.initNewGame();
 
     if (this.steps.length) {

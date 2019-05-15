@@ -228,7 +228,7 @@ export class SapperComponent implements OnInit, OnDestroy {
     this.field = [];
 
     // Создаем массив нужного размера, заполненный undefined
-    this.field = createEmptyField(this.chosenField.size[0], this.chosenField.size[1]);
+    this.field = createEmptyField(this.chosenField.size[1], this.chosenField.size[0]);
 
     // Заполняем массив начальными данными
     fillEachCell<SapperCell>(this.field, (rowIndex, columnIndex) => {

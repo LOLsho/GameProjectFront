@@ -9,12 +9,24 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 
 const firestore = admin.firestore();
+const database = admin.database();
 
 
 export const onUserCreated = functions.auth.user()
   .onCreate((user: UserRecord, context: EventContext) => {
     const usersCollectionRef = firestore.collection('users');
     return usersCollectionRef.add(user);
+  });
+
+
+export const onUserDeleted = functions.auth.user()
+  .onDelete((user: UserRecord, context: EventContext) => {
+
+    const userDatabaseRef = database.ref(`/status/${user.uid}`);
+    userDatabaseRef.remove();
+
+    const userFirestoreRef = firestore.doc(`users/${user.uid}`);
+    return userFirestoreRef.delete();
   });
 
 

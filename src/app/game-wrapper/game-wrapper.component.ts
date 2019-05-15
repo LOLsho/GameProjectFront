@@ -67,7 +67,9 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(sessionStream.subscribe((session: Session) => {
       this.session = session;
-      if (this.gameLaunched) this.updateGameSessionInput();
+      if (this.gameLaunched) {
+        this.gameRef.instance.session = this.session;
+      }
     }));
 
     this.subscriptions.push(stepsStream.subscribe(
@@ -98,8 +100,7 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
     this.gameRef = this.createComponent(this.gameData.gameComponent);
     const gameInstance = this.gameRef.instance;
 
-    this.updateGameSessionInput();
-
+    gameInstance.session = this.session;
     gameInstance.steps = this.steps;
     gameInstance.userData = this.gameData.user;
     gameInstance.generateStepData = this.generateDataForGameStep.bind(this);
@@ -136,10 +137,6 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
         this.unsubscribeAll();
       }));
     }
-  }
-
-  updateGameSessionInput() {
-    this.gameRef.instance.session = this.session;
   }
 
   generateDataForUpdatedSession(updatedGameData: any): Partial<Session> {

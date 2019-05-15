@@ -4,8 +4,8 @@ export type fillEachCellCallbackFn<T> = (rowIndex: number, columnIndex: number, 
 export function createEmptyField(rows: number, columns: number) {
   const field = [];
 
-  const fieldRow = Array(rows);
-  for (let rowIndex = 0; rowIndex < columns; rowIndex++) {
+  const fieldRow = Array(columns);
+  for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
     field.push([...fieldRow]);
   }
 
@@ -33,8 +33,8 @@ export function fillEachCell<T>(field: any[][], callback: fillEachCellCallbackFn
   const rows = field.length;
   const columns = field[0].length;
 
-  for (let rowIndex = 0; rowIndex < columns; rowIndex++) {
-    for (let columnIndex = 0; columnIndex < rows; columnIndex++) {
+  for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
+    for (let columnIndex = 0; columnIndex < columns; columnIndex++) {
       const mapped = callback(rowIndex, columnIndex, field[rowIndex][columnIndex]);
       field[rowIndex][columnIndex] = mapped;
     }
