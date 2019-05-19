@@ -1,14 +1,14 @@
-import { Component, ComponentFactoryResolver, ComponentRef, OnDestroy, OnInit, ViewChild, ViewContainerRef, } from '@angular/core';
+import { Component, ComponentFactoryResolver, ComponentRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GameDataForLaunching, Session, Step } from './game.interfaces';
 import { Store } from '@ngrx/store';
-import { AppState } from '../store/reducers';
 import { of, Subscription } from 'rxjs';
-import { SessionExit, UpdateSession } from './store/actions/session.actions';
-import { ClearGameRelatedStates } from './store/actions/game-info.actions';
 import { filter, skip, switchMap, take } from 'rxjs/operators';
-import { selectSessionState } from './store/selectors/session.selectors';
-import { selectAllSteps, selectLastStep, selectStepsLoaded } from './store/selectors/steps.selectors';
-import { MakeStep } from './store/actions/steps.actions';
+import { AppState } from '@store/state';
+import { selectSessionState } from '@store/session-store/selectors';
+import { selectLastStep, selectStepsAll, selectStepsLoaded } from '@store/steps-store/selectors';
+import { SessionExit, UpdateSession } from '@store/session-store/actions';
+import { MakeStep } from '@store/steps-store/actions';
+import { ClearGameRelatedStates } from '@store/game-info-store/actions';
 
 
 @Component({
@@ -51,7 +51,7 @@ export class GameWrapperComponent implements OnInit, OnDestroy {
     );
     let stepsStream = this.store.select(selectStepsLoaded).pipe(
       filter((loaded: boolean) => !!loaded),
-      switchMap(() => this.store.select(selectAllSteps)),
+      switchMap(() => this.store.select(selectStepsAll)),
       take(1),
     );
 

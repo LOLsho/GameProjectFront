@@ -7,7 +7,6 @@ import { SharedModule } from '../modules/shared.module';
 import { AuthComponent } from './auth.component';
 import { SocialsComponent } from './socials/socials.component';
 import { StoreModule } from '@ngrx/store';
-import { authReducer } from '../store/reducers/auth.reducer';
 
 
 const ROUTES: Routes = [
@@ -34,7 +33,7 @@ const ROUTES: Routes = [
     CommonModule,
     RouterModule.forChild(ROUTES),
     SharedModule,
-    StoreModule.forFeature('auth', authReducer),
+    // StoreModule.forFeature('auth', authReducer),
   ]
 })
 export class AuthModule {}

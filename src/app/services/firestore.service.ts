@@ -6,13 +6,13 @@ import { map, take } from 'rxjs/operators';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { firestore } from 'firebase';
 import { Store } from '@ngrx/store';
-import { AppState } from '../store/reducers';
-import { selectGameId } from '../game-wrapper/store/selectors/game-info.selectors';
-import { selectSessionId } from '../game-wrapper/store/selectors/session.selectors';
-import { selectUserId } from '../store/selectors/auth.selectors';
 import DocumentData = firebase.firestore.DocumentData;
 import { User } from '../auth/auth.interface';
 import * as firebase from 'firebase/app';
+import { selectGameId } from '@store/game-info-store/selectors';
+import { selectSessionId } from '@store/session-store/selectors';
+import { selectAuthUserId } from '@store/auth-store/selectors';
+import { AppState } from '@store/state';
 
 
 @Injectable({
@@ -34,7 +34,7 @@ export class FirestoreService {
     this.store.select(selectSessionId).subscribe((sessionId: string) => {
       this.currentSessionId = sessionId;
     });
-    this.store.select(selectUserId).subscribe((id: string) => {
+    this.store.select(selectAuthUserId).subscribe((id: string) => {
       this.userId = id;
     });
   }
@@ -129,14 +129,6 @@ export class FirestoreService {
   }
 
   getFirestoreTimestamp() {
-    // return firebase.firestore.FieldValue.serverTimestamp(); // TODO test. In presence use another timestamp
-    // console.log('firebase.firestore.FieldValue.serverTimestamp() -', firebase.firestore.FieldValue.serverTimestamp());
-
-    // console.log('now -', firebase.firestore.Timestamp.now());
-    // console.log('fromDate -', firestore.Timestamp.fromDate(new Date()));
-    // console.log('------------------');
-
-    // TODO Old version. Delete if no errors
     return firebase.firestore.Timestamp.now();
   }
 }

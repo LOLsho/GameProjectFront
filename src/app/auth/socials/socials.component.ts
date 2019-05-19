@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AuthState } from '../../store/reducers/auth.reducer';
-import { FacebookLogin, GithubLogin, GoogleLogin } from '../../store/actions/auth.actions';
+import { AppState } from '@store/state';
+import { FacebookLogin, GithubLogin, GoogleLogin } from '@store/auth-store/actions';
+
 
 @Component({
   selector: 'app-socials',
   templateUrl: './socials.component.html',
-  styleUrls: ['./socials.component.scss']
+  styleUrls: ['./socials.component.scss'],
 })
 export class SocialsComponent implements OnInit {
 
   constructor(
-    private store: Store<AuthState>
+    private store: Store<AppState>,
   ) {}
 
   ngOnInit() {}

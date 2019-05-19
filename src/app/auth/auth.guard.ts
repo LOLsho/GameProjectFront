@@ -3,10 +3,10 @@ import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angul
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { filter, map, take, tap } from 'rxjs/operators';
-import { AuthState } from '../store/reducers/auth.reducer';
-import { RouterGo } from '../store/actions/router.actions';
-import { getUser } from '../store/selectors/auth.selectors';
 import { User } from './auth.interface';
+import { AppState } from '@store/state';
+import { RouterGo } from '@store/router-store/actions';
+import { selectAuthUser } from '@store/auth-store/selectors';
 
 
 @Injectable({
@@ -15,7 +15,7 @@ import { User } from './auth.interface';
 export class AuthGuard implements CanActivate {
 
   constructor(
-    private store: Store<AuthState>,
+    private store: Store<AppState>,
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate {
 
     if (url === 'authentication') {
       return this.getIsAuthenticated().pipe(
-        map((authenticated: boolean) => !authenticated)
+        map((authenticated: boolean) => !authenticated),
       );
     } else {
       return this.getIsAuthenticated().pipe(
@@ -32,16 +32,16 @@ export class AuthGuard implements CanActivate {
           if (!authenticated) {
             this.store.dispatch(new RouterGo({ path: ['/authentication/sign-in'] }));
           }
-        })
+        }),
       );
     }
   }
 
   getIsAuthenticated(): Observable<boolean> {
-    return this.store.select(getUser).pipe(
+    return this.store.select(selectAuthUser).pipe(
       filter((user: User) => user !== null),
       map((user: User) => user.authenticated),
-      take(1)
+      take(1),
     );
   }
 }

@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Language } from 'angular-l10n';
 import { GameInitial, GameItem, GameList } from '../game-wrapper/game.interfaces';
 import { Store } from '@ngrx/store';
-import { GameListState } from '../store/reducers/games-list.reduces';
-import { selectGameList, selectGameListLoaded } from '../store/selectors/game-list.selectors';
-import { map, switchMap, tap } from 'rxjs/operators';
-import { LoadGames, UpdateGameItem } from '../store/actions/games-list.actions';
+import { map, switchMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { GAMES } from './game-list';
 import { emersionAnimation } from '../animations/emersion.animation';
-import { RouterGo } from '../store/actions/router.actions';
+import { selectGameList, selectGameListLoaded } from '@store/game-list-store/selectors';
+import { LoadGames, UpdateGameItem } from '@store/game-list-store/actions';
+import { AppState } from '@store/state';
+import { RouterGo } from '@store/router-store/actions';
 
 
 @Component({
@@ -40,7 +40,7 @@ export class GameListComponent implements OnInit {
   );
 
   constructor(
-    private store: Store<GameListState>,
+    private store: Store<AppState>,
   ) {}
 
   ngOnInit() {}

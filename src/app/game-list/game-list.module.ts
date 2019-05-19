@@ -4,9 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { GameListComponent } from './game-list.component';
 import { SharedModule } from '../modules/shared.module';
 import { StoreModule } from '@ngrx/store';
-import { gameListReducer } from '../store/reducers/games-list.reduces';
 import { EffectsModule } from '@ngrx/effects';
-import { GamesListEffects } from '../store/effects/games-list.effects';
 
 
 const ROUTES: Routes = [
@@ -25,8 +23,8 @@ const ROUTES: Routes = [
     CommonModule,
     SharedModule,
     RouterModule.forChild(ROUTES),
-    StoreModule.forFeature('gameList', gameListReducer),
-    EffectsModule.forFeature([GamesListEffects]),
+    // StoreModule.forFeature('gameList', gameListReducer),
+    // EffectsModule.forFeature([GamesListEffects]),
   ],
 })
 export class GameListModule { }

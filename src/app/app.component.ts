@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-import { GetUser } from './store/actions/auth.actions';
 import { Store } from '@ngrx/store';
-import { AppState } from './store/reducers';
 import { Observable } from 'rxjs';
 import { User } from './auth/auth.interface';
-import { getUser } from './store/selectors/auth.selectors';
-import { delay, filter, tap } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { emersionAnimation } from './animations/emersion.animation';
-import { MatDialog } from '@angular/material';
-import { EnterNicknameComponent } from './elements/enter-nickname/enter-nickname.component';
-import { PresenceService } from './services/presence.service';
+import { selectAuthState, selectAuthUser } from '@store/auth-store/selectors';
+import { GetUser } from '@store/auth-store/actions';
+import { AppState } from '@store/state';
+import { selectRouterState } from '@store/router-store/selectors';
 
 
 @Component({
@@ -20,25 +18,30 @@ import { PresenceService } from './services/presence.service';
 })
 export class AppComponent {
 
-  user$: Observable<User> = this.store.select(getUser).pipe(
+  user$: Observable<User> = this.store.select(selectAuthUser).pipe(
     filter((user: User) => {
       if (!user) this.store.dispatch(new GetUser());
       return !!user;
     }),
-    // tap((user: User) => {
-    //   if (user.authenticated && !user.displayName) {
-    //     const nicknameRef = this.modal.open(EnterNicknameComponent, { disableClose: true });
-    //     nicknameRef.afterClosed().subscribe((nickname) => {
-    //       // this.store.dispatch(new UpdateCurrentUser({ nickname }));
-    //     });
-    //   }
-    // }),
-    // delay(1500),
   );
 
   constructor(
     private store: Store<AppState>,
-    private modal: MatDialog,
-    private presence: PresenceService,
-  ) {}
+  ) {
+
+
+    setTimeout(() => {
+      console.log('before test', this.store);
+
+      this.store.select(selectRouterState).pipe(
+        map((state) => console.log('state:', state)),
+        tap((routerState) => console.log('routerState:', routerState))
+      );
+
+      this.store.select(selectAuthState).pipe(
+        tap((user) => console.log('USER:', user))
+      );
+    }, 5000);
+
+  }
 }

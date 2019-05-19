@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Language, TranslationService } from 'angular-l10n';
 import { Store } from '@ngrx/store';
-import { AuthState } from '../../store/reducers/auth.reducer';
-import { EmailAndPasswordRegister } from '../../store/actions/auth.actions';
 import { AuthWithEmailAndPasswordData } from '../auth.interface';
-import { getAuthPending } from '../../store/selectors/auth.selectors';
+import { selectAuthPending } from '@store/auth-store/selectors';
+import { AppState } from '@store/state';
+import { EmailAndPasswordRegister } from '@store/auth-store/actions';
+
 
 @Component({
   selector: 'app-sign-up',
@@ -16,7 +17,7 @@ export class SignUpComponent implements OnInit {
 
   @Language() lang: string;
 
-  $authPending = this.store.select(getAuthPending);
+  $authPending = this.store.select(selectAuthPending);
 
   EMAIL_MIN_LENGTH = 6;
   PASSWORD_MIN_LENGTH = 6;
@@ -28,7 +29,7 @@ export class SignUpComponent implements OnInit {
   passwordRepeat: AbstractControl;
 
   constructor(
-    private store: Store<AuthState>,
+    private store: Store<AppState>,
     private trn: TranslationService,
   ) {}
 

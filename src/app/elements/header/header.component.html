@@ -1,7 +1,6 @@
 <nav class="header mat-elevation-z6" id="header">
   <div class="main-container">
     <ul class="header__list">
-
       <li class="header__item">
         <a routerLink="/"
            routerLinkActive="header__active"
@@ -12,8 +11,8 @@
            LGames
         </a>
       </li>
+
       <li class="header__item">
-        <!--<mat-icon>thumbs-up</mat-icon>-->
         <a routerLink="/games"
            mat-button
            routerLinkActive="header__active"
@@ -24,17 +23,16 @@
       </li>
     </ul>
 
-
     <div class="header__right-elems">
-
       <div class="header__auth">
         <button mat-stroked-button [matMenuTriggerFor]="menu">
           <i class="material-icons">language</i>
           {{ 'Language' | translate:lang }}
         </button>
+
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="locale.setCurrentLanguage('ru')">{{ 'Russian' | translate }}</button>
-          <button mat-menu-item (click)="locale.setCurrentLanguage('en')">{{ 'English' | translate }}</button>
+          <button mat-menu-item (click)="changeLanguage('ru')">{{ 'Russian' | translate:lang }}</button>
+          <button mat-menu-item (click)="changeLanguage('en')">{{ 'English' | translate:lang }}</button>
         </mat-menu>
       </div>
 
@@ -46,6 +44,7 @@
              class="header__link">
             {{ 'HEADER__SIGN-IN' | translate:lang }}
           </a>
+
           <a routerLink="/authentication/sign-up"
              mat-button
              routerLinkActive="header__active"
@@ -60,7 +59,6 @@
           {{ 'Sign-out' | translate:lang }}
         </button>
       </div>
-
     </div>
   </div>
 </nav>

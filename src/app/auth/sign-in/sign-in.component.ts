@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { Language, TranslationService } from 'angular-l10n';
 import { Store } from '@ngrx/store';
-import { AuthState } from '../../store/reducers/auth.reducer';
-import { EmailAndPasswordLogin } from '../../store/actions/auth.actions';
-import { AuthWithEmailAndPasswordData } from '../auth.interface';
-import { getAuthPending } from '../../store/selectors/auth.selectors';
-import { tap } from 'rxjs/operators';
+import { selectAuthPending } from '@store/auth-store/selectors';
+import { AppState } from '@store/state';
+import { EmailAndPasswordLogin } from '@store/auth-store/actions';
+
 
 @Component({
   selector: 'app-sign-in',
@@ -19,7 +17,7 @@ export class SignInComponent implements OnInit {
 
   @Language() lang: string;
 
-  $authPending = this.store.select(getAuthPending);
+  $authPending = this.store.select(selectAuthPending);
 
   EMAIL_MIN_LENGTH = 6;
   PASSWORD_MIN_LENGTH = 6;
@@ -32,7 +30,7 @@ export class SignInComponent implements OnInit {
   constructor(
     private router: Router,
     private trn: TranslationService,
-    private store: Store<AuthState>,
+    private store: Store<AppState>,
   ) {}
 
   ngOnInit() {

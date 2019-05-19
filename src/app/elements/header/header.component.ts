@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { LocaleService, Language } from 'angular-l10n';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { AuthState } from '../../store/reducers/auth.reducer';
-import { Logout } from '../../store/actions/auth.actions';
-import { getUser } from '../../store/selectors/auth.selectors';
 import { map } from 'rxjs/operators';
 import { User } from '../../auth/auth.interface';
+import { selectAuthUser } from '@store/auth-store/selectors';
+import { AppState } from '@store/state';
+import { Logout } from '@store/auth-store/actions';
 
 
 @Component({
@@ -21,12 +21,12 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     public locale: LocaleService,
-    private store: Store<AuthState>,
+    private store: Store<AppState>,
   ) {}
 
   ngOnInit() {
-    this.authenticated$ = this.store.select(getUser).pipe(
-      map((user: User) => user.authenticated)
+    this.authenticated$ = this.store.select(selectAuthUser).pipe(
+      map((user: User) => user.authenticated),
     );
   }
 
@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit {
     this.store.dispatch(new Logout());
   }
 
-  changeLanguage(lang) {
+  changeLanguage(lang: string) {
     this.locale.setCurrentLanguage(lang);
   }
 }

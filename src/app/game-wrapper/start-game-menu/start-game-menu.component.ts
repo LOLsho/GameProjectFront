@@ -17,24 +17,26 @@ import {
 } from '../game.interfaces';
 import { MultiGameSettings } from './create-new-multi-game/multi-game-setting.model';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/reducers';
 import { Subscription } from 'rxjs';
-import { CreateSession, SetSession, SubscribeToSession } from '../store/actions/session.actions';
 import { FirestoreService, Query } from '../../services/firestore.service';
 import { filter, switchMap } from 'rxjs/operators';
 import { GAMES } from '../../game-list/game-list';
-import { SetGameInfo } from '../store/actions/game-info.actions';
-import { getUser } from '../../store/selectors/auth.selectors';
 import { User } from '../../auth/auth.interface';
-import { selectGameInfoState } from '../store/selectors/game-info.selectors';
-import { GameInfoState } from '../store/reducers/game-info.reducer';
 import { SessionListComponent } from '../../elements/session-list/session-list.component';
-import { SubscribeToSessionList, UnsubscribeFromSessionList } from '../store/actions/session-list.actions';
-import { selectAllSessions, selectSessionListLoaded } from '../store/selectors/session-list.selectors';
-import { LoadSteps } from '../store/actions/steps.actions';
 import { CreateNewMultiGameComponent } from './create-new-multi-game/create-new-multi-game.component';
 import { EnterIdComponent } from './enter-id/enter-id.component';
-import { selectGameNameFromParams } from '../../store/selectors/router.selectors';
+import { GameInfoState } from '@store/game-info-store/state';
+import { AppState } from '@store/state';
+import { selectGameNameFromParams } from '@store/router-store/selectors';
+import { SetGameInfo } from '@store/game-info-store/actions';
+import { selectAuthUser } from '@store/auth-store/selectors';
+import { selectGameInfoState } from '@store/game-info-store/selectors';
+import { SubscribeToSessionList, UnsubscribeFromSessionList } from '@store/session-list-store/actions';
+import { selectSessionListAll, selectSessionListLoaded } from '@store/session-list-store/selectors';
+import { CreateSession, SetSession, SubscribeToSession } from '@store/session-store/actions';
+import { LoadSteps } from '@store/steps-store/actions';
+
+
 
 @Component({
   selector: 'app-start-game-menu',
@@ -97,13 +99,14 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
         });
       }),
 
-      this.store.select(getUser).subscribe((user: User) => {
+      this.store.select(selectAuthUser).subscribe((user: User) => {
         this.user = user;
       }),
 
-      this.store.select(selectGameInfoState).subscribe((gameInfoState: GameInfoState) => {
-        this.gameInfo = gameInfoState;
-      }),
+      this.store.select(selectGameInfoState)
+        .subscribe((gameInfoState: GameInfoState) => {
+          this.gameInfo = gameInfoState;
+        }),
     ];
   }
 
@@ -166,7 +169,7 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
     this.store.dispatch(new SubscribeToSessionList(query));
     this.subscriptions.push(this.store.select(selectSessionListLoaded).pipe(
       filter((loaded: boolean) => !!loaded),
-      switchMap(() => this.store.select(selectAllSessions)),
+      switchMap(() => this.store.select(selectSessionListAll)),
     ).subscribe((sessionList: Session[]) => {
       sessionListRef.instance.sessions = sessionList;
     }));

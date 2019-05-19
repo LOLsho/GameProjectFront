@@ -5,8 +5,6 @@ import { FirestoreService } from '../../../services/firestore.service';
 import { emersionAnimation } from '../../../animations/emersion.animation';
 import { NotifierService } from 'angular-notifier';
 import { Session } from '../../game.interfaces';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/reducers';
 
 
 @Component({
@@ -28,7 +26,6 @@ export class EnterIdComponent implements OnInit {
   pending: boolean;
 
   constructor(
-    private store: Store<AppState>,
     private fb: FormBuilder,
     private firestoreService: FirestoreService,
     private notifier: NotifierService,

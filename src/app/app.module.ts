@@ -15,9 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslationModule } from 'angular-l10n';
 import { StoreModule } from '@ngrx/store';
 import { RouterSerializerProvider } from '../assets/configs/store/store.config';
-import { appReducers } from './store/reducers';
 import { EffectsModule } from '@ngrx/effects';
-import { appEffects } from './store/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { NotifierModule } from 'angular-notifier';
 import { notifierConfig } from '../assets/configs/notifier/notifier.config';
@@ -25,6 +23,7 @@ import { EnterNicknameComponent } from './elements/enter-nickname/enter-nickname
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { RootStoreModule } from '@store/root-store.module';
 
 
 
@@ -50,17 +49,18 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
     AngularFireDatabaseModule,
 
     // ----- Store -----
-    StoreModule.forRoot(appReducers, { /*metaReducers: [storeFreeze]*/ }),
-    StoreRouterConnectingModule,
-    EffectsModule.forRoot(appEffects),
-    StoreDevtoolsModule.instrument(),
+    RootStoreModule,
+
+    // StoreModule.forRoot(appReducers, { /*metaReducers: [storeFreeze]*/ }),
+    // StoreRouterConnectingModule,
+    // EffectsModule.forRoot(appEffects),
+    // StoreDevtoolsModule.instrument(),
   ],
   entryComponents: [
     EnterNicknameComponent,
   ],
   providers: [
     L10nProvider,
-    RouterSerializerProvider,
   ],
   bootstrap: [AppComponent],
 })
