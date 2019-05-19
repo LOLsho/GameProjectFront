@@ -4,7 +4,9 @@ import { Params } from '@angular/router';
 import { RouterReducerState } from '@ngrx/router-store';
 
 
-const getUrl = (state: RouterReducerState<RouterState>): string => state.state.url;
+const getUrl = (state: RouterReducerState<RouterState>): string => {
+  if (state.state) return state.state.url;
+};
 const getQueryParams = (state: RouterReducerState<RouterState>): Params => state.state.queryParams;
 const getParams = (state: RouterReducerState<RouterState>): Params => state.state.params;
 
