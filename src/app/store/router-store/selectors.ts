@@ -1,16 +1,15 @@
 import { RouterState } from './state';
 import { createFeatureSelector, createSelector, MemoizedSelector } from '@ngrx/store';
 import { Params } from '@angular/router';
+import { RouterReducerState } from '@ngrx/router-store';
 
 
-const getUrl = (state: RouterState) => {
-  if (state) return state.url;
-};
-const getQueryParams = (state: RouterState) => state.queryParams;
-const getParams = (state: RouterState) => state.params;
+const getUrl = (state: RouterReducerState<RouterState>): string => state.state.url;
+const getQueryParams = (state: RouterReducerState<RouterState>): Params => state.state.queryParams;
+const getParams = (state: RouterReducerState<RouterState>): Params => state.state.params;
 
-export const selectRouterState: MemoizedSelector<object, RouterState>
-  = createFeatureSelector<RouterState>('routerReducer');
+export const selectRouterState: MemoizedSelector<object, RouterReducerState<RouterState>>
+  = createFeatureSelector<RouterReducerState<RouterState>>('routerReducer');
 
 export const selectRouterUrl: MemoizedSelector<object, string>
   = createSelector(selectRouterState, getUrl);

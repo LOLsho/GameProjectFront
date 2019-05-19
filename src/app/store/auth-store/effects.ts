@@ -55,11 +55,7 @@ export class AuthEffects {
     ofType(authActions.ActionTypes.Authenticated),
     map((action: authActions.EmailAndPasswordRegister) => action.payload),
     switchMap((firebaseUser: Partial<User>) => this.firestoreService.getUser(firebaseUser.uid).pipe(
-      tap(console.log),
-      withLatestFrom(this.store.select(selectRouterUrl).pipe(
-        tap(console.log),
-        filter((url) => !!url),
-      )),
+      withLatestFrom(this.store.select(selectRouterUrl)),
       mergeMap(([user, url]: [User, string]) => {
         const actions: Action[] = [new authActions.SetUser({ ...user, authenticated: true })];
 

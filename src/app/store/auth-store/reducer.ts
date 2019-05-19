@@ -13,7 +13,7 @@ export function authReducer(state: AuthState = initialState, action: Actions): A
     case ActionTypes.FacebookLogin:
     case ActionTypes.GithubLogin:
     case ActionTypes.Logout:
-    case ActionTypes.Authenticated:
+      case ActionTypes.Authenticated:
       return { ...state, pending: true };
 
     case ActionTypes.SetUser:

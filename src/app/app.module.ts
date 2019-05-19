@@ -7,23 +7,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { ROUTES } from './app-routing.module';
 import { SharedModule } from './modules/shared.module';
-import { AngularFireModule } from 'angularfire2';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { AngularFireAuthModule } from 'angularfire2/auth';
-import { firebaseConfig } from '../assets/configs/firebase/firebase.config';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslationModule } from 'angular-l10n';
-import { StoreModule } from '@ngrx/store';
-import { RouterSerializerProvider } from '../assets/configs/store/store.config';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { NotifierModule } from 'angular-notifier';
 import { notifierConfig } from '../assets/configs/notifier/notifier.config';
 import { EnterNicknameComponent } from './elements/enter-nickname/enter-nickname.component';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { storeFreeze } from 'ngrx-store-freeze';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { RootStoreModule } from '@store/root-store.module';
+import { FirebaseModule } from './modules/firebase.module';
 
 
 
@@ -38,23 +28,19 @@ import { RootStoreModule } from '@store/root-store.module';
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(ROUTES, { preloadingStrategy: PreloadAllModules }),
-    TranslationModule.forRoot(l10nConfig),
-    NotifierModule.withConfig(notifierConfig),
+
+    // ----- Shared -----
     SharedModule,
 
     // ----- Firebase -----
-    AngularFireModule.initializeApp(firebaseConfig, { timestampsInSnapshots: true }),
-    AngularFirestoreModule,
-    AngularFireAuthModule,
-    AngularFireDatabaseModule,
+    FirebaseModule,
 
-    // ----- Store -----
+    // ----- NgRx Store -----
     RootStoreModule,
 
-    // StoreModule.forRoot(appReducers, { /*metaReducers: [storeFreeze]*/ }),
-    // StoreRouterConnectingModule,
-    // EffectsModule.forRoot(appEffects),
-    // StoreDevtoolsModule.instrument(),
+    // ----- Third-party -----
+    TranslationModule.forRoot(l10nConfig),
+    NotifierModule.withConfig(notifierConfig),
   ],
   entryComponents: [
     EnterNicknameComponent,

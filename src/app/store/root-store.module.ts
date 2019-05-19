@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { RouterStoreModule } from '@store/router-store/router-store.module';
 import { AuthStoreModule } from '@store/auth-store/auth-store.module';
 import { GameInfoStoreModule } from '@store/game-info-store/game-info-store.module';
 import { GameListStoreModule } from '@store/game-list-store/game-list-store.module';
@@ -13,11 +12,12 @@ import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { RouterSerializerProvider } from '../../assets/configs/store/store.config';
 import { RouterEffects } from '@store/router-store/effects';
+import { environment } from '../../environments/environment';
+import { storeFreeze } from 'ngrx-store-freeze';
 
 
 @NgModule({
   imports: [
-    // RouterStoreModule,
     AuthStoreModule,
     GameInfoStoreModule,
     GameListStoreModule,
@@ -26,12 +26,12 @@ import { RouterEffects } from '@store/router-store/effects';
     StepsStoreModule,
 
     StoreModule.forRoot({
-      router: routerReducer
+      routerReducer: routerReducer
     }),
     EffectsModule.forRoot([AppEffects, RouterEffects]),
 
     StoreRouterConnectingModule.forRoot(),
-    StoreDevtoolsModule.instrument(),
+    environment.production ? [] : StoreDevtoolsModule.instrument(),
   ],
   providers: [
     RouterSerializerProvider,
