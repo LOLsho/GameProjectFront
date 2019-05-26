@@ -7,8 +7,10 @@
             {{ game.name | translate:lang }}
           </div>
 
-          <div class="game-list__bg-img" [style.backgroundImage]="'url(' + game.imageSrc + ')'"
-               routerLink="/game/{{ game.name }}"
+          <div
+            class="game-list__bg-img"
+            [style.backgroundImage]="'url(' + game.imageSrc + ')'"
+            routerLink="/game/{{ game.name }}"
           ></div>
 
           <button mat-raised-button

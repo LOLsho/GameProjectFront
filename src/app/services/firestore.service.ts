@@ -40,14 +40,14 @@ export class FirestoreService {
   }
 
   getUser(uid: string) {
-    return this.db.collection('users').doc(uid)
+    return this.getUsersCollection().doc(uid)
       .get().pipe(
         map((res) => res.data()),
       );
   }
 
   addNewUser(user: any): Observable<any> {
-    const newUser: User = {
+    const newUser: Partial<User> = {
       uid: user.uid,
       name: user.displayName,
       email: user.email,
@@ -62,14 +62,15 @@ export class FirestoreService {
   }
 
   getSessionList(query: Query): AngularFirestoreCollection<DocumentData> {
-    return this.getGameDocument().collection('sessions', (ref: any) => {
-      if (query.where) {
-        query.where.forEach((whereQuery: Where) => {
-          ref = ref.where(whereQuery.field, whereQuery.opStr, whereQuery.value);
-        });
-      }
-      return ref;
-    });
+    return this.getGameDocument().collection('sessions', this.queryFn.bind(null, query));
+  }
+
+  getUsersCollection(): AngularFirestoreCollection {
+    return this.db.collection<User>('users');
+  }
+
+  getUsers(query: Query): AngularFirestoreCollection {
+    return this.db.collection<User>('users', this.queryFn.bind(null, query));
   }
 
   getGamesCollection(): AngularFirestoreCollection {
@@ -90,14 +91,7 @@ export class FirestoreService {
   }
 
   getStepsCollection(sessionId: string, query?: Query): AngularFirestoreCollection {
-    return this.getSessionDocument(sessionId).collection<any>('steps', (ref: any) => {
-      if (query && query.where) {
-        query.where.forEach((whereQuery: Where) => {
-          ref = ref.where(whereQuery.field, whereQuery.opStr, whereQuery.value);
-        });
-      }
-      return ref;
-    });
+    return this.getSessionDocument(sessionId).collection<any>('steps', this.queryFn.bind(null, query));
   }
 
   getGameIdByName(name: string): Observable<string> {
@@ -112,8 +106,8 @@ export class FirestoreService {
     return fromPromise(this.getSessionsCollection().add(data));
   }
 
-  updateGameSession(data): Observable<any> {
-    return fromPromise(this.getSessionDocument().update(data));
+  updateGameSession(data, id?: string): Observable<any> {
+    return fromPromise(this.getSessionDocument(id).update(data));
   }
 
   getGameListChanges(): Observable<any> {
@@ -130,6 +124,15 @@ export class FirestoreService {
 
   getFirestoreTimestamp() {
     return firebase.firestore.Timestamp.now();
+  }
+
+  queryFn(query: Query, ref) {
+    if (query && query.where) {
+      query.where.forEach((whereQuery: Where) => {
+        ref = ref.where(whereQuery.field, whereQuery.opStr, whereQuery.value);
+      });
+    }
+    return ref;
   }
 }
 

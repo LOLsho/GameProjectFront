@@ -9,6 +9,7 @@ export interface User {
   email: string;
   name: string;
   photoURL: string;
+  status: 'online' | 'away' | 'offline';
 }
 
 export const defaultUser: any = {

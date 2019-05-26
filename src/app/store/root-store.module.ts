@@ -14,6 +14,7 @@ import { RouterSerializerProvider } from '../../assets/configs/store/store.confi
 import { RouterEffects } from '@store/router-store/effects';
 import { environment } from '../../environments/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
+import { PlayersStoreModule } from '@store/players-store/players-store.module';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { storeFreeze } from 'ngrx-store-freeze';
     SessionStoreModule,
     SessionListStoreModule,
     StepsStoreModule,
+    PlayersStoreModule,
 
     StoreModule.forRoot({
       routerReducer: routerReducer

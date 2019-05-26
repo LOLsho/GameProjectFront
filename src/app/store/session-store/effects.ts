@@ -10,6 +10,7 @@ import * as sessionActions from './actions';
 import { AppState } from '@store/state';
 import { selectGameMode } from '@store/game-info-store/selectors';
 import { LoadSteps, UnsubscribeFromSteps } from '@store/steps-store/actions';
+import { UnsubscribeFromPlayers } from '@store/players-store/actions';
 
 
 @Injectable()
@@ -25,7 +26,7 @@ export class SessionEffects {
   ) {}
 
   @Effect()
-  subscribeToSession: Observable<Action> = this.actions$.pipe(
+  subscribeToSession$: Observable<Action> = this.actions$.pipe(
     ofType(sessionActions.ActionTypes.SubscribeToSession),
     tap(() => this.unsubscribeFromSession$ = new Subject()),
     map((action: sessionActions.SubscribeToSession) => action.payload.id),
@@ -68,7 +69,7 @@ export class SessionEffects {
     ofType(sessionActions.ActionTypes.UpdateSession),
     map((action: sessionActions.UpdateSession) => action.payload),
     switchMap((updatedSessionData: Partial<Session>) => {
-      return this.firestoreService.updateGameSession(updatedSessionData).pipe(
+      return this.firestoreService.updateGameSession(updatedSessionData, updatedSessionData.id).pipe(
         catchError((error) => of(new sessionActions.SessionFail(error))),
       );
     }),
@@ -92,6 +93,7 @@ export class SessionEffects {
     mergeMap(() => [
       new sessionActions.UnsubscribeFromSession(),
       new UnsubscribeFromSteps(),
+      new UnsubscribeFromPlayers(),
     ]),
   );
 

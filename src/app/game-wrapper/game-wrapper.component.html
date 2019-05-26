@@ -11,4 +11,7 @@
   <app-loader></app-loader>
 </div>
 
-
+<app-player-list
+  *ngIf="session"
+  [sessionId]="session.id"
+></app-player-list>

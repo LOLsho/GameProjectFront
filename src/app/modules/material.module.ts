@@ -33,7 +33,7 @@ const matElements = [
   MatCheckboxModule,
   MatTooltipModule,
   MatAutocompleteModule,
-  // DragDropModule,
+  DragDropModule,
 ];
 
 

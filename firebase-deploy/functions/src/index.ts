@@ -55,3 +55,120 @@ export const writeStepTimestamp = functions.firestore
     data.timestamp = admin.firestore.FieldValue.serverTimestamp();
     return snapshot.ref.set(data);
   });
+
+
+export const updateActiveSessionOnCreate = functions.firestore
+  .document('games/{gameId}/sessions/{sessionId}')
+  .onCreate(async (snapshot: DocumentSnapshot, context: EventContext) => {
+
+    const session = snapshot.data();
+    if (!session || session.gameMode === 'single') return null;
+
+    const userRef = firestore.doc(`users/${session.playerIds[0]}`);
+    const userDataSnap = await userRef.get();
+    const userData = await userDataSnap.data();
+
+    const activeSessions = userData.activeSessions || [];
+    activeSessions.push(context.params.sessionId);
+
+    return userRef.update({ activeSessions });
+  });
+
+
+export const updateActiveSessionOnDelete = functions.firestore
+  .document('games/{gameId}/sessions/{sessionId}')
+  .onDelete(async (snapshot: DocumentSnapshot, context: EventContext) => {
+    const session = snapshot.data();
+
+    if (!session) return;
+
+    for (const id of session.playerIds) {
+      const userRef = firestore.doc(`users/${id}`);
+      const userDataSnap = await userRef.get();
+      const userData = await userDataSnap.data();
+      const activeSessions = userData.activeSessions;
+
+      const index = activeSessions.findIndex((item: string) => item === context.params.sessionId);
+      activeSessions.splice(index, 1);
+
+      userRef.update({ activeSessions });
+    }
+  });
+
+
+export const updateActiveSessionOnUpdate = functions.firestore
+  .document('games/{gameId}/sessions/{sessionId}')
+  .onUpdate(async (change: Change<DocumentSnapshot>, context: EventContext) => {
+    const oldSession = change.before.data();
+    const newSession = change.after.data();
+
+    if (!oldSession || !newSession) return null;
+
+    const sessionOver = !oldSession.isSessionOver && newSession.isSessionOver;
+
+    let isTheSame = oldSession.playerIds.length === newSession.playerIds.length;
+
+    console.log('CONDITION 2:', isTheSame);
+    if (isTheSame) {
+      console.log('oldSession.playerIds:', oldSession.playerIds);
+      console.log('newSession.playerIds:', newSession.playerIds);
+      const uniqueElems = Array.from(new Set([...newSession.playerIds, ...oldSession.playerIds]));
+
+      isTheSame = uniqueElems.length === oldSession.playerIds.length;
+
+      console.log('CONDITION 3:', sessionOver);
+      if (sessionOver) isTheSame = false;
+    }
+
+    console.log('CONDITION 4:', isTheSame);
+    if (isTheSame) return null;
+
+    console.log('CONDITION 5:', sessionOver);
+    if (sessionOver) {
+      for (const id of newSession.playerIds) {
+        const userRef = firestore.doc(`users/${id}`);
+        const userDataSnap = await userRef.get();
+        const userData = await userDataSnap.data();
+        const activeSessions = userData.activeSessions;
+
+        const index = activeSessions.findIndex((item: string) => item === context.params.sessionId);
+        if (index !== -1) {
+          activeSessions.splice(index, 1);
+        }
+
+        userRef.update({ activeSessions });
+      }
+    } else {
+      const playersAdded = newSession.playerIds.filter((id: string) => {
+        return !oldSession.playerIds.includes(id);
+      });
+      const playersDeleted = oldSession.playerIds.filter((id: string) => {
+        return !newSession.playerIds.includes(id);
+      });
+
+      for (const id of playersAdded) {
+        const userRef = firestore.doc(`users/${id}`);
+        const userDataSnap = await userRef.get();
+        const userData = await userDataSnap.data();
+        const activeSessions = userData.activeSessions || [];
+
+        activeSessions.push(context.params.sessionId);
+
+        userRef.update({ activeSessions });
+      }
+
+      for (const id of playersDeleted) {
+        const userRef = firestore.doc(`users/${id}`);
+        const userDataSnap = await userRef.get();
+        const userData = await userDataSnap.data();
+        const activeSessions = userData.activeSessions;
+
+        const index = activeSessions.findIndex((item: string) => item === context.params.sessionId);
+        activeSessions.splice(index, 1);
+
+        userRef.update({ activeSessions });
+      }
+    }
+
+    return null;
+  });

@@ -22,7 +22,9 @@ export class SapperComponent implements OnInit, OnDestroy {
   set session(session: Session) {
     this._session = session;
     if (session.gameData.firstCell) {
-      this.updateGame();
+      if (!this.firstCell) {
+        this.updateGame();
+      }
     } else {
       this.initGame();
     }

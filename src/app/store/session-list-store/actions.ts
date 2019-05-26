@@ -4,9 +4,9 @@ import { Session } from '../../game-wrapper/game.interfaces';
 
 export enum ActionTypes {
   SubscribeToSessionList = '[GAME] Subscribe To Session List',
-  UnsubscribeFromSessionList= '[GAME] Unsubscribe From Session List',
+  UnsubscribeFromSessionList = '[GAME] Unsubscribe From Session List',
 
-  SessionListLoaded= '[FIRESTORE API] Session List Loaded',
+  SessionListLoaded = '[FIRESTORE API] Session List Loaded',
   AddOneSessionToList = '[FIRESTORE API] Add One Session To List',
   UpdateOneSessionInList = '[FIRESTORE API] Update One Session In List',
   RemoveOneSessionFromList = '[FIRESTORE API] Remove One Session From List',

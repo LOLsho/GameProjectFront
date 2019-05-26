@@ -18,6 +18,8 @@ import { ChessComponent } from '../games/chess/chess.component';
 import { CanvasService } from '../services/canvas.service';
 import { ChessPieceComponent } from '../games/chess/chess-piece/chess-piece.component';
 import { ChoosePieceComponent } from '../games/chess/choose-piece/choose-piece.component';
+import { PlayerListComponent } from './player-list/player-list.component';
+import { PlayerComponent } from './player-list/player/player.component';
 
 
 const ROUTES: Routes = [
@@ -53,7 +55,9 @@ const gamesComponents = [
     MenuComponent,
     StartGameMenuComponent,
     BoxComponent,
+    PlayerListComponent,
     ...gamesComponents,
+    PlayerComponent,
   ],
   imports: [
     CommonModule,

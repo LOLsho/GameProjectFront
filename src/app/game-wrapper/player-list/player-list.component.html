@@ -1,0 +1,15 @@
+<div class="player-list" cdkDrag>
+  <div class="player-list__container" *ngIf="players$ | async as players; else loader">
+    <ul class="player-list__list">
+      <li class="player-list__item" *ngFor="let player of players">
+        <app-player
+          [player]="player"
+        ></app-player>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #loader>
+    <app-loader></app-loader>
+  </ng-template>
+</div>

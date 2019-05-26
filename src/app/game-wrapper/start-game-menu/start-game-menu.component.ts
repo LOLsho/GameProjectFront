@@ -33,7 +33,7 @@ import { selectAuthUser } from '@store/auth-store/selectors';
 import { selectGameInfoState } from '@store/game-info-store/selectors';
 import { SubscribeToSessionList, UnsubscribeFromSessionList } from '@store/session-list-store/actions';
 import { selectSessionListAll, selectSessionListLoaded } from '@store/session-list-store/selectors';
-import { CreateSession, SetSession, SubscribeToSession } from '@store/session-store/actions';
+import { CreateSession, SetSession, SubscribeToSession, UpdateSession } from '@store/session-store/actions';
 import { LoadSteps } from '@store/steps-store/actions';
 
 
@@ -154,13 +154,13 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
           { field: 'isSessionOver', opStr: '==', value: false },
           { field: 'gameMode', opStr: '==', value: 'single' },
           { field: 'creatorId', opStr: '==', value: this.user.uid },
-        ]
+        ],
       };
     } else {
       query = {
         where: [
-          { field: 'gameMode', opStr: '==', value: 'multiplayer' },
           { field: 'isSessionOver', opStr: '==', value: false },
+          { field: 'gameMode', opStr: '==', value: 'multiplayer' },
           { field: 'private', opStr: '==', value: false },
         ],
       };
@@ -179,6 +179,10 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
       this.store.dispatch(new UnsubscribeFromSessionList());
 
       if (this.gameMode === 'multiplayer') {
+        if (!session.playerIds.includes(this.user.uid)) {
+          session.playerIds.push(this.user.uid);
+          this.store.dispatch(new UpdateSession({ playerIds: session.playerIds, id: session.id }));
+        }
         this.store.dispatch(new SubscribeToSession({ id: session.id }));
       } else if (this.gameMode === 'single') {
         this.store.dispatch(new SetSession(session));
