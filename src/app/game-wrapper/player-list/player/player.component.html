@@ -1,20 +1,29 @@
 <div class="player">
   <div class="player__top">
-    <div class="player__image-wrap">
+    <app-user-photo
+      [photoUrl]="player.photoURL"
+    ></app-user-photo>
 
-      <img class="player__image"
-           [src]="player.photoURL || 'assets/general/images/default-user.png'"
-           alt="photo"
-      >
-    </div>
+    <div class="player__name-block">
+      <div class="player__name">
+        {{ player.name || 'Anonymous' }}
+      </div>
 
-    <div class="player__name">
-      {{ player.name || 'Anonymous' }}
-      <br>
-      {{ player.status }}
+      <div class="player__controls">
+        <div class="player__status-indicator">
+          <app-status-indicator
+            [status]="player.status"
+          ></app-status-indicator>
+        </div>
+
+        <div class="player__select-menu">
+            <app-select-menu *ngIf="menu.length" [items]="menu" (itemClicked)="onPlayerActionClick($event)">
+            <div class="player__dots" matRipple>
+              <i class="fas fa-ellipsis-v player__dots-icon"></i>
+            </div>
+          </app-select-menu>
+        </div>
+      </div>
     </div>
   </div>
-
-
-
 </div>

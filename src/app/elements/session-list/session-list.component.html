@@ -2,7 +2,11 @@
   <div class="session-list content-border" *ngIf="sessions; else loader">
     <ul class="session-list__list">
       <li class="session-list__item" *ngFor="let session of sessions">
-        <app-session-item [session]="session" (sessionClicked)="sessionClicked($event)"></app-session-item>
+        <app-session-item
+          [session]="session"
+          [user]="user"
+          (joinClicked)="joinSession($event)"
+        ></app-session-item>
       </li>
     </ul>
 

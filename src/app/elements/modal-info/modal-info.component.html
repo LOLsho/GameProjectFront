@@ -1,0 +1,14 @@
+<div class="modal-info">
+  <div class="modal-info__text">
+    {{ text }}
+  </div>
+
+  <button mat-raised-button
+          class="modal-info__button"
+          color="primary"
+          type="button"
+          (click)="closeModal()"
+  >
+    {{ 'Ok' | translate:lang }}
+  </button>
+</div>

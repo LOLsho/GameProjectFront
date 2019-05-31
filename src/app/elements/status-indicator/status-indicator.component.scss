@@ -1,0 +1,32 @@
+
+
+
+.status-indicator {
+  min-width: 15px;
+  min-height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-indicator__light {
+  width: 8px;
+  height: 8px;
+  border-radius: 100px;
+  transition: all 0.2s ease;
+
+  &.online {
+    background-color: green;
+    box-shadow: 0 0 8px 2px green;
+  }
+
+  &.offline {
+    background-color: grey;
+    //box-shadow: 0 0 5px 3px grey;
+  }
+
+  &.away {
+    background-color: orange;
+    box-shadow: 0 0 8px 2px orange;
+  }
+}

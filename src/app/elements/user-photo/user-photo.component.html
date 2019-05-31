@@ -1,0 +1,12 @@
+<div class="user-photo"
+     [style.width.px]="size"
+     [style.minWidth.px]="size"
+     [style.height.px]="size"
+     [style.minHeight.px]="size"
+     matTooltip="{{ name || '' }}"
+>
+  <img class="user-photo__image"
+       [src]="photoUrl || 'assets/general/images/default-user.png'"
+       alt="photo"
+  >
+</div>

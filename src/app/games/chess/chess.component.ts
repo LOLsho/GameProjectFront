@@ -112,11 +112,7 @@ export class ChessComponent implements OnInit {
   cellClicked(clickedCellId: number, piece?: ChessPieceData) {
     if (this.gameOver) return;
 
-    if (this.session.creatorId === this.userData.uid) {
-      if (this.steps.length % 2 !== 0) return;
-    } else {
-      if (this.steps.length % 2 === 0) return;
-    }
+    if (this.lastStep.userId === this.userData.uid) return;
 
     if (this.activeCellId !== null) {
       if (this.availableMoves.includes(clickedCellId)) {

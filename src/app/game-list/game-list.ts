@@ -41,7 +41,7 @@ export const GAMES: GameInitial[] = [
         joinGameDisabled: false,
         watchSavedGamesDisabled: true,
         multiModeConfig: {
-          moveOrder: 'no-order',
+          // moveOrder: 'no-order',
           maxParticipants: null,
         },
       },

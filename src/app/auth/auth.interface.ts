@@ -1,3 +1,5 @@
+import { UserStatus } from '../services/presence.service';
+
 export interface AuthWithEmailAndPasswordData {
   email: string;
   password: string;
@@ -9,7 +11,7 @@ export interface User {
   email: string;
   name: string;
   photoURL: string;
-  status: 'online' | 'away' | 'offline';
+  status: UserStatus;
 }
 
 export const defaultUser: any = {

@@ -10,7 +10,7 @@ import * as sessionActions from './actions';
 import { AppState } from '@store/state';
 import { selectGameMode } from '@store/game-info-store/selectors';
 import { LoadSteps, UnsubscribeFromSteps } from '@store/steps-store/actions';
-import { UnsubscribeFromPlayers } from '@store/players-store/actions';
+import { ClearPlayersState, UnsubscribeFromPlayers } from '@store/players-store/actions';
 
 
 @Injectable()
@@ -92,8 +92,10 @@ export class SessionEffects {
     ofType(sessionActions.ActionTypes.SessionExit),
     mergeMap(() => [
       new sessionActions.UnsubscribeFromSession(),
+      new sessionActions.ClearSessionState(),
       new UnsubscribeFromSteps(),
       new UnsubscribeFromPlayers(),
+      new ClearPlayersState(),
     ]),
   );
 

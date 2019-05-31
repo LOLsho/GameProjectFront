@@ -1,0 +1,19 @@
+
+
+
+.modal-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.modal-info__text {
+  text-align: center;
+  font-size: 19px;
+  font-weight: bold;
+}
+
+.modal-info__button {
+  margin-top: 12px;
+}

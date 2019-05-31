@@ -21,7 +21,7 @@ export class CreateNewMultiGameComponent implements OnInit {
   moveOrderOptions = [
     { value: 'no-order', caption: 'No order' },
     { value: 'player-by-player', caption: 'Player by player' },
-    { value: 'teem-by-teem', caption: 'Teem by teem' },
+    // { value: 'teem-by-teem', caption: 'Teem by teem' },
   ];
 
   multiGameSettings: MultiGameSettings = {

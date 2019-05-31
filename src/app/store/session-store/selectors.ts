@@ -3,6 +3,7 @@ import { SessionState } from './state';
 
 
 const getId = (state: SessionState): string => state.id;
+const getIsOver = (state: SessionState): boolean => state.isSessionOver;
 
 
 export const selectSessionState: MemoizedSelector<object, SessionState>
@@ -10,3 +11,6 @@ export const selectSessionState: MemoizedSelector<object, SessionState>
 
 export const selectSessionId: MemoizedSelector<object, string>
   = createSelector(selectSessionState, getId);
+
+export const selectIsSessionOver: MemoizedSelector<object, boolean>
+  = createSelector(selectSessionState, getIsOver);

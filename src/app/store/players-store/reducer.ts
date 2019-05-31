@@ -2,7 +2,7 @@ import { initialPlayersState, playersAdapter, PlayersState } from '@store/player
 import { PlayersAction, PlayersActionType } from '@store/players-store/actions';
 
 
-export const playersReducer = function (
+export function playersReducer (
   state: PlayersState = initialPlayersState,
   action: PlayersAction
 ): PlayersState {
@@ -13,19 +13,24 @@ export const playersReducer = function (
     case PlayersActionType.PlayersError:
       return state;
 
+    case PlayersActionType.PlayersLoaded:
+      return { ...state, loaded: true };
+
     case PlayersActionType.AddPlayer:
-      return playersAdapter.addOne(action.payload, { ...state, loaded: true });
+      return playersAdapter.upsertOne(action.payload, state);
 
     case PlayersActionType.UpdatePlayer:
-      return playersAdapter.upsertOne(action.payload, { ...state, loaded: true });
+      return playersAdapter.upsertOne(action.payload, state);
 
     case PlayersActionType.RemovePlayer:
-      return playersAdapter.removeOne(action.payload.uid, { ...state, loaded: true });
+      return playersAdapter.removeOne(action.payload.uid, state);
 
     case PlayersActionType.ClearPlayersState:
       return playersAdapter.removeAll({ ...state, loaded: false });
 
+    case PlayersActionType.KickOutPlayer:
+      return playersAdapter.removeOne(action.payload.uid, state);
   }
 
   return state;
-};
+}

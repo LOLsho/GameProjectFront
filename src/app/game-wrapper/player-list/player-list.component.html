@@ -3,7 +3,10 @@
     <ul class="player-list__list">
       <li class="player-list__item" *ngFor="let player of players">
         <app-player
+          [session]="session"
           [player]="player"
+          [me]="user"
+          (kickOut)="kickOutPlayer(player)"
         ></app-player>
       </li>
     </ul>

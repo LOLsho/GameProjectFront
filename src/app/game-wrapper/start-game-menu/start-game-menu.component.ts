@@ -35,6 +35,7 @@ import { SubscribeToSessionList, UnsubscribeFromSessionList } from '@store/sessi
 import { selectSessionListAll, selectSessionListLoaded } from '@store/session-list-store/selectors';
 import { CreateSession, SetSession, SubscribeToSession, UpdateSession } from '@store/session-store/actions';
 import { LoadSteps } from '@store/steps-store/actions';
+import { AddPlayer } from '@store/players-store/actions';
 
 
 
@@ -89,7 +90,7 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
     this.subscriptions = [
 
       this.store.select(selectGameNameFromParams).pipe(
-        filter(gameName => !!gameName)
+        filter(gameName => !!gameName),
       ).subscribe((gameName) => {
 
         this.gameInitials = GAMES.find(gameInitial => gameInitial.name === gameName);
@@ -153,7 +154,7 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
         where: [
           { field: 'isSessionOver', opStr: '==', value: false },
           { field: 'gameMode', opStr: '==', value: 'single' },
-          { field: 'creatorId', opStr: '==', value: this.user.uid },
+          { field: 'creator.uid', opStr: '==', value: this.user.uid },
         ],
       };
     } else {
@@ -172,6 +173,7 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
       switchMap(() => this.store.select(selectSessionListAll)),
     ).subscribe((sessionList: Session[]) => {
       sessionListRef.instance.sessions = sessionList;
+      sessionListRef.instance.user = this.user;
     }));
 
     this.subscriptions.push(sessionListRef.instance.sessionChosen.subscribe((session: Session) => {
@@ -181,6 +183,7 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
       if (this.gameMode === 'multiplayer') {
         if (!session.playerIds.includes(this.user.uid)) {
           session.playerIds.push(this.user.uid);
+          this.store.dispatch(new AddPlayer(this.user));
           this.store.dispatch(new UpdateSession({ playerIds: session.playerIds, id: session.id }));
         }
         this.store.dispatch(new SubscribeToSession({ id: session.id }));
@@ -252,7 +255,11 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
   generateDataForCreatedSession(createdGameData: any): Session {
     const newSession: Session = {
       created: this.firestoreService.getFirestoreTimestamp(),
-      creatorId: this.user.uid,
+      creator: {
+        uid: this.user.uid,
+        photoURL: this.user.photoURL,
+        name: this.user.name,
+      },
       gameMode: this.gameMode,
       gameData: createdGameData,
       isSessionOver: false,

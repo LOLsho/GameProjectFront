@@ -162,7 +162,7 @@ export class SapperComponent implements OnInit, OnDestroy {
     if (cell.isOpen || cell.checked || this.playerLost || this.playerWon) return;
 
     // The first click should do the creator. So if not - return
-    if (!this.firstCell && this.session.creatorId !== this.userData.uid) return;
+    if (!this.firstCell && this.session.creator.uid !== this.userData.uid) return;
 
     cell.isOpen = true;
     this.makeStep(cell.id, 'left');

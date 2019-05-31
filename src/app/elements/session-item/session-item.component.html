@@ -1,6 +1,54 @@
-<div class="session-item" (click)="onSessionClick()">
-  <div class="session-item__date content-border">
-    Создано: {{ session.created | date:'dd LLLL; HH:mm':false:false:'ru-RU' }}<br>
-    First Cell: {{ !!session.gameData.firstCell }}
+<div class="session-item content-border">
+  <div class="session-item__row">
+    <div class="session-item__item">
+      <div class="session-item__sub-title">
+        {{ 'Host' | translate:lang }}:
+      </div>
+
+      <app-user-photo
+        [photoUrl]="session.creator.photoURL"
+        [name]="session.creator.name"
+        size="35"
+      ></app-user-photo>
+    </div>
+
+    <div class="session-item__item">
+      <div class="session-item__sub-title">
+        {{ 'Created' | translate:lang }}:
+      </div>
+
+      <div class="session-item__value">
+        {{ session.created | date:'HH:mm (dd LLLL)' }}
+      </div>
+    </div>
+
+    <div class="session-item__item">
+      <div class="session-item__sub-title">
+        {{ 'Players quantity' | translate:lang }}:
+      </div>
+
+      <div class="session-item__value">
+        {{ session.playerIds.length }}<span *ngIf="session.maxParticipants">/{{session.maxParticipants}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-item__buttons">
+    <button mat-stroked-button
+            color="primary"
+            class="session-item__button"
+            [disabled]="true"
+    >
+      {{ 'Watch' | translate:lang }}
+    </button>
+
+    <button mat-stroked-button
+            [disabled]="!session.playerIds.includes(this.user.uid) && session.playerIds.length === session.maxParticipants"
+            color="primary"
+            class="session-item__button"
+            (click)="joinGame()"
+    >
+      {{ 'Join' | translate:lang }}
+    </button>
   </div>
 </div>

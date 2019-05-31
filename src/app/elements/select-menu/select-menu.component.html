@@ -1,0 +1,15 @@
+<div class="select-menu">
+  <div class="select-menu__button" [matMenuTriggerFor]="menu">
+    <ng-content></ng-content>
+  </div>
+
+  <mat-menu #menu="matMenu">
+    <button
+      mat-menu-item
+      matRipple
+      *ngFor="let item of items"
+      [innerHTML]="item.innerHtml"
+      (click)="onItemClicked(item)"
+    ></button>
+  </mat-menu>
+</div>

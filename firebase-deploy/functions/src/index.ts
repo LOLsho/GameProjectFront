@@ -108,22 +108,15 @@ export const updateActiveSessionOnUpdate = functions.firestore
 
     let isTheSame = oldSession.playerIds.length === newSession.playerIds.length;
 
-    console.log('CONDITION 2:', isTheSame);
     if (isTheSame) {
-      console.log('oldSession.playerIds:', oldSession.playerIds);
-      console.log('newSession.playerIds:', newSession.playerIds);
       const uniqueElems = Array.from(new Set([...newSession.playerIds, ...oldSession.playerIds]));
 
       isTheSame = uniqueElems.length === oldSession.playerIds.length;
-
-      console.log('CONDITION 3:', sessionOver);
       if (sessionOver) isTheSame = false;
     }
 
-    console.log('CONDITION 4:', isTheSame);
     if (isTheSame) return null;
 
-    console.log('CONDITION 5:', sessionOver);
     if (sessionOver) {
       for (const id of newSession.playerIds) {
         const userRef = firestore.doc(`users/${id}`);

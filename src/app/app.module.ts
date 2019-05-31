@@ -14,7 +14,7 @@ import { notifierConfig } from '../assets/configs/notifier/notifier.config';
 import { EnterNicknameComponent } from './elements/enter-nickname/enter-nickname.component';
 import { RootStoreModule } from '@store/root-store.module';
 import { FirebaseModule } from './modules/firebase.module';
-
+import { ModalInfoComponent } from './elements/modal-info/modal-info.component';
 
 
 @NgModule({
@@ -23,6 +23,7 @@ import { FirebaseModule } from './modules/firebase.module';
     GreetingComponent,
     AppComponent,
     EnterNicknameComponent,
+    ModalInfoComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,6 +45,7 @@ import { FirebaseModule } from './modules/firebase.module';
   ],
   entryComponents: [
     EnterNicknameComponent,
+    ModalInfoComponent,
   ],
   providers: [
     L10nProvider,

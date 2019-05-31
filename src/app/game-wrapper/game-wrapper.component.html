@@ -12,6 +12,7 @@
 </div>
 
 <app-player-list
-  *ngIf="session"
-  [sessionId]="session.id"
+  *ngIf="gameLaunched && session && session.gameMode === 'multiplayer'"
+  [session]="session"
+  [user]="gameData.user"
 ></app-player-list>

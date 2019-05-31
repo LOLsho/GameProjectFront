@@ -33,7 +33,7 @@ export interface Session<T = any> {
   // For single and multi modes
   isSessionOver: boolean;
   created: any;
-  creatorId: string;
+  creator: Partial<User>;
   gameData: T;
   gameMode: GameMode;
 
