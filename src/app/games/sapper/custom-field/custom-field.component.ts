@@ -7,7 +7,7 @@ import { MatDialogRef } from '@angular/material';
 @Component({
   selector: 'app-custom-field',
   templateUrl: './custom-field.component.html',
-  styleUrls: ['./custom-field.component.scss']
+  styleUrls: ['./custom-field.component.scss'],
 })
 export class CustomFieldComponent implements OnInit {
 

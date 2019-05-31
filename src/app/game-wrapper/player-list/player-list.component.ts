@@ -29,6 +29,7 @@ export class PlayerListComponent implements OnInit {
     filter((loaded: boolean) => loaded),
     switchMap(() => this.store.select(selectPlayersAll).pipe(
       takeUntil(this.sessionOver$),
+      filter((players) => players.length > 0),
       withLatestFrom(this.store.select(selectAuthUser)),
       map(([players, me]: [User[], User]) => {
         const myIndex = players.findIndex((player: User) => player.uid === me.uid);

@@ -9,12 +9,22 @@ import {
   SubscribeToPlayers,
   UpdatePlayer,
 } from '@store/players-store/actions';
-import { catchError, concatMap, map, mergeMap, switchMap, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
+import {
+  catchError,
+  concatMap,
+  filter,
+  map,
+  mergeMap,
+  switchMap,
+  takeUntil,
+  tap,
+  withLatestFrom,
+} from 'rxjs/operators';
 import { FirestoreService, Query } from '../../services/firestore.service';
 import { NotifierService } from 'angular-notifier';
 import { User } from '../../auth/auth.interface';
 import { AppState } from '@store/state';
-import { selectSessionState } from '@store/session-store/selectors';
+import { selectIsSessionOver, selectSessionState } from '@store/session-store/selectors';
 import { Session } from '../../game-wrapper/game.interfaces';
 import { selectPlayersLoaded } from '@store/players-store/selectors';
 import { selectAuthUserId } from '@store/auth-store/selectors';
@@ -39,6 +49,10 @@ export class PlayersEffects {
     private translation: TranslationService,
   ) {}
 
+  sessionOver$: Observable<boolean> = this.store.select(selectIsSessionOver).pipe(
+    filter((isOver: boolean) => isOver),
+  );
+
   @Effect()
   subscribeToPlayers$: Observable<Action> = this.actions$.pipe(
     ofType(PlayersActionType.SubscribeToPlayers),
@@ -46,10 +60,11 @@ export class PlayersEffects {
     map((action: SubscribeToPlayers) => action.payload.sessionId),
     switchMap((sessionId: string) => {
       const query: Query = {
-        where: [{ field: 'activeSessions', opStr: 'array-contains', value: sessionId },],
+        where: [{ field: 'activeSessions', opStr: 'array-contains', value: sessionId }],
       };
       return this.firestoreService.getUsers(query).stateChanges().pipe(
         takeUntil(this.unsubscribeFromPlayers$),
+        takeUntil(this.sessionOver$),
         mergeMap((actions) => actions),
         map((res: any) => {
           const player: User = res.payload.doc.data();

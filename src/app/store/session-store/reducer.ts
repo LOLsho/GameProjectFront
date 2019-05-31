@@ -11,8 +11,10 @@ export function sessionReducer(state: SessionState = initialState, action: Actio
     case ActionTypes.ClearSessionState:
       return initialState;
 
-    case ActionTypes.CreateSession:
     case ActionTypes.UpdateSession:
+      return { ...state, ...action.payload };
+
+    case ActionTypes.CreateSession:
     case ActionTypes.SessionFail:
     case ActionTypes.SessionExit:
     case ActionTypes.SubscribeToSession:
