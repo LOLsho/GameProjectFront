@@ -20,6 +20,7 @@ import { ChessPieceComponent } from '../games/chess/chess-piece/chess-piece.comp
 import { ChoosePieceComponent } from '../games/chess/choose-piece/choose-piece.component';
 import { PlayerListComponent } from './player-list/player-list.component';
 import { PlayerComponent } from './player-list/player/player.component';
+import { SnakeComponent } from '../games/snake/snake.component';
 
 
 const ROUTES: Routes = [
@@ -45,6 +46,7 @@ const gamesComponents = [
   EnterIdComponent,
   ChessPieceComponent,
   ChoosePieceComponent,
+  SnakeComponent,
 ];
 
 

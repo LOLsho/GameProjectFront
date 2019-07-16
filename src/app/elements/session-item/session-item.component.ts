@@ -26,6 +26,14 @@ export class SessionItemComponent implements OnInit {
   joinGame() {
     this.joinClicked.emit(this.session);
   }
+
+  get conditionToDisableJoin(): boolean {
+    if (this.session.gameMode === 'multiplayer') {
+      return !this.session.playerIds.includes(this.user.uid) && this.session.playerIds.length >= this.session.maxParticipants;
+    } else {
+      return false;
+    }
+  }
 }
 
 

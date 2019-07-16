@@ -15,6 +15,7 @@ import { EnterNicknameComponent } from './elements/enter-nickname/enter-nickname
 import { RootStoreModule } from '@store/root-store.module';
 import { FirebaseModule } from './modules/firebase.module';
 import { ModalInfoComponent } from './elements/modal-info/modal-info.component';
+import { ChatComponent } from './chat/chat.component';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { ModalInfoComponent } from './elements/modal-info/modal-info.component';
     AppComponent,
     EnterNicknameComponent,
     ModalInfoComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,

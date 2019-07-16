@@ -120,13 +120,18 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
     this.store.dispatch(new SetGameInfo({ gameMode: this.gameMode }));
   }
 
+  runGame(specificGameDetails) {
+    this.createSession(specificGameDetails);
+    this.emitPreparedGameData();
+  }
+
   singleModeActionSelected(singleModeAction: SingleModeAction) {
     this.singleModeAction = singleModeAction;
 
     switch (this.singleModeAction) {
       case 'newGame':
         if (this.gameInitials.menuComponent) this.showGameMenu();
-        else this.emitPreparedGameData();
+        else this.runGame({});
         break;
       case 'continue':
         this.showSessionList(); break;
@@ -139,8 +144,7 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       gameMenuRef.instance.menuClosed.subscribe((specificGameDetails) => {
         gameMenuRef.destroy();
-        this.createSession(specificGameDetails);
-        this.emitPreparedGameData();
+        this.runGame(specificGameDetails);
       })
     );
   }
@@ -232,13 +236,9 @@ export class StartGameMenuComponent implements OnInit, OnDestroy {
         componentRef.destroy();
         this.multiGameSettings = multiGameSettings;
 
-        if (this.gameInitials.menuComponent) {
-          this.showGameMenu();
-        } else {
-          this.createSession({});
-          this.emitPreparedGameData();
-        }
-      })
+        if (this.gameInitials.menuComponent) this.showGameMenu();
+        else this.runGame({});
+      }),
     );
   }
 

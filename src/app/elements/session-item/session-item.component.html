@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="session-item__item">
+    <div class="session-item__item" *ngIf="session.gameMode === 'multiplayer'">
       <div class="session-item__sub-title">
         {{ 'Players quantity' | translate:lang }}:
       </div>
@@ -43,7 +43,7 @@
     </button>
 
     <button mat-stroked-button
-            [disabled]="!session.playerIds.includes(this.user.uid) && session.playerIds.length === session.maxParticipants"
+            [disabled]="conditionToDisableJoin"
             color="primary"
             class="session-item__button"
             (click)="joinGame()"
