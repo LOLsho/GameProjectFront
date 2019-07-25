@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Language } from 'angular-l10n';
 import { Message } from './message/message.models';
 import { Observable, Subject, Subscription } from 'rxjs';
@@ -19,6 +19,9 @@ import { FirestoreService } from '../services/firestore.service';
 export class ChatComponent implements OnInit, OnDestroy {
 
   @Language() lang: string;
+  @ViewChild('chatContainer') chatContainer: ElementRef;
+
+  chatHidden = false;
 
   user: User;
   messages: Message[];
@@ -50,26 +53,26 @@ export class ChatComponent implements OnInit, OnDestroy {
     ).subscribe((messages: Message[]) => {
       this.messages = messages;
     }));
-
-
-
-
-    // this.subscriptions.push(this.sendMessage$.pipe(withLatestFrom(this.user$)).subscribe(
-    //   ([messageText, user]: [string, User]) => {
-    //     const message: Message = {
-    //       text: messageText,
-    //       userId: user.uid,
-    //       name: user.name,
-    //       timestamp: this.firestoreService.getFirestoreTimestamp(),
-    //     };
-    //     this.messageAdded$.next(message);
-    //     this.store.dispatch(new SendGeneralMessage(message));
-    //   }
-    // ));
   }
 
   hideChat() {
-    console.log('in hide chat');
+    const transformStyle = this.chatContainer.nativeElement.style.transform;
+    let cutStyle;
+    let transformXNum;
+
+    if (transformStyle) {
+      cutStyle = transformStyle.substr(12);
+      transformXNum = parseInt(cutStyle, 10);
+    } else {
+      transformXNum = 0;
+    }
+    this.chatHidden = true;
+    this.chatContainer.nativeElement.style.left = `${window.innerWidth - transformXNum}px`;
+  }
+
+  returnChat() {
+    this.chatHidden = false;
+    this.chatContainer.nativeElement.style.left = `${window.innerWidth - 340}px`;
   }
 
   sendMessage(messageText: string) {

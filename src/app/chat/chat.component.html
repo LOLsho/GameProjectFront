@@ -1,4 +1,4 @@
-<div class="chat" cdkDrag>
+<div class="chat" cdkDrag #chatContainer>
   <div class="chat__header">
     <div class="chat__title">
       {{ 'Chat' | translate:lang }}
@@ -35,4 +35,13 @@
   <app-input-area
     (send)="sendMessage($event)"
   ></app-input-area>
+
+  <div
+    class="chat__return-chat"
+    [matTooltip]="'Show chat' | translate:lang"
+    matTooltipPosition="left"
+    [style.opacity]="chatHidden ? 1 : 0"
+    [style.pointerEvents]="chatHidden ? 'auto' : 'none'"
+    (click)="returnChat()"
+  ></div>
 </div>

@@ -1,4 +1,5 @@
 @import "variables";
+@import "mixins";
 
 
 .chat {
@@ -6,10 +7,11 @@
   z-index: 1001;
   width: 320px;
   position: fixed;
-  bottom: 100px;
-  right: 100px;
+  bottom: 5%;
+  left: 70%;
   background-color: white;
   box-shadow: 0 3px 3px -2px rgba(0, 0, 0, .2), 0 3px 4px 0 rgba(0, 0, 0, .14), 0 1px 8px 0 rgba(0, 0, 0, .12);
+  transition: left 0.4s ease-in-out;
 }
 
 .chat__header {
@@ -46,10 +48,22 @@
   transform: scaleX(0.9);
 }
 
+.chat__return-chat {
+  @include centerer-y;
+  width: 20px;
+  left: -20px;
+  height: 100px;
+  background-color: white;
+  border-radius: 25px 0 0 25px;
+  cursor: pointer;
+  transition: left 0.4s ease-in-out, opacity 0.4s ease-in-out;
+  transition-delay: 0.4s;
+  border: 2px solid $theme-blue;
+}
+
 /deep/ .mat-tab-label {
   height: 35px !important;
   width: 110px !important;
   min-width: 10px !important;
 }
-
 
