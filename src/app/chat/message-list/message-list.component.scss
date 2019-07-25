@@ -1,0 +1,20 @@
+.message-list {
+  height: 420px;
+  min-height: 420px;
+  max-height: 420px;
+}
+
+.message-list__wrap {
+  padding: 5px 7px;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.message-list__item {
+  margin-bottom: 5px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

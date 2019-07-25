@@ -1,5 +1,5 @@
-@import "../../../assets/my-styles/mixins";
-@import "../../../assets/my-styles/variables";
+@import "mixins";
+@import "variables";
 
 $border-color: #808080;
 
@@ -36,7 +36,7 @@ $border-color: #808080;
   position: relative;
   border: 2px solid black;
   padding: 15px;
-  border-radius: 4px;
+  border-radius: $common-border-radius;
   min-width: 240px;
 }
 

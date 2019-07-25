@@ -1,4 +1,4 @@
-@import "../../assets/my-styles/variables";
+@import "variables";
 
 
 .centered-full-screen {
@@ -19,5 +19,5 @@
 .content-border {
   border: 2px solid black;
   padding: 15px;
-  border-radius: 4px;
+  border-radius: $common-border-radius;
 }

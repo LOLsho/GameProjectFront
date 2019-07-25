@@ -1,0 +1,55 @@
+@import "variables";
+
+
+.chat {
+  border-radius: $common-border-radius;
+  z-index: 1001;
+  width: 320px;
+  position: fixed;
+  bottom: 100px;
+  right: 100px;
+  background-color: white;
+  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, .2), 0 3px 4px 0 rgba(0, 0, 0, .14), 0 1px 8px 0 rgba(0, 0, 0, .12);
+}
+
+.chat__header {
+  border-bottom: 1px solid rgba(0, 0, 0, .12);
+  padding: 9px 0 7px;
+  font-weight: bold;
+}
+
+.chat__title {
+  text-align: center;
+}
+
+.chat__panel-icons {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.chat__drag-handle {
+  color: #c3c3c3;
+  cursor: move;
+  width: 24px;
+  height: 24px;
+}
+
+.chat__cross {
+  color: #c3c3c3;
+  cursor: pointer;
+  font-size: 25px;
+  line-height: 0;
+  margin-left: 3px;
+  transform: scaleX(0.9);
+}
+
+/deep/ .mat-tab-label {
+  height: 35px !important;
+  width: 110px !important;
+  min-width: 10px !important;
+}
+
+

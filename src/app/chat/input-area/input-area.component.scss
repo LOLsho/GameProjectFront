@@ -1,0 +1,37 @@
+@import "variables";
+
+.input-area {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 6px 7px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input-area__input {
+  border: 1px solid #A8A8A8;
+  border-radius: $chat-border-radius;
+  background-color: white;
+  padding: 6px 11px 5px;
+  width: 90%;
+  font-size: 15px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    border: 1px solid #3f51b5;
+    box-shadow: inset 0 0 2px #3f51b5;
+  }
+}
+
+.input-area__send-icon {
+  font-size: 26px;
+  cursor: pointer;
+  color: #A8A8A8;
+  pointer-events: none;
+  transition: color 0.2s ease;
+
+  &.active {
+    color: #3f51b5;
+    pointer-events: auto;
+  }
+}

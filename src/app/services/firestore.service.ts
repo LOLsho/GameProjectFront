@@ -13,6 +13,8 @@ import { selectGameId } from '@store/game-info-store/selectors';
 import { selectSessionId } from '@store/session-store/selectors';
 import { selectAuthUserId } from '@store/auth-store/selectors';
 import { AppState } from '@store/state';
+import { Message } from '../chat/message/message.models';
+import DocumentReference = firebase.firestore.DocumentReference;
 
 
 @Injectable({
@@ -102,7 +104,15 @@ export class FirestoreService {
       );
   }
 
-  createNewGameSession(data): Observable<any> {
+  getGeneralMessagesCollection(query?: Query): AngularFirestoreCollection<DocumentData> {
+    return this.db.collection<Message>('chat', this.queryFn.bind(null, query));
+  }
+
+  sendGeneralMessage(message: Message): Observable<DocumentReference> {
+    return fromPromise(this.getGeneralMessagesCollection().add(message));
+  }
+
+  createNewGameSession(data): Observable<DocumentReference> {
     return fromPromise(this.getSessionsCollection().add(data));
   }
 

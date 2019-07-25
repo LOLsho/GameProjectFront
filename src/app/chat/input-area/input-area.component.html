@@ -1,0 +1,14 @@
+<div class="input-area" [formGroup]="chatForm">
+  <input class="input-area__input"
+         type="text"
+         formControlName="textInput"
+         #inputText
+         (keyup.enter)="onSend(inputText.value)"
+  >
+  <span class="input-area__send-icon"
+        [class.active]="inputText.value.trim().length !== 0"
+        (click)="onSend(inputText.value)"
+  >
+    <i class="fas fa-arrow-circle-up"></i>
+  </span>
+</div>

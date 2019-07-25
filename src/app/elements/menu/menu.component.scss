@@ -1,10 +1,10 @@
-
+@import "variables";
 
 
 .menu {
   border: 2px solid black;
   padding: 15px;
-  border-radius: 4px;
+  border-radius: $common-border-radius;
   min-width: 240px;
 }
 

@@ -5,6 +5,7 @@ import { GameListState } from '@store/game-list-store/state';
 import { SessionState } from '@store/session-store/state';
 import { SessionListState } from '@store/session-list-store/state';
 import { StepsState } from '@store/steps-store/state';
+import { ChatState } from '@store/chat-store/state';
 
 
 export interface AppState {
@@ -15,4 +16,5 @@ export interface AppState {
   session: SessionState;
   sessionList: SessionListState;
   steps: StepsState;
+  chat: ChatState;
 }

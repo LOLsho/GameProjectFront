@@ -1,8 +1,9 @@
-<div class="app" *ngIf="user$ | async; else loader">
+<div class="app" *ngIf="user$ | async as user; else loader">
   <app-header></app-header>
   <div class="main">
     <router-outlet></router-outlet>
   </div>
+  <app-chat *ngIf="user.authenticated"></app-chat>
 </div>
 
 <ng-template #loader>

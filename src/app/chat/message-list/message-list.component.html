@@ -1,0 +1,14 @@
+<div class="message-list">
+  <ul class="message-list__wrap" #messagesWrap *ngIf="messages; else loader">
+    <li class="message-list__item" *ngFor="let message of messages">
+      <app-message
+        [user]="user"
+        [message]="message"
+      ></app-message>
+    </li>
+  </ul>
+
+  <ng-template #loader>
+    <app-loader [@emersionAnimation]></app-loader>
+  </ng-template>
+</div>

@@ -16,6 +16,9 @@ import { RootStoreModule } from '@store/root-store.module';
 import { FirebaseModule } from './modules/firebase.module';
 import { ModalInfoComponent } from './elements/modal-info/modal-info.component';
 import { ChatComponent } from './chat/chat.component';
+import { MessageListComponent } from './chat/message-list/message-list.component';
+import { MessageComponent } from './chat/message/message.component';
+import { InputAreaComponent } from './chat/input-area/input-area.component';
 
 
 @NgModule({
@@ -26,6 +29,9 @@ import { ChatComponent } from './chat/chat.component';
     EnterNicknameComponent,
     ModalInfoComponent,
     ChatComponent,
+    MessageListComponent,
+    MessageComponent,
+    InputAreaComponent,
   ],
   imports: [
     BrowserModule,

@@ -15,6 +15,7 @@ import { RouterEffects } from '@store/router-store/effects';
 import { environment } from '../../environments/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { PlayersStoreModule } from '@store/players-store/players-store.module';
+import { ChatStoreModule } from '@store/chat-store/chat-store.module';
 
 
 @NgModule({
@@ -26,9 +27,10 @@ import { PlayersStoreModule } from '@store/players-store/players-store.module';
     SessionListStoreModule,
     StepsStoreModule,
     PlayersStoreModule,
+    ChatStoreModule,
 
     StoreModule.forRoot({
-      routerReducer: routerReducer
+      routerReducer: routerReducer,
     }),
     EffectsModule.forRoot([AppEffects, RouterEffects]),
 

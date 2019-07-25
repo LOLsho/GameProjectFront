@@ -1,0 +1,59 @@
+@import "variables";
+
+
+.message {
+  display: flex;
+}
+
+.message__name {
+  color: #81ff8d;
+  //color: #00fcff;
+  font-size: 11px;
+  margin-bottom: 1px;
+}
+
+.message__wrap {
+  max-width: 80%;
+  padding: 7px 11px 5px;
+  background-color: $theme-blue;
+  color: white;
+  font-weight: 300;
+
+  &.right {
+    margin-left: auto;
+    border-radius: $chat-border-radius $chat-border-radius 4px $chat-border-radius;
+  }
+
+  &.left {
+    border-radius: $chat-border-radius $chat-border-radius $chat-border-radius 4px;
+  }
+}
+
+.message__text {
+  font-size: 15px;
+  line-height: 18px;
+  word-break: break-all;
+}
+
+.message__time {
+  font-style: italic;
+  font-size: 11px;
+  color: rgba(white, .7);
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1px;
+}
+
+.message__status-indicator {
+  display: block;
+  height: 13px;
+  width: 13px;
+  position: relative;
+  margin-left: 5px;
+  pointer-events: none;
+}
+
+.message__loader {
+  width: 100%;
+  height: 100%;
+}

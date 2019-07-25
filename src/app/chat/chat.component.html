@@ -1,3 +1,38 @@
-<p>
-  chat works!
-</p>
+<div class="chat" cdkDrag>
+  <div class="chat__header">
+    <div class="chat__title">
+      {{ 'Chat' | translate:lang }}
+    </div>
+
+    <div class="chat__panel-icons">
+      <div class="chat__drag-handle" cdkDragHandle>
+        <svg width="21px" fill="currentColor" viewBox="0 0 22 22">
+          <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
+          <path d="M0 0h24v24H0z" fill="none"></path>
+        </svg>
+      </div>
+
+      <div class="chat__cross"
+           matTooltip="{{ 'Hide' | translate:lang }}"
+           matTooltipPosition="above"
+           (click)="hideChat()"
+      >
+        <i class="far fa-window-close"></i>
+      </div>
+    </div>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab [label]="'General' | translate:lang">
+      <app-message-list
+        [user]="user"
+        [messageAdded$]="messageAdded$"
+        [messages]="messages"
+      ></app-message-list>
+    </mat-tab>
+  </mat-tab-group>
+
+  <app-input-area
+    (send)="sendMessage($event)"
+  ></app-input-area>
+</div>

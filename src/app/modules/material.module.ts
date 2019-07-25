@@ -7,7 +7,7 @@ import {
   MatMenuModule,
   MatDialogModule,
   MatCheckboxModule,
-  MatAutocompleteModule, MatRippleModule,
+  MatAutocompleteModule, MatRippleModule, MatTabsModule,
 } from '@angular/material';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -35,6 +35,7 @@ const matElements = [
   MatAutocompleteModule,
   DragDropModule,
   MatRippleModule,
+  MatTabsModule,
 ];
 
 
