@@ -13,9 +13,22 @@
 
     <div class="message__time">
       <span>{{ message.timestamp | date:'HH:mm' }}</span>
-      <span class="message__status-indicator">
-        <img src="assets/general/svg-icons/chat-loader.svg" alt="loader" class="message__loader" *ngIf="!message.id">
-        <img src="assets/general/svg-icons/chat-checked-twice.svg" alt="checked" class="message__loader" *ngIf="message.id">
+      <span class="message__status-indicator"
+            [class.hide]="message.id && message.userId !== user.uid"
+      >
+        <img
+          src="assets/general/svg-icons/chat-loader.svg"
+          class="message__loader"
+          alt="loader"
+          *ngIf="!message.id"
+        >
+
+        <img
+          src="assets/general/svg-icons/chat-checked-twice.svg"
+          class="message__loader"
+          alt="checked"
+          *ngIf="message.id"
+        >
       </span>
     </div>
   </div>

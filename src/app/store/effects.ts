@@ -5,6 +5,7 @@ import { Action } from '@ngrx/store';
 import { mergeMap } from 'rxjs/operators';
 import * as appActions from './actions';
 import { ClearGameList } from '@store/game-list-store/actions';
+import { UnsubscribeFromGeneralMessages } from '@store/chat-store/actions';
 
 
 @Injectable()
@@ -19,6 +20,7 @@ export class AppEffects {
     ofType(appActions.ActionTypes.ClearAppState),
     mergeMap(() => [
       new ClearGameList(),
+      new UnsubscribeFromGeneralMessages(),
     ]),
   );
 }

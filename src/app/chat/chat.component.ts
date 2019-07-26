@@ -36,6 +36,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.store.dispatch(new LoadGeneralMessages());
+    console.warn('here');
     this.subscribe();
   }
 
@@ -44,13 +46,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.user = user;
     }));
 
-    this.subscriptions.push(this.store.select(selectGeneralMessagesLoaded).pipe(
-      filter((loaded: boolean) => {
-        if (loaded) return true;
-        else this.store.dispatch(new LoadGeneralMessages());
-      }),
-      switchMap(() => this.store.select(selectAllGeneralMessages)),
-    ).subscribe((messages: Message[]) => {
+    this.subscriptions.push(this.store.select(selectAllGeneralMessages).subscribe((messages: Message[]) => {
       this.messages = messages;
     }));
   }

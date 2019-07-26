@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import {
   AddGeneralMessage,
-  ChatActionTypes, ChatError, GeneralMessagesLoaded,
+  ChatActionTypes, ChatError, ClearGeneralMessagesState, GeneralMessagesLoaded,
   RemoveGeneralMessage, SendGeneralMessage, SubscribeToGeneralMessages,
   UpdateGeneralMessage,
 } from '@store/chat-store/actions';
-import { catchError, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
 import { FirestoreService, Query } from '../../services/firestore.service';
 import { Message } from '../../chat/message/message.models';
 import { NotifierService } from 'angular-notifier';
@@ -15,6 +15,7 @@ import { Action, Store } from '@ngrx/store';
 import { AppState } from '@store/state';
 import { selectLastGeneralMessage } from '@store/chat-store/selectors';
 import { environment } from '../../../environments/environment';
+import * as sessionListActions from '@store/session-list-store/actions';
 
 
 const serverLatency = environment.approximateServerLatency;
@@ -22,6 +23,8 @@ const serverLatency = environment.approximateServerLatency;
 
 @Injectable()
 export class ChatEffects {
+
+  unsubFromGeneralMessages$: Subject<void>;
 
   constructor(
     private actions$: Actions,
@@ -52,6 +55,7 @@ export class ChatEffects {
   @Effect()
   subscribeToGeneralMessages$: Observable<Action> = this.actions$.pipe(
     ofType(ChatActionTypes.SubscribeToGeneralMessages),
+    tap(() => this.unsubFromGeneralMessages$ = new Subject()),
     withLatestFrom(this.store$.select(selectLastGeneralMessage)),
     map(([_, lastMessage]) => {
       let timestamp;
@@ -64,6 +68,7 @@ export class ChatEffects {
       return query;
     }),
     switchMap((query: Query) => this.firestoreService.getGeneralMessagesCollection(query).stateChanges().pipe(
+      takeUntil(this.unsubFromGeneralMessages$),
       mergeMap((actions) => actions),
       map((res: any) => {
         const messageData = res.payload.doc.data();
@@ -84,6 +89,18 @@ export class ChatEffects {
       }),
       catchError((error) => of(new ChatError(error))),
     )),
+  );
+
+  @Effect()
+  generalMessagesUnsubscribe$: Observable<Action> = this.actions$.pipe(
+    ofType(ChatActionTypes.UnsubscribeFromGeneralMessages),
+    tap(() => {
+      if (this.unsubFromGeneralMessages$) {
+        this.unsubFromGeneralMessages$.next();
+        this.unsubFromGeneralMessages$.complete();
+      }
+    }),
+    map(() => new ClearGeneralMessagesState()),
   );
 
   @Effect({ dispatch: false })

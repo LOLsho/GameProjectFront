@@ -1,4 +1,9 @@
-import { ChatState, generalMessagesAdapter, initialChatState } from '@store/chat-store/state';
+import {
+  ChatState,
+  generalMessagesAdapter,
+  initialChatState,
+  initialGeneralMessagesState,
+} from '@store/chat-store/state';
 import { ChatActions, ChatActionTypes } from '@store/chat-store/actions';
 
 
@@ -8,12 +13,11 @@ export function chatReducer(state: ChatState = initialChatState, action: ChatAct
     case ChatActionTypes.SubscribeToGeneralMessages:
     case ChatActionTypes.ChatError:
     case ChatActionTypes.SendGeneralMessage:
+    case ChatActionTypes.UnsubscribeFromGeneralMessages:
       return state;
 
     case ChatActionTypes.GeneralMessagesLoaded:
-      // return stepsAdapter.addAll(action.payload, { ...state, loaded: true });
       return updateChatState(state, action.payload, 'general', 'addAll');
-      // return { ...state, general: { ...state.general, loaded: true } };
 
     case ChatActionTypes.AddGeneralMessage:
       return updateChatState(state, action.payload, 'general', 'addOne');
@@ -23,6 +27,9 @@ export function chatReducer(state: ChatState = initialChatState, action: ChatAct
 
     case ChatActionTypes.RemoveGeneralMessage:
       return updateChatState(state, action.payload.id, 'general', 'removeOne');
+
+    case ChatActionTypes.ClearGeneralMessagesState:
+      return { ...state, general: initialGeneralMessagesState };
   }
 
   return state;

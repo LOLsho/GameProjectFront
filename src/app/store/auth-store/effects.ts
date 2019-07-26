@@ -10,7 +10,7 @@ import { Action, Store } from '@ngrx/store';
 import * as authActions from './actions';
 import { PresenceService } from '../../services/presence.service';
 import { Observable, of } from 'rxjs';
-import { catchError, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 import { AuthWithEmailAndPasswordData, defaultUser, User } from '../../auth/auth.interface';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { AppState } from '@store/state';
@@ -36,13 +36,15 @@ export class AuthEffects {
   @Effect()
   getUser$: Observable<Action> = this.actions$.pipe(
     ofType(authActions.ActionTypes.GetUser),
-    switchMap(() => this.afAuth.authState),
+    tap(() => console.log('tap in getUser$')),
+    switchMap(() => this.afAuth.authState.pipe(take(1))),
     map((user: any) => {
       if (user) {
         this.notifierService.notify(
           'default',
           this.translation.translate('You are signed in with email') + ` "${user.email}"`
         );
+        console.log('in getUser$');
         return new authActions.Authenticated(user);
       } else {
         return new authActions.NotAuthenticated();
@@ -148,6 +150,7 @@ export class AuthEffects {
       const provider = new auth.GithubAuthProvider();
       return fromPromise(this.afAuth.auth.signInWithPopup(provider)).pipe(
         mergeMap((credential: any) => {
+          console.log('in githubLogin$');
           return [
             new authActions.NewUserRegistered(credential),
             new authActions.Authenticated({ uid: credential.user.uid, authenticated: true }),
