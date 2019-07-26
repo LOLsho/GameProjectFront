@@ -1,15 +1,18 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Language } from 'angular-l10n';
+import { Language, TranslationService } from 'angular-l10n';
 import { Message } from './message/message.models';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/state';
 import { LoadGeneralMessages, SendGeneralMessage } from '@store/chat-store/actions';
-import { selectAllGeneralMessages, selectGeneralMessagesLoaded } from '@store/chat-store/selectors';
-import { filter, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import {
+  selectAllGeneralMessages,
+  selectLastGeneralMessage,
+} from '@store/chat-store/selectors';
 import { User } from '../auth/auth.interface';
 import { selectAuthUser } from '@store/auth-store/selectors';
 import { FirestoreService } from '../services/firestore.service';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-chat',
@@ -25,6 +28,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   user: User;
   messages: Message[];
+  amountUnreadMessages = 0;
 
   messageAdded$: Subject<void> = new Subject<void>();
 
@@ -33,11 +37,12 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private firestoreService: FirestoreService,
+    private notifierService: NotifierService,
+    private translation: TranslationService,
   ) {}
 
   ngOnInit() {
     this.store.dispatch(new LoadGeneralMessages());
-    console.warn('here');
     this.subscribe();
   }
 
@@ -48,6 +53,17 @@ export class ChatComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.store.select(selectAllGeneralMessages).subscribe((messages: Message[]) => {
       this.messages = messages;
+    }));
+
+    this.subscriptions.push(this.store.select(selectLastGeneralMessage).subscribe((message: Message) => {
+      if (!message || !this.user) return;
+      if (this.user.uid === message.userId) return;
+
+      if (this.chatHidden) {
+        this.amountUnreadMessages++;
+        const note = `${message.name || 'Anonymous'}: ${message.text}`;
+        this.notifierService.notify('default', note);
+      }
     }));
   }
 
@@ -68,7 +84,8 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   returnChat() {
     this.chatHidden = false;
-    this.chatContainer.nativeElement.style.left = `${window.innerWidth - 340}px`;
+    setTimeout(() => this.amountUnreadMessages = 0, 800);
+    this.chatContainer.nativeElement.style.left = `${window.innerWidth - 500}px`;
   }
 
   sendMessage(messageText: string) {
@@ -84,8 +101,12 @@ export class ChatComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.store.dispatch(new SendGeneralMessage(message));
     }, 500);
+  }
 
-    // this.messages.push({ text: message, userId: '123321', timestamp: '15:48' });
+  get returnChatTooltip(): string {
+    const inscription1 = this.translation.translate('Show chat');
+    const inscription2 = this.translation.translate('Unread messages');
+    return `${inscription1} | ${inscription2}: ${this.amountUnreadMessages}`;
   }
 
   ngOnDestroy() {

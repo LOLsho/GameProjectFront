@@ -36,7 +36,6 @@ export class AuthEffects {
   @Effect()
   getUser$: Observable<Action> = this.actions$.pipe(
     ofType(authActions.ActionTypes.GetUser),
-    tap(() => console.log('tap in getUser$')),
     switchMap(() => this.afAuth.authState.pipe(take(1))),
     map((user: any) => {
       if (user) {

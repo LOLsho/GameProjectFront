@@ -39,6 +39,15 @@
   height: 24px;
 }
 
+.chat__drag-icon {
+  fill: #c3c3c3;
+  transition: fill 0.2s ease;
+
+  &:hover {
+    fill: $theme-blue;
+  }
+}
+
 .chat__cross {
   color: #c3c3c3;
   cursor: pointer;
@@ -46,19 +55,54 @@
   line-height: 0;
   margin-left: 3px;
   transform: scaleX(0.9);
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $theme-blue;
+  }
 }
 
 .chat__return-chat {
   @include centerer-y;
-  width: 20px;
-  left: -20px;
-  height: 100px;
-  background-color: white;
+  display: flex;
+  justify-content: center;
+  width: 22px;
+  left: -18px;
+  height: 104px;
+  background-color: $theme-blue;
   border-radius: 25px 0 0 25px;
   cursor: pointer;
-  transition: left 0.4s ease-in-out, opacity 0.4s ease-in-out;
-  transition-delay: 0.4s;
-  border: 2px solid $theme-blue;
+  transition: left 0.4s ease-in-out 0.4s, box-shadow 0.4s ease-in-out, margin-left 0.4s ease-in-out;
+  z-index: -100;
+  box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+
+  &:hover {
+    margin-left: -4px;
+  }
+
+  &.hidden {
+    left: 0;
+    box-shadow: none;
+  }
+}
+
+.chat__unread-messages {
+  font-size: 12px;
+  transform: rotate(-90deg);
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.chat__unread-indicator {
+  margin-left: 4px;
+  padding: 4px;
+  border-radius: 10px;
+  background-color: orange;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
 }
 
 /deep/ .mat-tab-label {
@@ -67,3 +111,7 @@
   min-width: 10px !important;
 }
 
+/deep/ .mat-tab-group {
+  z-index: 5;
+  background-color: white;
+}
