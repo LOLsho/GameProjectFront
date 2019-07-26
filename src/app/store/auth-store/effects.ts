@@ -44,7 +44,6 @@ export class AuthEffects {
           'default',
           this.translation.translate('You are signed in with email') + ` "${user.email}"`
         );
-        console.log('in getUser$');
         return new authActions.Authenticated(user);
       } else {
         return new authActions.NotAuthenticated();
@@ -150,7 +149,6 @@ export class AuthEffects {
       const provider = new auth.GithubAuthProvider();
       return fromPromise(this.afAuth.auth.signInWithPopup(provider)).pipe(
         mergeMap((credential: any) => {
-          console.log('in githubLogin$');
           return [
             new authActions.NewUserRegistered(credential),
             new authActions.Authenticated({ uid: credential.user.uid, authenticated: true }),
