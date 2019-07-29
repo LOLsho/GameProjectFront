@@ -8,6 +8,7 @@ import { StatusIndicatorComponent } from '../elements/status-indicator/status-in
 import { UserPhotoComponent } from '../elements/user-photo/user-photo.component';
 import { SelectMenuComponent } from '../elements/select-menu/select-menu.component';
 import { CommonModule } from '@angular/common';
+import { MaxLengthPipe } from '../pipes/max-length.pipe';
 
 
 const sharedModules = [
@@ -22,6 +23,7 @@ const sharedComponents = [
   StatusIndicatorComponent,
   UserPhotoComponent,
   SelectMenuComponent,
+  MaxLengthPipe,
 ];
 
 

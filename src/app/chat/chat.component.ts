@@ -13,11 +13,13 @@ import { User } from '../auth/auth.interface';
 import { selectAuthUser } from '@store/auth-store/selectors';
 import { FirestoreService } from '../services/firestore.service';
 import { NotifierService } from 'angular-notifier';
+import { MaxLengthPipe } from '../pipes/max-length.pipe';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
+  providers: [MaxLengthPipe],
 })
 export class ChatComponent implements OnInit, OnDestroy {
 
@@ -39,6 +41,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     private firestoreService: FirestoreService,
     private notifierService: NotifierService,
     private translation: TranslationService,
+    private maxLengthPipe: MaxLengthPipe,
   ) {}
 
   ngOnInit() {
@@ -61,7 +64,8 @@ export class ChatComponent implements OnInit, OnDestroy {
 
       if (this.chatHidden) {
         this.amountUnreadMessages++;
-        const note = `${message.name || 'Anonymous'}: ${message.text}`;
+        const shortenedMessageText = this.maxLengthPipe.transform(message.text, 45);
+        const note = `${message.name || 'Anonymous'}: ${shortenedMessageText}`;
         this.notifierService.notify('default', note);
       }
     }));
@@ -69,23 +73,31 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   hideChat() {
     const transformStyle = this.chatContainer.nativeElement.style.transform;
-    let cutStyle;
+    let xCutStyle;
     let transformXNum;
+    let yCutStyle;
+    let transformYNum;
 
     if (transformStyle) {
-      cutStyle = transformStyle.substr(12);
-      transformXNum = parseInt(cutStyle, 10);
+      xCutStyle = transformStyle.substr(12);
+      transformXNum = parseInt(xCutStyle, 10);
+      const indexToCut = xCutStyle.indexOf(',') + 1;
+      yCutStyle = xCutStyle.substr(indexToCut);
+      transformYNum = parseInt(yCutStyle, 10);
     } else {
       transformXNum = 0;
+      transformYNum = 0;
     }
+
     this.chatHidden = true;
-    this.chatContainer.nativeElement.style.left = `${window.innerWidth - transformXNum}px`;
+    this.chatContainer.nativeElement.style.right = `${-320 + transformXNum}px`;
+    this.chatContainer.nativeElement.style.bottom = `${(window.innerHeight + transformYNum) / 2 - (535 / 2)}px`;
   }
 
   returnChat() {
     this.chatHidden = false;
     setTimeout(() => this.amountUnreadMessages = 0, 800);
-    this.chatContainer.nativeElement.style.left = `${window.innerWidth - 500}px`;
+    this.chatContainer.nativeElement.style.right = `${20}px`;
   }
 
   sendMessage(messageText: string) {
