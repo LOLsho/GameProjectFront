@@ -54,10 +54,59 @@
         </div>
       </ng-template>
 
-      <div class="header__auth" *ngIf="authenticated$ | async; else notAuthenticated">
-        <button mat-button (click)="singOut()">
-          {{ 'Sign-out' | translate:lang }}
-        </button>
+      <div class="header__user-button" *ngIf="authenticatedUser$ | async as user; else notAuthenticated">
+        <app-user-photo
+          style="cursor: pointer;"
+          [description]="user.name || 'Anonymous' + ' | ' + user.email"
+          [photoUrl]="user.photoURL"
+          [size]="36"
+          (click)="userMenuOpened ? closeUserMenu() : openUserMenu()"
+        ></app-user-photo>
+
+        <div class="user-menu" *ngIf="userMenuOpened" #userMenu>
+          <div class="user-menu__wrap">
+            <div class="user-menu__top">
+              <div class="user-menu__photo">
+                <app-user-photo
+                  [photoUrl]="user.photoURL"
+                  [shape]="'round'"
+                  [size]="96"
+                ></app-user-photo>
+<!--                [bottomLine]="'Change'"-->
+              </div>
+
+              <div class="user-menu__info-wrap">
+                <div class="user-menu__info">
+                  <div class="user-menu__name">
+                    {{ user.name || 'Anonymous' }}
+                  </div>
+                  <div class="user-menu__email">
+                    {{ user.email }}
+                  </div>
+                </div>
+
+                <div class="user-menu__buttons">
+                  <div class="user-menu__setting-button">
+                    <button mat-raised-button
+                            color="primary"
+                            type="button"
+                            [disabled]="true"
+                            (click)="goToUserProfile()"
+                    >
+                      {{ 'Profile' | translate:lang }}
+                    </button>
+                  </div>
+
+                  <div class="user-menu__setting-button">
+                    <button mat-button (click)="singOut()">
+                      {{ 'Sign-out' | translate:lang }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

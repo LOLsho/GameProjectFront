@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Language } from 'angular-l10n';
 
 
 @Component({
@@ -8,9 +9,14 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class UserPhotoComponent implements OnInit {
 
+  @Language() lang: string;
+
   @Input() photoUrl: string;
   @Input() name: string;
   @Input() size = 50;
+  @Input() shape: 'round' | 'square' = 'square';
+  @Input() description: string;
+  @Input() bottomLine: string;
 
   constructor() {}
 

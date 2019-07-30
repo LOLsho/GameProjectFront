@@ -21,3 +21,10 @@ export const selectAuthUserId: MemoizedSelector<object, string> = createSelector
     if (user) return user.uid;
   }
 );
+
+export const selectIsAuthenticated: MemoizedSelector<object, boolean> = createSelector(
+  selectAuthUser,
+  (user: User) => {
+    if (user) return user.authenticated;
+  }
+);

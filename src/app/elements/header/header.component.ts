@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { LocaleService, Language } from 'angular-l10n';
-import { Observable } from 'rxjs';
+import { fromEvent, Observable, of, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { map } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { User } from '../../auth/auth.interface';
-import { selectAuthUser } from '@store/auth-store/selectors';
+import { selectAuthUser, selectIsAuthenticated } from '@store/auth-store/selectors';
 import { AppState } from '@store/state';
 import { Logout } from '@store/auth-store/actions';
 
@@ -14,27 +14,65 @@ import { Logout } from '@store/auth-store/actions';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
   @Language() lang: string;
-  authenticated$: Observable<boolean>;
+
+  @ViewChild('userMenu') userMenu: ElementRef;
+
+  subs: Subscription[] = [];
+  userMenuOpened: boolean;
+
+  authenticatedUser$: Observable<User> = this.store.select(selectIsAuthenticated).pipe(
+    switchMap((authenticated: boolean) => {
+      if (authenticated) return this.store.select(selectAuthUser);
+      else return of(null);
+    }),
+  );
 
   constructor(
     public locale: LocaleService,
     private store: Store<AppState>,
   ) {}
 
-  ngOnInit() {
-    this.authenticated$ = this.store.select(selectAuthUser).pipe(
-      map((user: User) => user.authenticated),
+  openUserMenu() {
+    this.userMenuOpened = true;
+    setTimeout(() => this.subscribeToClicks());
+  }
+
+  closeUserMenu() {
+    this.userMenuOpened = false;
+    this.unsubscribe();
+  }
+
+  ngOnInit() {}
+
+  subscribeToClicks() {
+    this.subs.push(fromEvent(window, 'click').subscribe(() => this.closeUserMenu()));
+
+    this.subs.push(
+      fromEvent(this.userMenu.nativeElement, 'click').subscribe((event: any) => event.stopPropagation()),
     );
   }
 
   singOut() {
+    this.userMenuOpened = false;
     this.store.dispatch(new Logout());
   }
 
   changeLanguage(lang: string) {
     this.locale.setCurrentLanguage(lang);
+  }
+
+  goToUserProfile() {
+
+  }
+
+  unsubscribe() {
+    this.subs.forEach((sub) => sub.unsubscribe());
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe();
   }
 }

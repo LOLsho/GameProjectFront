@@ -3,10 +3,14 @@
      [style.minWidth.px]="size"
      [style.height.px]="size"
      [style.minHeight.px]="size"
-     matTooltip="{{ name || '' }}"
+     [style.border-radius.px]="shape === 'round' ? 100 : 4"
+     matTooltip="{{ description || name || '' }}"
 >
   <img class="user-photo__image"
        [src]="photoUrl || 'assets/general/images/default-user.png'"
        alt="photo"
   >
+  <div class="user-photo__bottom-line" *ngIf="bottomLine">
+    {{ bottomLine | translate:lang }}
+  </div>
 </div>
