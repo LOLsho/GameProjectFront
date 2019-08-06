@@ -6,5 +6,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: top 0.3s ease, left 0.3s ease;
+  transition: top 0.3s ease, left 0.3s ease, transform 1s ease 0.8s;
+}
+
+.chess-piece__img {
+  width: 100%;
 }

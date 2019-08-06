@@ -3,7 +3,7 @@
      [style.height.px]="config.cellHeight"
      [style.left.px]="posX"
      [style.top.px]="posY"
-
+     [style.transform]="upsideDown ? 'rotate(180deg)' : ''"
 >
   <img src="assets/games/chess/images/{{ fraction + '-' + name }}.png" alt="chess-piece" class="chess-piece__img">
 </div>

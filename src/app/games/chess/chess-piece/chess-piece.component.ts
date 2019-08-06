@@ -11,29 +11,21 @@ export class ChessPieceComponent implements OnInit {
   @Input() readonly fraction: ChessFraction;
   @Input() readonly name: ChessPieceName;
   @Input() readonly config: ChessConfig;
-
-  @Input()
-  set cellId(value: number) {
-    const [rowIndex, colIndex] = this.getIndexesFromId(value);
-
-    this.posX = colIndex * this.config.cellWidth;
-    this.posY = rowIndex * this.config.cellHeight;
-  }
-
-  posX: number;
-  posY: number;
-
-  id: number;
+  @Input() readonly cellId: number;
+  @Input() readonly upsideDown: boolean;
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() {}
 
+  get posX(): number {
+    const rowIndex = Math.floor(this.cellId / this.config.columns);
+    const colIndex = this.cellId - (rowIndex * this.config.columns);
+    return colIndex * this.config.cellWidth;
   }
 
-  getIndexesFromId(id: number) {
-    const rowIndex = Math.floor(id / this.config.columns);
-    const columnIndex = id - (rowIndex * this.config.columns);
-    return [rowIndex, columnIndex];
+  get posY(): number {
+    const rowIndex = Math.floor(this.cellId / this.config.columns);
+    return rowIndex * this.config.cellHeight;
   }
 }

@@ -1,17 +1,43 @@
-@import "../../../assets/my-styles/variables";
+@import "variables";
+@import "mixins";
 
 
 .chess {
   background-color: #312E2B;
   height: calc(100vh - #{$header-height});
+  max-height: calc(100vh - #{$header-height});
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.chess__field {
-  user-select: none;
+.chess__flip-button {
+  @include centerer-y;
+  width: 40px;
+  height: 40px;
+  background: rgba(white, 0.7);
+  left: -60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: $common-border-radius;
+  transition: background 0.25s ease;
+
+  &:hover {
+    background: rgba(white, 0.9);
+  }
+}
+
+.chess__container {
   position: relative;
+  user-select: none;
+}
+
+.chess__field {
+  position: relative;
+  transition: transform 1s ease;
 }
 
 .chess__row {
@@ -27,8 +53,8 @@
 }
 
 .chess__available-mark {
-  width: 25px;
-  height: 25px;
+  width: 28%;
+  height: 28%;
   border-radius: 100px;
   background-color: rgba(black, .5);
   z-index: 10;

@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {
   ChessConfig,
   ChessFraction,
@@ -8,7 +17,7 @@ import { createEmptyField } from '../../../assets/functions/game-functions';
 import { emersionAnimation } from '../../animations/emersion.animation';
 import { UtilService } from '../../services/util.service';
 import { NotifierService } from 'angular-notifier';
-import { TranslationService } from 'angular-l10n';
+import { Language, TranslationService } from 'angular-l10n';
 import { MatDialog } from '@angular/material';
 import { ChoosePieceComponent } from './choose-piece/choose-piece.component';
 import { take } from 'rxjs/operators';
@@ -22,9 +31,10 @@ import { Step } from '../../game-wrapper/game.interfaces';
   styleUrls: ['./chess.component.scss'],
   animations: [emersionAnimation],
 })
-export class ChessComponent implements OnInit {
+export class ChessComponent implements OnInit, AfterViewInit {
 
-  @Input() generateStepData: Function;
+  @Language() lang: string;
+  @ViewChild('gameContainer') gameContainer: ElementRef;
 
   gameOver: boolean;
 
@@ -50,10 +60,13 @@ export class ChessComponent implements OnInit {
   lastStep: Step<ChessStep>;
   testLastStep: Step<ChessStep>;
 
+  upsideDown = false;
+
   @Input() session;
   @Input() userData: User;
   @Input() steps: Step<ChessStep>[] = [];
   @Output() sessionFinished = new EventEmitter();
+  @Input() generateStepData: Function;
 
   @Input()
   set step(value: Step<ChessStep>) {
@@ -71,14 +84,29 @@ export class ChessComponent implements OnInit {
     private notifier: NotifierService,
     private translation: TranslationService,
     private modal: MatDialog,
+    private crd: ChangeDetectorRef,
   ) { }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ngAfterViewInit() {
+    this.setInitialConfig();
     this.initNewGame();
 
     if (this.steps.length) {
       this.updateGameUpToLastStep();
     }
+    this.crd.detectChanges();
+  }
+
+  setInitialConfig() {
+    const container = this.gameContainer.nativeElement;
+    let diameter = (container.clientHeight - 40) / 8;
+
+    if (diameter > 87) diameter = 87;
+
+    this.config.cellHeight = diameter;
+    this.config.cellWidth = diameter;
   }
 
   updateGameUpToLastStep() {
@@ -747,6 +775,10 @@ export class ChessComponent implements OnInit {
 
   getKing(searchInArr: ChessPieceData[]): ChessPieceData {
     return searchInArr.find((piece: ChessPieceData) => piece.name === 'king');
+  }
+
+  flipOverField() {
+    this.upsideDown = !this.upsideDown;
   }
 
   get activePiece(): ChessPieceData {
