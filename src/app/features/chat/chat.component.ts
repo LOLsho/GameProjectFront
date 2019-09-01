@@ -9,11 +9,11 @@ import {
   selectAllGeneralMessages,
   selectLastGeneralMessage,
 } from '@store/chat-store/selectors';
-import { User } from '../auth/auth.interface';
+import { User } from '../../auth/auth.interface';
 import { selectAuthUser } from '@store/auth-store/selectors';
-import { FirestoreService } from '../services/firestore.service';
+import { FirestoreService } from '../../services/firestore.service';
 import { NotifierService } from 'angular-notifier';
-import { MaxLengthPipe } from '../pipes/max-length.pipe';
+import { MaxLengthPipe } from '../../pipes/max-length.pipe';
 
 @Component({
   selector: 'app-chat',

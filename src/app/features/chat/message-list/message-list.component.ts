@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import { Message } from '../message/message.models';
 import { Subject, Subscription } from 'rxjs';
-import { emersionAnimation } from '../../animations/emersion.animation';
-import { User } from '../../auth/auth.interface';
+import { emersionAnimation } from '../../../animations/emersion.animation';
+import { User } from '../../../auth/auth.interface';
 
 @Component({
   selector: 'app-message-list',

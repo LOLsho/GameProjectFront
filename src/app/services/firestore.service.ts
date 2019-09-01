@@ -13,7 +13,7 @@ import { selectGameId } from '@store/game-info-store/selectors';
 import { selectSessionId } from '@store/session-store/selectors';
 import { selectAuthUserId } from '@store/auth-store/selectors';
 import { AppState } from '@store/state';
-import { Message } from '../chat/message/message.models';
+import { Message } from '../features/chat/message/message.models';
 import DocumentReference = firebase.firestore.DocumentReference;
 
 

@@ -1,4 +1,4 @@
-import { Message } from '../../chat/message/message.models';
+import { Message } from '../../features/chat/message/message.models';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 
 

@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Message } from '../../chat/message/message.models';
+import { Message } from '../../features/chat/message/message.models';
 
 
 export enum ChatActionTypes {

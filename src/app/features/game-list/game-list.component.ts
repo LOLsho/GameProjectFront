@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Language } from 'angular-l10n';
-import { GameInitial, GameItem, GameList } from '../game-wrapper/game.interfaces';
+import { GameInitial, GameItem, GameList } from '../../game-wrapper/game.interfaces';
 import { Store } from '@ngrx/store';
 import { map, switchMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { GAMES } from './game-list';
-import { emersionAnimation } from '../animations/emersion.animation';
+import { emersionAnimation } from '../../animations/emersion.animation';
 import { selectGameList, selectGameListLoaded } from '@store/game-list-store/selectors';
 import { LoadGames, UpdateGameItem } from '@store/game-list-store/actions';
 import { AppState } from '@store/state';

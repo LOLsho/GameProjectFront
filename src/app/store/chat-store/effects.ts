@@ -9,7 +9,7 @@ import {
 } from '@store/chat-store/actions';
 import { catchError, map, mergeMap, switchMap, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
 import { FirestoreService, Query } from '../../services/firestore.service';
-import { Message } from '../../chat/message/message.models';
+import { Message } from '../../features/chat/message/message.models';
 import { NotifierService } from 'angular-notifier';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '@store/state';

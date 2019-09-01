@@ -9,7 +9,7 @@ import { SapperComponent } from '../games/sapper/sapper.component';
 import { MenuComponent } from '../elements/menu/menu.component';
 import { StartGameMenuComponent } from './start-game-menu/start-game-menu.component';
 import { SapperStartMenuComponent } from '../games/sapper/sapper-start-menu/sapper-start-menu.component';
-import { SessionListComponent } from '../elements/session-list/session-list.component';
+import { SessionListComponent } from '../features/session-list/session-list.component';
 import { SessionItemComponent } from '../elements/session-item/session-item.component';
 import { EnterIdComponent } from './start-game-menu/enter-id/enter-id.component';
 import { CreateNewMultiGameComponent } from './start-game-menu/create-new-multi-game/create-new-multi-game.component';

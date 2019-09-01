@@ -7,6 +7,8 @@ import { User } from '../../auth/auth.interface';
 import { selectAuthUser, selectIsAuthenticated } from '@store/auth-store/selectors';
 import { AppState } from '@store/state';
 import { Logout } from '@store/auth-store/actions';
+import { MatDialog } from '@angular/material';
+import { UserProfileComponent } from '../user-profile/user-profile.component';
 
 
 @Component({
@@ -31,8 +33,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   );
 
   constructor(
-    public locale: LocaleService,
+    private locale: LocaleService,
     private store: Store<AppState>,
+    private modal: MatDialog,
   ) {}
 
   openUserMenu() {
@@ -65,7 +68,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   goToUserProfile() {
-
+    this.modal.open(UserProfileComponent);
+    this.closeUserMenu();
   }
 
   unsubscribe() {

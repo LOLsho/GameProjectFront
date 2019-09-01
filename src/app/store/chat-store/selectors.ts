@@ -1,6 +1,6 @@
 import { ChatState, generalMessagesAdapter, GeneralMessagesState } from '@store/chat-store/state';
 import { createFeatureSelector, createSelector, MemoizedSelector } from '@ngrx/store';
-import { Message } from '../../chat/message/message.models';
+import { Message } from '../../features/chat/message/message.models';
 
 
 export const getGeneralMessagesState = (state: ChatState): GeneralMessagesState => state.general;
