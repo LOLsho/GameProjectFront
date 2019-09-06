@@ -15,7 +15,6 @@ import { EnterIdComponent } from './start-game-menu/enter-id/enter-id.component'
 import { CreateNewMultiGameComponent } from './start-game-menu/create-new-multi-game/create-new-multi-game.component';
 import { BoxComponent } from '../elements/box/box.component';
 import { ChessComponent } from '../games/chess/chess.component';
-import { CanvasService } from '../services/canvas.service';
 import { ChessPieceComponent } from '../games/chess/chess-piece/chess-piece.component';
 import { ChoosePieceComponent } from '../games/chess/choose-piece/choose-piece.component';
 import { PlayerListComponent } from './player-list/player-list.component';
@@ -65,14 +64,10 @@ const gamesComponents = [
     CommonModule,
     SharedModule,
     RouterModule.forChild(ROUTES),
-    // StoreModule.forFeature('appState', []),
-    // EffectsModule.forFeature([SessionEffects, SessionListEffects, StepsEffects, GameInfoEffects]),
   ],
   entryComponents: [
     ...gamesComponents,
   ],
-  providers: [
-    CanvasService,
-  ],
+  providers: [],
 })
 export class GameWrapperModule { }

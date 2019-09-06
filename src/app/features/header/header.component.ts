@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { LocaleService, Language } from 'angular-l10n';
 import { fromEvent, Observable, of, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { User } from '../../auth/auth.interface';
 import { selectAuthUser, selectIsAuthenticated } from '@store/auth-store/selectors';
 import { AppState } from '@store/state';
@@ -68,7 +68,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   goToUserProfile() {
-    this.modal.open(UserProfileComponent);
+    this.store.select(selectAuthUser).pipe(
+      take(1)
+    ).subscribe((user: User) => {
+      this.modal.open(UserProfileComponent, {
+        data: {
+          editable: true,
+          userId: user.uid,
+        }
+      });
+    });
+
     this.closeUserMenu();
   }
 
