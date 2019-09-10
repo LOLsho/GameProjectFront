@@ -41,7 +41,7 @@ export class UserProfileComponent implements OnInit {
     private fb: FormBuilder,
     private store: Store<AppState>,
     private trn: TranslationService,
-    @Inject(MAT_DIALOG_DATA) private data: { userId: string, editable: boolean },
+    @Inject(MAT_DIALOG_DATA) public data: { userId: string, editable: boolean },
   ) { }
 
   ngOnInit() {
