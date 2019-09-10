@@ -9,6 +9,7 @@ import { UserPhotoComponent } from '../elements/user-photo/user-photo.component'
 import { SelectMenuComponent } from '../elements/select-menu/select-menu.component';
 import { CommonModule } from '@angular/common';
 import { MaxLengthPipe } from '../pipes/max-length.pipe';
+import { BoxComponent } from '../elements/box/box.component';
 
 
 const sharedModules = [
@@ -24,6 +25,7 @@ const sharedComponents = [
   UserPhotoComponent,
   SelectMenuComponent,
   MaxLengthPipe,
+  BoxComponent,
 ];
 
 

@@ -33,6 +33,7 @@
   "Watch": "Watch",
   "Chat": "Chat",
   "Hide": "Hide",
+  "Save": "Save",
   "Change": "Change",
   "Game settings": "Game settings",
   "Privacy": "Privacy",
@@ -56,8 +57,10 @@
   "Unread messages": "Unread messages",
   "You have signed out": "You have signed out",
   "Flip board": "flip board",
+  "Email": "Email",
   "You are signed in with email": "You are signed in with email",
   "You have been kicked out from the game": "You have been kicked out from the game",
+  "Profile data successfully updated": "Profile data successfully updated",
 
   "HEADER__SIGN-IN": "Sign in",
   "HEADER__SIGN-UP": "Sign up",

@@ -13,7 +13,6 @@ import { SessionListComponent } from '../features/session-list/session-list.comp
 import { SessionItemComponent } from '../elements/session-item/session-item.component';
 import { EnterIdComponent } from './start-game-menu/enter-id/enter-id.component';
 import { CreateNewMultiGameComponent } from './start-game-menu/create-new-multi-game/create-new-multi-game.component';
-import { BoxComponent } from '../elements/box/box.component';
 import { ChessComponent } from '../games/chess/chess.component';
 import { ChessPieceComponent } from '../games/chess/chess-piece/chess-piece.component';
 import { ChoosePieceComponent } from '../games/chess/choose-piece/choose-piece.component';
@@ -55,7 +54,6 @@ const gamesComponents = [
     GameWrapperComponent,
     MenuComponent,
     StartGameMenuComponent,
-    BoxComponent,
     PlayerListComponent,
     ...gamesComponents,
     PlayerComponent,

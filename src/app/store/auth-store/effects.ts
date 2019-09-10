@@ -10,13 +10,15 @@ import { Action, Store } from '@ngrx/store';
 import * as authActions from './actions';
 import { PresenceService } from '../../services/presence.service';
 import { Observable, of } from 'rxjs';
-import { catchError, filter, map, mergeMap, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, filter, flatMap, map, mergeMap, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 import { AuthWithEmailAndPasswordData, defaultUser, User } from '../../auth/auth.interface';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { AppState } from '@store/state';
 import { selectRouterUrl } from '@store/router-store/selectors';
 import { RouterGo } from '@store/router-store/actions';
 import { ClearAppState } from '@store/actions';
+import { selectAuthUserId } from '@store/auth-store/selectors';
+import { SetUser } from './actions';
 
 
 @Injectable()
@@ -51,9 +53,18 @@ export class AuthEffects {
   );
 
   @Effect()
+  reloadUser$: Observable<Action> = this.actions$.pipe(
+    ofType(authActions.ActionTypes.ReloadAuthUser),
+    withLatestFrom(this.store.select(selectAuthUserId)),
+    switchMap(([_, id]) => this.firestoreService.getUser(id).pipe(
+      map((user: User) => new SetUser({ ...user, authenticated: true })),
+    ))
+  );
+
+  @Effect()
   userAuthenticated$: Observable<Action> = this.actions$.pipe(
     ofType(authActions.ActionTypes.Authenticated),
-    map((action: authActions.EmailAndPasswordRegister) => action.payload),
+    map((action: authActions.Authenticated) => action.payload),
     switchMap((firebaseUser: Partial<User>) => this.firestoreService.getUser(firebaseUser.uid).pipe(
       withLatestFrom(this.store.select(selectRouterUrl)),
       mergeMap(([user, url]: [User, string]) => {
@@ -68,17 +79,6 @@ export class AuthEffects {
       catchError((error) => of(new authActions.AuthFail(error))),
     )),
   );
-
-  // @Effect({ dispatch: false })
-  // updateCurrentUser$: Observable<Action> = this.actions$.pipe(
-  //   ofType(AuthActionTypes.UpdateCurrentUser),
-  //   map((action: UpdateCurrentUser) => action.payload),
-  //   switchMap((updateData: Partial<User>) => {
-  //     return fromPromise(this.afAuth.auth.currentUser.updateProfile({ displayName: updateData.nickname })).pipe(
-  //       tap(console.log)
-  //     );
-  //   })
-  // );
 
   @Effect()
   emailAndPasswordRegister$: Observable<Action> = this.actions$.pipe(

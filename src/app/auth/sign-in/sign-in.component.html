@@ -14,7 +14,7 @@
              formControlName="email"
       >
       <mat-error *ngIf="email.invalid">
-        {{getEmailErrorMessage()}}
+        {{ getEmailErrorMessage() }}
       </mat-error>
     </mat-form-field>
 
@@ -29,7 +29,7 @@
         {{hide ? 'visibility' : 'visibility_off'}}
       </mat-icon>
       <mat-error *ngIf="password.invalid">
-        {{getPasswordErrorMessage()}}
+        {{ getPasswordErrorMessage() }}
       </mat-error>
     </mat-form-field>
   </div>

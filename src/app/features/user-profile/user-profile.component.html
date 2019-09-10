@@ -1,26 +1,48 @@
 <div class="user-profile">
-  <form class="user-profile__form" [formGroup]="form" *ngIf="user$ | async as user; else loader">
-    <mat-form-field class="custom-field__input">
-      <input matInput
-             placeholder="{{ 'Name' | translate:lang }}"
-             formControlName="name"
-             autocomplete="off"
-             [value]="user.name"
-             [disabled]="true"
-             (input)="onNameChange($event)"
+  <app-box [boxTitle]="'Profile'">
+    <form class="user-profile__form" [formGroup]="form">
+      <mat-form-field class="user-profile__input">
+        <input matInput
+               placeholder="{{ 'Name' | translate:lang }}"
+               formControlName="name"
+               autocomplete="off"
+        >
+        <mat-error *ngIf="form.get('name').invalid">
+          {{ 'From' | translate:lang }} {{ NAME_MIN_LENGTH }}
+          {{ ('To' | translate:lang).toLowerCase() }} {{ NAME_MAX_LENGTH }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="user-profile__input">
+        <input matInput
+               placeholder="{{ 'Email' | translate:lang }}"
+               formControlName="email"
+               autocomplete="off"
+        >
+        <mat-error *ngIf="form.get('email').invalid">
+          {{ emailErrorMessage }}
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button
+              *ngIf="data.editable"
+              [disabled]="form.pristine || form.invalid"
+              color="primary"
+              class="auth__btn"
+              type="submit"
+              (click)="saveProfile()"
       >
-<!--      <mat-hint align="start">-->
-<!--        {{ 'From' | translate:lang }} 4-->
-<!--        {{ ('To' | translate:lang).toLowerCase() }} 16-->
-<!--      </mat-hint>-->
-    </mat-form-field>
+        {{ 'Save' | translate:lang }}
+      </button>
 
-    <div>
-      <pre>{{ user | json }}</pre>
-    </div>
-  </form>
+      <!--    <div>-->
+      <!--      <pre>{{ user | json }}</pre>-->
+      <!--    </div>-->
+    </form>
+  </app-box>
 
-  <ng-template #loader>
-    <app-loader></app-loader>
+
+  <ng-template [ngIf]="pending">
+    <app-loader [@emersionAnimation]></app-loader>
   </ng-template>
 </div>

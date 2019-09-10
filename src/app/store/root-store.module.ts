@@ -16,6 +16,7 @@ import { environment } from '../../environments/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { PlayersStoreModule } from '@store/players-store/players-store.module';
 import { ChatStoreModule } from '@store/chat-store/chat-store.module';
+import { UsersStoreModule } from '@store/users-store/users-store.module';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { ChatStoreModule } from '@store/chat-store/chat-store.module';
     StepsStoreModule,
     PlayersStoreModule,
     ChatStoreModule,
+    UsersStoreModule,
 
     StoreModule.forRoot({
       routerReducer: routerReducer,

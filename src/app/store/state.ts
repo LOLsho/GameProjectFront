@@ -6,6 +6,7 @@ import { SessionState } from '@store/session-store/state';
 import { SessionListState } from '@store/session-list-store/state';
 import { StepsState } from '@store/steps-store/state';
 import { ChatState } from '@store/chat-store/state';
+import { UsersState } from '@store/users-store/state';
 
 
 export interface AppState {
@@ -17,4 +18,5 @@ export interface AppState {
   sessionList: SessionListState;
   steps: StepsState;
   chat: ChatState;
+  users: UsersState;
 }

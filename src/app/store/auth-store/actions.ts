@@ -6,7 +6,7 @@ export enum ActionTypes {
   GetUser = '[Auth] Get User',
   SetUser = '[Auth] Set Authenticated And Parsed User',
 
-  UpdateUserName = '[App] Update User Name',
+  ReloadAuthUser = '[Auth] Reload User',
 
   EmailAndPasswordRegister = '[Auth] Email And Password Register Attempt',
   EmailAndPasswordLogin = '[Auth] Email And Password Login Attempt',
@@ -35,9 +35,8 @@ export class SetUser implements Action {
   constructor(public payload: User) {}
 }
 
-export class UpdateUserName implements Action {
-  readonly type = ActionTypes.UpdateUserName;
-  constructor(public payload: { name: string }) {}
+export class ReloadAuthUser implements Action {
+  readonly type = ActionTypes.ReloadAuthUser;
 }
 
 export class EmailAndPasswordLogin implements Action {
@@ -94,8 +93,8 @@ export class AuthFail implements Action {
 
 export type Actions =
   | GetUser
-  | UpdateUserName
   | EmailAndPasswordRegister
+  | ReloadAuthUser
   | EmailAndPasswordLogin
   | GoogleLogin
   | FacebookLogin

@@ -48,6 +48,10 @@ export class FirestoreService {
       );
   }
 
+  updateUser(id: string, data): Observable<any> {
+    return fromPromise(this.getUsersCollection().doc(id).update(data));
+  }
+
   addNewUser(user: any): Observable<any> {
     const newUser: Partial<User> = {
       uid: user.uid,

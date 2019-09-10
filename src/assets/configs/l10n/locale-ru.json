@@ -32,6 +32,7 @@
   "Watch": "Смотреть",
   "Chat": "Чат",
   "Hide": "Скрыть",
+  "Save": "Сохранить",
   "Change": "Изменить",
   "Kick out": "Выгнать",
   "Game settings": "Настройки игры",
@@ -56,8 +57,10 @@
   "Unread messages": "Непрочитанных сообщений",
   "You have signed out": "Вы вышли из аккаунта",
   "Flip board": "Перевернуть доску",
+  "Email": "Почта",
   "You are signed in with email": "Вы вошли по электронной почте",
   "You have been kicked out from the game": "Вас выгнали из игры",
+  "Profile data successfully updated": "Данные профиля успешно обновлены",
 
   "HEADER__SIGN-IN": "Вход",
   "HEADER__SIGN-UP": "Регистрация",

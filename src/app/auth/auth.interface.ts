@@ -12,6 +12,7 @@ export interface User {
   name: string;
   photoURL: string;
   status: UserStatus;
+  color?: string;
 }
 
 export const defaultUser: any = {

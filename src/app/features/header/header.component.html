@@ -57,7 +57,7 @@
       <div class="header__user-button" *ngIf="authenticatedUser$ | async as user; else notAuthenticated">
         <app-user-photo
           style="cursor: pointer;"
-          [description]="user.name || 'Anonymous' + ' | ' + user.email"
+          [description]="(user.name || 'Anonymous') + ' | ' + user.email"
           [photoUrl]="user.photoURL"
           [size]="36"
           (click)="userMenuOpened ? closeUserMenu() : openUserMenu()"
@@ -90,7 +90,7 @@
                     <button mat-raised-button
                             color="primary"
                             type="button"
-                            [disabled]="true"
+                            [disabled]="false"
                             (click)="goToUserProfile()"
                     >
                       {{ 'Profile' | translate:lang }}
